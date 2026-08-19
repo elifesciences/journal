@@ -2,20 +2,36 @@ ARG image_tag=latest
 ARG php_version
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-FROM elifesciences/php_7.3_fpm:${php_version}
+#FROM elifesciences/php_7.3_fpm:${php_version}
+FROM ghcr.io/elifesciences/php:8.3-fpm
 
 ENV PROJECT_FOLDER=/srv/journal
 ENV PHP_ENTRYPOINT=web/app.php
 WORKDIR ${PROJECT_FOLDER}
 
 USER root
-RUN pecl channel-update pecl.php.net && \
-    pecl install redis-5.3.7 && \
-    docker-php-ext-enable redis && \
-    pecl update channels && \
-    pecl install xdebug-2.9.8 && \
-    docker-php-ext-enable xdebug && \
-    rm -rf /tmp/pear/
+
+# TODO? install gh and run gh attestation on this pie binary (look up the pie installation docs)
+# Install PIE (PHP Installer for Extensions)
+RUN curl -fL --output /tmp/pie.phar https://github.com/php/pie/releases/latest/download/pie.phar
+RUN mv /tmp/pie.phar /usr/local/bin/pie
+RUN chmod +x /usr/local/bin/pie
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests unzip libtool \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pie install xdebug/xdebug
+RUN pie install phpredis/phpredis
+
+#RUN pecl channel-update pecl.php.net && \
+#    pecl install redis-5.3.7 && \
+#    docker-php-ext-enable redis && \
+#    pecl update channels && \
+#    pecl install xdebug-2.9.8 && \
+#    docker-php-ext-enable xdebug && \
+#    rm -rf /tmp/pear/
+
 RUN mkdir -p build var && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var

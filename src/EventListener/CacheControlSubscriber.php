@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 
 final class CacheControlSubscriber implements EventSubscriberInterface
 {
@@ -37,6 +38,11 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         if (!$request->isMethodCacheable() || $response instanceof StreamedResponse || Response::HTTP_NOT_MODIFIED === $response->getStatusCode() || ($request->hasSession() && $request->getSession()->isStarted() || $request->hasPreviousSession())) {
             return;
         }
+
+        // The session wasn't used, so this response is safe to cache; stop Symfony's
+        // SessionListener from forcing it private just because the security firewall's
+        // AccessListener touched the (anonymous) token storage while checking access control.
+        $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, true);
 
         if ('no-cache, private' === $response->headers->get('Cache-Control')) {
             // Default Symfony value, so treat as untouched.

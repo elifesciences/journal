@@ -2,7 +2,6 @@
 
 namespace eLife\Journal;
 
-use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
@@ -50,7 +49,6 @@ class AppKernel extends Kernel
     {
         $bundles = [
             new AppBundle(),
-            new BobthecowMustacheBundle(),
             new CocurSlugifyBundle(),
             new FrameworkBundle(),
             new IsometriksSpamBundle(),

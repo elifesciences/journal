@@ -11,12 +11,7 @@ parameters:
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
 
-bobthecow_mustache:
-    globals:
-        assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
-        assetsPath: 'assets/patterns'
-    loader_id: elife.journal.mustache.loader
-    partials_loader_id: elife.journal.mustache.loader
+    container.autowiring.strict_mode: true
 
 cocur_slugify:
     strip_tags: true
@@ -82,7 +77,6 @@ framework:
         save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
         engines:
-          - mustache
           - twig
     web_link: ~
 

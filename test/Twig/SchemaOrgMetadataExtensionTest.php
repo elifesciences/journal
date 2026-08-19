@@ -69,7 +69,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     private function defaultExpectations(bool $many = false)
     {
         ($many ? $this->urlGenerator : $this->urlGenerator->expects($this->once()))
-            ->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+            ->method('getContext')->willReturn(new RequestContext('', 'GET', 'journal', 'https'));
         ($many ? $this->packages : $this->packages->expects($this->once()))
             ->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
     }
@@ -110,7 +110,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     public function it_generates_schema_org_metadata()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext('', 'GET', 'journal', 'https'));
         $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');

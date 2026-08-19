@@ -46,7 +46,7 @@ final class DownloadControllerTest extends WebTestCase
         foreach (
             [
                 'content-type' => ['audio/mp3'],
-                'content-disposition' => ['attachment; filename="test.mp3"']
+                'content-disposition' => ['attachment; filename=test.mp3']
             ] as $key => $value) {
                 $this->assertArrayHasKey($key, $response->headers->all());
                 $this->assertSame($value, $response->headers->all()[$key]);
@@ -90,7 +90,7 @@ final class DownloadControllerTest extends WebTestCase
         foreach (
             [
                 'content-type' => ['application/pdf'],
-                'content-disposition' => ['attachment; filename="test.pdf"'],
+                'content-disposition' => ['attachment; filename=test.pdf'],
                 'link' => ['<http://www.example.com/canonical>; rel="canonical"'],
             ] as $key => $value) {
             $this->assertArrayHasKey($key, $response->headers->all());

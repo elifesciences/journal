@@ -310,6 +310,18 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    mustache:
+        class: Mustache_Engine
+        arguments:
+          -
+            cache: '%kernel.cache_dir%/mustache'
+            charset: '%kernel.charset%'
+            loader: '@elife.journal.mustache.loader'
+            partials_loader: '@elife.journal.mustache.loader'
+            helpers:
+                assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
+                assetsPath: 'assets/patterns'
+
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
