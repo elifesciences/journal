@@ -83,6 +83,6 @@ final class ArticleTypesController extends Controller
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, $impactStatements[$type] ?? null);
 
-        return new Response($this->get('templating')->render('::article-type.html.twig', $arguments));
+        return new Response($this->get('templating')->render('article-type.html.twig', $arguments));
     }
 }

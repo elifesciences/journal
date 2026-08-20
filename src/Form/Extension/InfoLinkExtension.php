@@ -22,8 +22,8 @@ final class InfoLinkExtension extends AbstractTypeExtension
         $view->vars['info_link'] = ['name' => 'Privacy notice', 'url' => $this->urlGenerator->generate('privacy')];
     }
 
-    public function getExtendedType() : string
+    public static function getExtendedTypes() : iterable
     {
-        return EmailType::class;
+        return [EmailType::class];
     }
 }

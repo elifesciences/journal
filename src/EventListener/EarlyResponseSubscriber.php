@@ -4,7 +4,7 @@ namespace eLife\Journal\EventListener;
 
 use eLife\Journal\Exception\EarlyResponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 final class EarlyResponseSubscriber implements EventSubscriberInterface
 {
@@ -15,9 +15,9 @@ final class EarlyResponseSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if ($exception instanceof EarlyResponse) {
             $event->setResponse($exception->getResponse());

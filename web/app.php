@@ -1,7 +1,7 @@
 <?php
 
 use eLife\Journal\AppKernel;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 umask(0002);

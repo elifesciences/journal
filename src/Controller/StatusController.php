@@ -52,7 +52,7 @@ final class StatusController extends Controller
             }
         }
 
-        return $this->createResponse($this->get('templating')->render('::status.html.twig', ['checks' => $checks]), $status);
+        return $this->createResponse($this->get('templating')->render('status.html.twig', ['checks' => $checks]), $status);
     }
 
     private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])

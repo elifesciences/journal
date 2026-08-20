@@ -144,7 +144,7 @@ final class ArchiveController extends Controller
                 }, array_values($months), array_keys($months)), new ListHeading('Monthly archive'));
             });
 
-        return new Response($this->get('templating')->render('::archive-year.html.twig', $arguments));
+        return new Response($this->get('templating')->render('archive-year.html.twig', $arguments));
     }
 
     public function monthAction(Request $request, int $year, string $month) : Response
@@ -225,7 +225,7 @@ final class ArchiveController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load Magazine list'));
 
-        return new Response($this->get('templating')->render('::archive-month.html.twig', $arguments));
+        return new Response($this->get('templating')->render('archive-month.html.twig', $arguments));
     }
 
     private function validateArchiveYear(int $year, int $month = null)

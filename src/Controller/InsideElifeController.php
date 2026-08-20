@@ -65,7 +65,7 @@ final class InsideElifeController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
+        return new Response($this->get('templating')->render('inside-elife.html.twig', $arguments));
     }
 
     public function articleAction(Request $request, string $id) : Response
@@ -96,6 +96,6 @@ final class InsideElifeController extends Controller
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
         
-        return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
+        return new Response($this->get('templating')->render('inside-elife-article.html.twig', $arguments));
     }
 }

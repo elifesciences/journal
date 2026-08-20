@@ -65,6 +65,6 @@ final class ReviewedPreprintsController extends Controller
             'Preprints that have been invited for review by eLife are published as Reviewed Preprints and include an eLife assessment, public reviews and a response from the authors (if available).'
             );
 
-        return new Response($this->get('templating')->render('::reviewed-preprints.html.twig', $arguments));
+        return new Response($this->get('templating')->render('reviewed-preprints.html.twig', $arguments));
     }
 }

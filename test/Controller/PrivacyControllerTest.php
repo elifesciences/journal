@@ -23,7 +23,7 @@ final class PrivacyControllerTest extends PageTestCase
             'Authors',
             'Editors and reviewers',
             'Privacy notice changes',
-        ], $majorSections->extract('_text'));
+        ], $majorSections->extract(['_text']));
     }
 
     #[Test]

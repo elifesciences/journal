@@ -67,7 +67,7 @@ final class PressPacksController extends Controller
             new Paragraph('Please don’t hesitate to contact us if you have any questions.'),
         ];
 
-        return new Response($this->get('templating')->render('::press-packs.html.twig', $arguments));
+        return new Response($this->get('templating')->render('press-packs.html.twig', $arguments));
     }
 
     public function pressPackAction(Request $request, string $id) : Response
@@ -119,7 +119,7 @@ final class PressPacksController extends Controller
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));
 
-        return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
+        return new Response($this->get('templating')->render('press-pack.html.twig', $arguments));
     }
 
     private function generateDownloadLink(string $uri) : string

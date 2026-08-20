@@ -65,7 +65,7 @@ final class PodcastController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader('eLife podcast');
 
-        return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
+        return new Response($this->get('templating')->render('podcast.html.twig', $arguments));
     }
 
     public function episodeAction(Request $request, int $number) : Response
@@ -101,6 +101,6 @@ final class PodcastController extends Controller
                 );
             }));
 
-        return new Response($this->get('templating')->render('::podcast-episode.html.twig', $arguments));
+        return new Response($this->get('templating')->render('podcast-episode.html.twig', $arguments));
     }
 }

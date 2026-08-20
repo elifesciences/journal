@@ -70,6 +70,6 @@ final class PromotionalCollectionsController extends Controller
                 );
             }));
 
-        return new Response($this->get('templating')->render('::promotional-collection.html.twig', $arguments));
+        return new Response($this->get('templating')->render('promotional-collection.html.twig', $arguments));
     }
 }

@@ -230,6 +230,6 @@ final class TermsController extends Controller
             ), 'Questions and Comments', 2),
         ];
 
-        return new Response($this->get('templating')->render('::terms.html.twig', $arguments));
+        return new Response($this->get('templating')->render('terms.html.twig', $arguments));
     }
 }

@@ -146,7 +146,7 @@ abstract class Controller implements ContainerAwareInterface
                     );
                 });
 
-            $template = $arguments['listing']->wait() instanceof ViewModel\GridListing ? '::pagination-grid.html.twig' : '::pagination.html.twig';
+            $template = $arguments['listing']->wait() instanceof ViewModel\GridListing ? 'pagination-grid.html.twig' : 'pagination.html.twig';
 
             $response = new Response($this->get('templating')->render($template, $arguments));
         }

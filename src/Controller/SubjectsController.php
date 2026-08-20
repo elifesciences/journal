@@ -59,7 +59,7 @@ final class SubjectsController extends Controller
                 return GridListing::forBlockLinks($subjects->toArray());
             });
 
-        return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
+        return new Response($this->get('templating')->render('subjects.html.twig', $arguments));
     }
 
     public function subjectAction(Request $request, string $id) : Response
@@ -190,6 +190,6 @@ final class SubjectsController extends Controller
             true
         );
 
-        return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
+        return new Response($this->get('templating')->render('subject.html.twig', $arguments));
     }
 }

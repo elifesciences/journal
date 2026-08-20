@@ -16,11 +16,10 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
-use Symfony\Bundle\WebServerBundle\WebServerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
-use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
+use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
 
 class AppKernel extends Kernel
 {
@@ -58,13 +57,12 @@ class AppKernel extends Kernel
             new SecurityBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),
-            new WhiteOctoberPagerfantaBundle(),
+            new BabDevPagerfantaBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['ci', 'dev'], true)) {
             $bundles[] = new DebugBundle();
             $bundles[] = new WebProfilerBundle();
-            $bundles[] = new WebServerBundle();
         }
 
         return $bundles;

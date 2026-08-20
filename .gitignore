@@ -16,3 +16,8 @@
 docker-compose.override.yml
 .env
 .idea/
+.DS_Store
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###

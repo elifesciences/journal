@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\Test;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowseControllerTest extends PageTestCase
@@ -475,7 +475,7 @@ final class BrowseControllerTest extends PageTestCase
         );
     }
 
-    private function assertStatusCodeIs200(Client $client)
+    private function assertStatusCodeIs200(KernelBrowser $client)
     {
         $crawler = $client->getCrawler();
         $errorMessage = $crawler->filter('title')->text();

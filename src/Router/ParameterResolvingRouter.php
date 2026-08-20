@@ -4,12 +4,13 @@ namespace eLife\Journal\Router;
 
 use BadMethodCallException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 
-final class ParameterResolvingRouter implements RouterInterface, RequestMatcherInterface
+final class ParameterResolvingRouter implements RouterInterface, RequestMatcherInterface, WarmableInterface
 {
     private $router;
     private $parameterResolver;
@@ -52,5 +53,14 @@ final class ParameterResolvingRouter implements RouterInterface, RequestMatcherI
         }
 
         return $this->router->matchRequest($request);
+    }
+
+    public function warmUp(string $cacheDir)
+    {
+        if (!$this->router instanceof WarmableInterface) {
+            return [];
+        }
+
+        return $this->router->warmUp($cacheDir);
     }
 }

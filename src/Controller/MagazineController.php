@@ -155,6 +155,6 @@ final class MagazineController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load digests'));
 
-        return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
+        return new Response($this->get('templating')->render('magazine.html.twig', $arguments));
     }
 }

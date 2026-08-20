@@ -70,7 +70,7 @@ final class EventsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader('eLife events');
 
-        return new Response($this->get('templating')->render('::events.html.twig', $arguments));
+        return new Response($this->get('templating')->render('events.html.twig', $arguments));
     }
 
     public function eventAction(Request $request, string $id) : Response
@@ -107,6 +107,6 @@ final class EventsController extends Controller
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
 
-        return new Response($this->get('templating')->render('::event.html.twig', $arguments));
+        return new Response($this->get('templating')->render('event.html.twig', $arguments));
     }
 }

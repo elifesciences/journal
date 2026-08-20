@@ -83,6 +83,6 @@ final class ProfilesController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        return new Response($this->get('templating')->render('::profile.html.twig', $arguments));
+        return new Response($this->get('templating')->render('profile.html.twig', $arguments));
     }
 }

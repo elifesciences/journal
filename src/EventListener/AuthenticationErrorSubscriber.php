@@ -5,7 +5,7 @@ namespace eLife\Journal\EventListener;
 use eLife\Patterns\ViewModel\InfoBar;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -28,7 +28,7 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest() || !$event->getRequest()->getSession()->isStarted()) {
             return;

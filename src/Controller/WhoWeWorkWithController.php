@@ -297,7 +297,7 @@ final class WhoWeWorkWithController extends Controller
             GridListing::forImageLinks($this->toImageLinks($committees), new ListHeading('Committees and initiatives')),
         ];
 
-        return new Response($this->get('templating')->render('::who-we-work-with.html.twig', $arguments));
+        return new Response($this->get('templating')->render('who-we-work-with.html.twig', $arguments));
     }
 
     private function toImageLinks(array $items) : array

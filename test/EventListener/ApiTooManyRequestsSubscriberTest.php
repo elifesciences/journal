@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -21,11 +21,11 @@ final class ApiTooManyRequestsSubscriberTest extends TestCase
         $subscriber = new ApiTooManyRequestsSubscriber();
 
         $exception = new BadResponse('Too Many Requests', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(429));
-        $event = new GetResponseForExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
-        $actual = $event->getException();
+        $actual = $event->getThrowable();
 
         $this->assertInstanceOf(HttpException::class, $actual);
         $this->assertSame(429, $actual->getStatusCode());
@@ -44,10 +44,10 @@ final class ApiTooManyRequestsSubscriberTest extends TestCase
         $subscriber = new ApiTooManyRequestsSubscriber();
 
         $exception = new BadResponse('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(400));
-        $event = new GetResponseForExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
-        $this->assertSame($exception, $event->getException());
+        $this->assertSame($exception, $event->getThrowable());
     }
 }

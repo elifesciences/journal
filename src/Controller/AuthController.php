@@ -29,6 +29,6 @@ final class AuthController extends Controller
             'error' => new OrcidVisibilitySettingError($this->get('router')->generate('contact')),
         ];
 
-        return new Response($this->get('templating')->render('::exception.html.twig', $arguments));
+        return new Response($this->get('templating')->render('exception.html.twig', $arguments));
     }
 }

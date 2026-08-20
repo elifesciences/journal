@@ -5,7 +5,7 @@ namespace test\eLife\Journal;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
@@ -17,7 +17,7 @@ abstract class WebTestCase extends BaseWebTestCase
     use AppKernelTestCase;
     use Assertions;
 
-    final protected function logIn(Client $client)
+    final protected function logIn(KernelBrowser $client)
     {
         $session = $client->getContainer()->get('session');
 

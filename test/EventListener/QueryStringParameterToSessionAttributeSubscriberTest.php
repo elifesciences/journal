@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Traversable;
 
@@ -23,7 +23,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
 
         $request = Request::create($uri);
         $request->setSession(new Session(new MockArraySessionStorage()));
-        $event = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber->onKernelRequest($event);
 
@@ -44,7 +44,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
 
         $request = Request::create('?foo');
         $request->setSession(new Session(new MockArraySessionStorage()));
-        $event = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
+        $event = new RequestEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
 
         $subscriber->onKernelRequest($event);
 
@@ -58,7 +58,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
 
         $request = Request::create('?parameter');
         $request->setSession(new Session(new MockArraySessionStorage()));
-        $event = new GetResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
+        $event = new RequestEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::SUB_REQUEST);
 
         $subscriber->onKernelRequest($event);
 

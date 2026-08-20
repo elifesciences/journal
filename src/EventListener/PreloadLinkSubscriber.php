@@ -7,7 +7,7 @@ use Fig\Link\Link;
 use GuzzleHttp\Psr7\UriResolver;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use function GuzzleHttp\Psr7\uri_for;
 use function strpos;
@@ -28,7 +28,7 @@ final class PreloadLinkSubscriber implements EventSubscriberInterface
         return [KernelEvents::RESPONSE => ['onKernelResponse', 1]];
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $request = $event->getRequest();
         $response = $event->getResponse();

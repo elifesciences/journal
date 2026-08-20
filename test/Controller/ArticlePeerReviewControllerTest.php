@@ -57,7 +57,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
                 'Reviewer #2 (public review)',
                 'Author response',
             ],
-            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract(['_text']))
         );
     }
 
@@ -87,7 +87,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
                 'Decision letter',
                 'Author response',
             ],
-            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract(['_text']))
         );
     }
 

@@ -19,6 +19,12 @@ trait CanCheckAuthorization
 
     final protected function isGranted(string ...$attributes) : bool
     {
-        return $this->getAuthorizationChecker()->isGranted($attributes);
+        foreach ($attributes as $attribute) {
+            if ($this->getAuthorizationChecker()->isGranted($attribute)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

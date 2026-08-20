@@ -12,7 +12,6 @@ use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\HttpKernel\UriSigner;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
 final class FigureAssetVideoConverterTest extends BlockConverterTestCase
@@ -26,7 +25,7 @@ final class FigureAssetVideoConverterTest extends BlockConverterTestCase
         $this->converter = new FigureAssetVideoConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->createMock(PatternRenderer::class),
-            new DownloadLinkUriGenerator($this->createMock(UrlGeneratorInterface::class), new UriSigner('secret'))
+            new DownloadLinkUriGenerator($this->stubUrlGenerator(), new UriSigner('secret'))
         );
 
         $viewModelConverter

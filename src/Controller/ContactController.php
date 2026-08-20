@@ -23,6 +23,6 @@ final class ContactController extends Controller
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::contact.html.twig', $arguments));
+        return new Response($this->get('templating')->render('contact.html.twig', $arguments));
     }
 }

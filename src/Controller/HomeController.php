@@ -168,6 +168,6 @@ final class HomeController extends Controller
             true
         );
 
-        return new Response($this->get('templating')->render('::home.html.twig', $arguments));
+        return new Response($this->get('templating')->render('home.html.twig', $arguments));
     }
 }

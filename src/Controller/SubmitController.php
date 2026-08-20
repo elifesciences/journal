@@ -47,7 +47,7 @@ final class SubmitController extends Controller
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $path = [
                 '_forwarded' => $request->attributes,
-                '_controller' => 'AppBundle:Auth:redirect',
+                '_controller' => AuthController::class.'::redirectAction',
             ];
             $subRequest = $request->duplicate(null, null, $path);
             $subRequest->headers->set('Referer', $request->getUri());
@@ -80,6 +80,6 @@ final class SubmitController extends Controller
             null,
             'Submit your research'
         );
-        return new Response($this->get('templating')->render('::submit-your-research.html.twig', $arguments));
+        return new Response($this->get('templating')->render('submit-your-research.html.twig', $arguments));
     }
 }

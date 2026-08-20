@@ -695,7 +695,7 @@ final class HomeControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
+        $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract(['_text'])));
     }
 
     #[Test]

@@ -1,0 +1,57 @@
+{% set criticalCss = 'post' %}
+
+{% set hypothesis = true %}
+
+{% extends 'page.html.twig' %}
+
+{% block title %}{{ title|striptags }} | Interviews{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block social %}
+
+            {% if socialMediaSharersLinks %}
+                
+                {{ render_pattern(socialMediaSharersLinks) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block main %}
+
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
+
+            {% if cv %}
+                {{ render_pattern(cv) }}
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if collections %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(collections) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    {{ schema_org_metadata(item) }}
+
+{% endblock %}

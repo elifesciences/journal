@@ -147,7 +147,7 @@ final class BrowseController extends Controller
                 );
             });
 
-        return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
+        return new Response($this->get('templating')->render('browse.html.twig', $arguments));
     }
 
     private function buildTermFilters(array $terms, string $queryStringParameterName = null): array

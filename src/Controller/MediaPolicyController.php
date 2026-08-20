@@ -34,6 +34,6 @@ final class MediaPolicyController extends Controller
             ), 'Corporate news and announcements', 2),
         ];
 
-        return new Response($this->get('templating')->render('::media-policy.html.twig', $arguments));
+        return new Response($this->get('templating')->render('media-policy.html.twig', $arguments));
     }
 }

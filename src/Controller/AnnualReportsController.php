@@ -51,6 +51,6 @@ final class AnnualReportsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::annual-reports.html.twig', $arguments));
+        return new Response($this->get('templating')->render('annual-reports.html.twig', $arguments));
     }
 }

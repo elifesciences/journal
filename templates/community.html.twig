@@ -1,0 +1,35 @@
+{% set criticalCss = 'listing' %}
+
+{% extends 'page.html.twig' %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if highlights %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(highlights) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

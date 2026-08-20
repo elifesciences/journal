@@ -2,30 +2,20 @@
 
 namespace eLife\Journal\Templating;
 
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use function GuzzleHttp\Promise\all;
 
-final class PromiseAwareEngine implements EngineInterface
+final class PromiseAwareEngine
 {
-    private $engine;
+    private $twig;
 
-    public function __construct(EngineInterface $engine)
+    public function __construct(Environment $twig)
     {
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function render($name, array $parameters = [])
     {
-        return $this->engine->render($name, all($parameters)->wait());
-    }
-
-    public function exists($name)
-    {
-        return $this->engine->exists($name);
-    }
-
-    public function supports($name)
-    {
-        return $this->engine->supports($name);
+        return $this->twig->render($name, all($parameters)->wait());
     }
 }

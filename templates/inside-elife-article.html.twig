@@ -1,0 +1,48 @@
+{% set criticalCss = 'post' %}
+
+{% set hypothesis = true %}
+{% set customWrapperClass = 'content--one-column' %}
+
+{% extends 'page.html.twig' %}
+
+{% block title %}{{ title|striptags }} | Inside eLife{% endblock %}
+
+{% block body %}
+
+    <style>
+        /* This is needed for inside-elife/9bc3981f */
+        .iframe-embed {
+            margin: 24px 0;
+            margin: 1.5rem 0;
+        }
+    </style>
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/content-new.html.twig' %}
+
+        {% block social %}
+
+            {% if socialMediaSharersLinks %}
+                
+                {{ render_pattern(socialMediaSharersLinks) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block main %}
+
+            {% for block in blocks %}
+                {{ render_pattern(block)|iframe_embed }}
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    {{ schema_org_metadata(item) }}
+
+{% endblock %}

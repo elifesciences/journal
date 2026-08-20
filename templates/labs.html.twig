@@ -1,0 +1,29 @@
+{% set criticalCss = 'grid-listing' %}
+
+{% extends 'page.html.twig' %}
+
+{% block meta %}
+
+    {{ parent() }}
+
+    <link rel="alternate" type="application/rss+xml" title="Open source technology innovation news from eLife Sciences" href="{{ path('rss-labs') }}" />
+
+{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
+
+        {% block listing %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

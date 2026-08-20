@@ -40,6 +40,6 @@ final class RequestHeaderVoter extends Voter
             return false;
         }
 
-        return !empty(array_intersect($request->headers->get($this->header, null, false), $this->headerValues));
+        return !empty(array_intersect($request->headers->all($this->header), $this->headerValues));
     }
 }

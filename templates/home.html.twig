@@ -1,0 +1,95 @@
+{% set criticalCss = 'home' %}
+{% set isHomePage = true %}
+{% set mainClass = 'main--with-new-designs-borders' %}
+
+{% extends 'page.html.twig' %}
+
+{% block meta %}
+
+    {{ parent() }}
+
+    <link rel="alternate" type="application/rss+xml" title="Read the latest life sciences research from eLife Sciences" href="{{ path('rss-recent') }}" />
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="banner-and-subjects-wrapper">
+
+        {% if homeBanner is defined and homeBanner %}
+
+            {{ render_pattern(homeBanner) }}
+
+        {% endif %}
+
+        {% if subjects %}
+
+            <div class="wrapper wrapper--subjects">
+
+                {{ render_pattern(subjectsLink) }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% if highlights is defined and highlights %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(highlights) }}
+
+        </div>
+
+    {% endif %}
+    
+    {{ render_pattern(testimonialWithLink) }}
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if announcements %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(announcements) }}
+
+                </div>
+
+            {% endif %}
+
+            {% if magazine %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(magazine) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    {% if subjects %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(subjects) }}
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}

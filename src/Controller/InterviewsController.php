@@ -69,7 +69,7 @@ final class InterviewsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::interviews.html.twig', $arguments));
+        return new Response($this->get('templating')->render('interviews.html.twig', $arguments));
     }
 
     public function interviewAction(Request $request, string $id) : Response
@@ -130,6 +130,6 @@ final class InterviewsController extends Controller
             }))
             ->otherwise($this->softFailure("Failed to load collections for interview '$id'"));
 
-        return new Response($this->get('templating')->render('::interview.html.twig', $arguments));
+        return new Response($this->get('templating')->render('interview.html.twig', $arguments));
     }
 }

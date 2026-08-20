@@ -69,7 +69,7 @@ final class DigestsController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'Cutting jargon and putting research in context, <a href="https://doi.org/10.7554/eLife.25410">digests</a> showcase some of the latest articles published in eLife.');
 
-        return new Response($this->get('templating')->render('::digests.html.twig', $arguments));
+        return new Response($this->get('templating')->render('digests.html.twig', $arguments));
     }
 
     public function digestAction(Request $request, string $id) : Response
@@ -120,6 +120,6 @@ final class DigestsController extends Controller
                 });
             });
             
-        return new Response($this->get('templating')->render('::digest.html.twig', $arguments));
+        return new Response($this->get('templating')->render('digest.html.twig', $arguments));
     }
 }

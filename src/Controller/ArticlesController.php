@@ -710,7 +710,7 @@ final class ArticlesController extends Controller
 
         $arguments['google_scholar_metadata'] = (bool) $request->headers->get('X-eLife-Google-Scholar-Metadata', false);
 
-        return new Response($this->get('templating')->render('::article-text.html.twig', $arguments), Response::HTTP_OK, ['Vary' => 'X-eLife-Google-Scholar-Metadata']);
+        return new Response($this->get('templating')->render('article-text.html.twig', $arguments), Response::HTTP_OK, ['Vary' => 'X-eLife-Google-Scholar-Metadata']);
     }
 
     public function figuresAction(Request $request, string $id, int $version = null) : Response
@@ -869,7 +869,7 @@ final class ArticlesController extends Controller
                 return $body;
             });
 
-        return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
+        return new Response($this->get('templating')->render('article-figures.html.twig', $arguments));
     }
 
     public function peerReviewsAction(Request $request, string $id, int $version = null) : Response
@@ -1169,7 +1169,7 @@ final class ArticlesController extends Controller
                 return $body;
             });
 
-        return new Response($this->get('templating')->render('::article-peer-reviews.html.twig', $arguments));
+        return new Response($this->get('templating')->render('article-peer-reviews.html.twig', $arguments));
     }
 
     public function bibTexAction(Request $request, string $id) : Response
@@ -1179,7 +1179,7 @@ final class ArticlesController extends Controller
         $arguments['item'] = $arguments['item']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
 
-        return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
+        return new Response($this->get('templating')->render('article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
     }
 
     public function pdfAction(Request $request, string $id, int $version = null) : Response
@@ -1204,7 +1204,7 @@ final class ArticlesController extends Controller
         $arguments['item'] = $arguments['item']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
 
-        return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
+        return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
     public function eraAction(Request $request, string $id) : Response
@@ -1221,7 +1221,7 @@ final class ArticlesController extends Controller
 
         $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
 
-        return new Response($this->get('templating')->render('::article-era.html.twig', $arguments));
+        return new Response($this->get('templating')->render('article-era.html.twig', $arguments));
     }
 
     public function eraDownloadAction(Request $request, string $id) : Response
@@ -1321,7 +1321,7 @@ final class ArticlesController extends Controller
             ->then(function (ArticleVersion $item) {
                 return [
                     $this->convertTo($item, ViewModel\ModalWindow::class),
-                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation', 'clipboard' => $this->get('templating')->render('::article.cite.twig', ['item' => $item])]),
+                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation', 'clipboard' => $this->get('templating')->render('article.cite.twig', ['item' => $item])]),
                 ];
             });
 

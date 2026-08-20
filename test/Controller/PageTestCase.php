@@ -3,7 +3,7 @@
 namespace test\eLife\Journal\Controller;
 
 use PHPUnit\Framework\Attributes\Test;
-use Symfony\Component\BrowserKit\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\Journal\WebTestCase;
@@ -131,7 +131,7 @@ abstract class PageTestCase extends WebTestCase
         return $text;
     }
 
-    protected static function onCreateClient(Client $client)
+    protected static function onCreateClient(KernelBrowser $client)
     {
         // Do nothing.
     }

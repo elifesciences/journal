@@ -65,6 +65,6 @@ final class AlertsController extends Controller
 
         $arguments['body'][] = new Paragraph('eLife is also on <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.');
 
-        return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
+        return new Response($this->get('templating')->render('alerts.html.twig', $arguments));
     }
 }

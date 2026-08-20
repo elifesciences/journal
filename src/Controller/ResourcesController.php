@@ -57,7 +57,7 @@ final class ResourcesController extends Controller
             ), 'The eLife logo', 2),
         ];
 
-        return new Response($this->get('templating')->render('::resources.html.twig', $arguments));
+        return new Response($this->get('templating')->render('resources.html.twig', $arguments));
     }
 
     private function generateDownloadLink(string $uri) : string

@@ -25,7 +25,7 @@ final class MediaPolicyControllerTest extends PageTestCase
             'Our policy not to embargo eLife papers',
             'Making research content widely accessible',
             'Corporate news and announcements',
-        ], $majorSections->extract('_text'));
+        ], $majorSections->extract(['_text']));
     }
 
     #[Test]

@@ -67,7 +67,7 @@ final class JobAdvertsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::job-adverts.html.twig', $arguments));
+        return new Response($this->get('templating')->render('job-adverts.html.twig', $arguments));
     }
 
     public function jobAdvertAction(Request $request, string $id) : Response
@@ -99,6 +99,6 @@ final class JobAdvertsController extends Controller
                 return [new Paragraph('This position is now closed to applications.')];
             });
 
-        return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
+        return new Response($this->get('templating')->render('job-advert.html.twig', $arguments));
     }
 }

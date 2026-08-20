@@ -334,7 +334,7 @@ services:
         class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
-          - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
+          - '@=service("kernel").getProjectDir()~"/templates/patterns"'
           - stat_props: '%mustache_stat_props%'
 
     elife.journal.router.parameter_resolver.model:
@@ -389,11 +389,10 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.templating.promise_aware:
+    templating:
         class: eLife\Journal\Templating\PromiseAwareEngine
-        decorates: templating
         arguments:
-          - '@elife.journal.templating.promise_aware.inner'
+          - '@twig'
 
     elife.journal.twig.extension.fragment_link_rewriter:
         class: eLife\Journal\Twig\FragmentLinkRewriterExtension
@@ -1644,6 +1643,9 @@ services:
 
     elife.assets.packages:
         alias: 'assets.packages'
+
+    elife.error_renderer:
+        alias: 'error_renderer'
 
 #    elife.csa_guzzle.client.elife_api:
 #        alias: 'csa_guzzle.client.elife_api'

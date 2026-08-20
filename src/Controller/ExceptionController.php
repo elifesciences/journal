@@ -8,7 +8,7 @@ use eLife\Patterns\ViewModel\ClientError;
 use eLife\Patterns\ViewModel\NotFound;
 use eLife\Patterns\ViewModel\ServerError;
 use eLife\Patterns\ViewModel\ServiceUnavailable;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
@@ -20,7 +20,9 @@ final class ExceptionController extends Controller
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null) : Response
     {
         if ($request->attributes->get('showException', $this->get('kernel')->isDebug())) {
-            return $this->get('twig.controller.exception')->showAction($request, $exception, $logger);
+            $rendered = $this->get('elife.error_renderer')->render($request->attributes->get('exception'));
+
+            return new Response($rendered->getAsString(), $rendered->getStatusCode(), $rendered->getHeaders());
         }
 
         if (ob_get_length()) {
@@ -38,7 +40,7 @@ final class ExceptionController extends Controller
 
         $arguments['error'] = $this->createError($request, $exception->getStatusCode());
 
-        return new Response($this->get('templating')->render('::exception.html.twig', $arguments));
+        return new Response($this->get('templating')->render('exception.html.twig', $arguments));
     }
 
     private function createError(Request $request, int $statusCode) : ViewModel

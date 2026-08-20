@@ -25,8 +25,8 @@ final class DisableAnonymousCsrfExtension extends AbstractTypeExtension
         $resolver->setDefault('csrf_protection', false);
     }
 
-    public function getExtendedType() : string
+    public static function getExtendedTypes() : iterable
     {
-        return FormType::class;
+        return [FormType::class];
     }
 }

@@ -249,6 +249,6 @@ EOT
             ), null, null, true),
         ];
 
-        return new Response($this->get('templating')->render('::privacy.html.twig', $arguments));
+        return new Response($this->get('templating')->render('privacy.html.twig', $arguments));
     }
 }

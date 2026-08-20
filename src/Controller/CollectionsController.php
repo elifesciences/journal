@@ -59,7 +59,7 @@ final class CollectionsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
+        return new Response($this->get('templating')->render('collections.html.twig', $arguments));
     }
 
     public function collectionAction(Request $request, string $id) : Response
@@ -126,6 +126,6 @@ final class CollectionsController extends Controller
                 );
             });
 
-        return new Response($this->get('templating')->render('::collection.html.twig', $arguments));
+        return new Response($this->get('templating')->render('collection.html.twig', $arguments));
     }
 }

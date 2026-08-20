@@ -3,11 +3,11 @@
 namespace eLife\Journal\DependencyInjection;
 
 use Redis;
-use Snc\RedisBundle\Session\Storage\Handler\RedisSessionHandler;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler;
 
 final class RedisSessionsPass implements CompilerPassInterface
 {
@@ -25,7 +25,7 @@ final class RedisSessionsPass implements CompilerPassInterface
 
         $sessionHandler = new Definition(RedisSessionHandler::class);
         $sessionHandler->addArgument($container->findDefinition('elife.journal.session.redis'));
-        $sessionHandler->addArgument($container->getParameter('session.storage.options'));
+        $sessionHandler->addArgument(['ttl' => $container->getParameter('session.storage.options')['cookie_lifetime'] ?? null]);
 
         $container->setDefinition('session.handler', $sessionHandler);
     }

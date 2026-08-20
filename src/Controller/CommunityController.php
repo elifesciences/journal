@@ -68,6 +68,6 @@ follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and e
             }))
             ->otherwise($this->softFailure('Failed to load community highlights'));
 
-        return new Response($this->get('templating')->render('::community.html.twig', $arguments));
+        return new Response($this->get('templating')->render('community.html.twig', $arguments));
     }
 }

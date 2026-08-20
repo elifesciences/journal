@@ -15,6 +15,9 @@
     "require": {
         "php": "8.3",
         "ext-hash": "*",
+        "ext-json": "*",
+        "ext-redis": "*",
+        "babdev/pagerfanta-bundle": "3.3.0",
         "beberlei/assert": "^v3.3.4",
         "cocur/slugify": "^3.0",
         "composer/package-versions-deprecated": "1.11.99.2",
@@ -30,7 +33,7 @@
         "guzzlehttp/promises": "^1.3",
         "guzzlehttp/psr7": "^1.4",
         "isometriks/spam-bundle": "*",
-        "knpuniversity/oauth2-client-bundle": "^1.20",
+        "knpuniversity/oauth2-client-bundle": "^2.18.0",
         "league/oauth2-client": "^2.2",
         "mindplay/composer-locator": "^2.1",
         "monolog/monolog": "1.27.1",
@@ -39,15 +42,12 @@
         "pagerfanta/pagerfanta": "^1.0",
         "psr/http-message": "^1.0",
         "psr/log": "^1.0",
-        "snc/redis-bundle": "^2.0",
         "swiftmailer/swiftmailer": "^6.0",
-        "symfony/http-client": "^4.4",
+        "symfony/http-client": "^5.4",
         "symfony/monolog-bundle": "^3.1",
         "symfony/swiftmailer-bundle": "^3.1",
-        "symfony/symfony": "^4.0",
-        "twig/twig": "^2.7",
-        "white-october/pagerfanta-bundle": "^1.1",
-        "ext-json": "*"
+        "symfony/symfony": "^5.4",
+        "twig/twig": "^2.7"
     },
     "require-dev": {
         "elife/api": "^2.31",

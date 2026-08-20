@@ -1,0 +1,45 @@
+{% set criticalCss = 'archive-month' %}
+
+{% extends 'page.html.twig' %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% if covers %}
+
+            {{ render_pattern(covers) }}
+
+        {% endif %}
+
+    </div>
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if magazine %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(magazine) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

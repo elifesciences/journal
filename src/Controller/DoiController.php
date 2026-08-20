@@ -61,6 +61,11 @@ final class DoiController extends Controller
 
         $subRequest = Request::create($this->get('router')->generate($routeName, ['id' => $matches[1]], UrlGeneratorInterface::ABSOLUTE_URL));
 
+        $currentRequest = $this->get('request_stack')->getCurrentRequest();
+        if ($currentRequest && $currentRequest->hasSession()) {
+            $subRequest->setSession($currentRequest->getSession());
+        }
+
         /** @var Response $text */
         $text = $this->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 

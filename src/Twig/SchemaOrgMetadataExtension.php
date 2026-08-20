@@ -201,7 +201,7 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
 
             $format = implode('', iterator_to_array((function ($time) {
                 foreach ($time as $unit => $length) {
-                    yield "${length}{$unit}";
+                    yield "{$length}{$unit}";
                 }
             })(array_filter([
                 'H' => $duration->h,

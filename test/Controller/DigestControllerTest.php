@@ -88,7 +88,7 @@ final class DigestControllerTest extends PageTestCase
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
-            }, $crawler->filter('.contextual-data__item')->extract('_text'))
+            }, $crawler->filter('.contextual-data__item')->extract(['_text']))
         );
     }
 

@@ -25,6 +25,6 @@ final class LocalPageStubController extends Controller
 
         $arguments['body'][] = new Paragraph('This is a page forwarded to other projects in production, it cannot be displayed in local development.');
 
-        return new Response($this->get('templating')->render('::local-page-stub.html.twig', $arguments));
+        return new Response($this->get('templating')->render('local-page-stub.html.twig', $arguments));
     }
 }

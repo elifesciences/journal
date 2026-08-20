@@ -152,7 +152,7 @@ final class AboutController extends Controller
 
         $arguments['lists'] = array_filter($arguments['lists'], Callback::isNotEmpty());
 
-        return new Response($this->get('templating')->render('::about-people.html.twig', $arguments));
+        return new Response($this->get('templating')->render('about-people.html.twig', $arguments));
     }
 
     private function createAboutProfiles(Sequence $people, string $heading, bool $compact = false)

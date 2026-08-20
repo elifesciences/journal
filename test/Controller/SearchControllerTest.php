@@ -625,6 +625,6 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        return '/search'.($for ? '?for='.$for : '');
+        return '/search'.($for ? '?for='.rawurlencode($for) : '');
     }
 }

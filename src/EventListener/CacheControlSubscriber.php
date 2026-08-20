@@ -5,7 +5,7 @@ namespace eLife\Journal\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 
 final class CacheControlSubscriber implements EventSubscriberInterface
@@ -26,7 +26,7 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $request = $event->getRequest();
         $response = $event->getResponse();

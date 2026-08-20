@@ -1214,7 +1214,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
-            }, $crawler->filter('.contextual-data__item')->extract('_text'))
+            }, $crawler->filter('.contextual-data__item')->extract(['_text']))
         );
 
         $metrics = $crawler->filter('.main-content-grid > section:nth-of-type(3)');
@@ -1369,7 +1369,7 @@ final class ArticleControllerTest extends PageTestCase
                 $expected,
                 array_map(function (string $text) {
                     return trim(preg_replace('!\s+!', ' ', $text));
-                }, $crawler->filter('.contextual-data__item')->extract('_text'))
+                }, $crawler->filter('.contextual-data__item')->extract(['_text']))
             );
         }
     }
@@ -2810,7 +2810,7 @@ final class ArticleControllerTest extends PageTestCase
                 'References',
                 'Article and author information',
             ],
-            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract(['_text']))
         );
     }
 
