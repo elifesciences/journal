@@ -1,0 +1,31 @@
+security:
+    enable_authenticator_manager: true
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        oauth:
+            id: knpu.oauth2.user_provider
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt))/
+            security: false
+        main:
+            guard:
+                authenticators:
+                    - elife.journal.security.authenticator.elife
+            logout:
+                delete_cookies:
+                    session:
+                        name: '%session_name%' # https://github.com/symfony/symfony/pull/24018
+                path: /log-out
+                target: /
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - path: ^/log-in
+          roles: IS_AUTHENTICATED_ANONYMOUSLY

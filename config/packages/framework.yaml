@@ -1,0 +1,56 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    secret: '%secret%'
+    http_method_override: false
+
+    error_controller: eLife\Journal\Controller\ExceptionController::showAction
+    form: ~
+    router:
+        resource: '%kernel.project_dir%/config/routes.yaml'
+
+    # Enables session support. Note that the session will ONLY be started if you read or write from it.
+    # Remove or comment this section to explicitly disable session support.
+    session:
+        cookie_lifetime: 2592000 # 30 days
+        name: '%session_name%'
+        save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
+        handler_id: null
+        cookie_secure: true
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
+
+    assets:
+        json_manifest_path: '%kernel.project_dir%/build/rev-manifest.json'
+
+    #esi: true
+    #fragments: true
+    php_errors:
+        log: true
+
+# ci/dev are the only envs that don't run behind HTTPS with a known host, so they're the
+# exceptions to the cookie_secure default above rather than the other way round.
+when@dev:
+    framework:
+        session:
+            cookie_secure: auto
+
+when@ci:
+    framework:
+        test: ~
+        session:
+            cookie_secure: auto
+            storage_factory_id: session.storage.factory.mock_file
+        profiler:
+            collect: false
+            enabled: true
+
+# trusted_hosts is a list, so a later when@ block can't override/clear it (Symfony merges
+# list config additively) — ci/dev simply never set it, and the rest alias this one block.
+when@prod: &prod_trusted_hosts
+    framework:
+        trusted_hosts: '%trusted_hosts%'
+
+when@demo: *prod_trusted_hosts
+when@preview: *prod_trusted_hosts
+when@continuumtest: *prod_trusted_hosts
+when@continuumtestpreview: *prod_trusted_hosts

@@ -1,0 +1,6 @@
+when@dev: &framework_error_routes
+    _errors:
+        resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+        prefix: /_error
+
+when@ci: *framework_error_routes

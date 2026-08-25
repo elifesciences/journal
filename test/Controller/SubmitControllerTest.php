@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use test\eLife\Journal\WebTestCase;
 use function GuzzleHttp\Psr7\parse_query;
 
@@ -146,7 +147,7 @@ final class SubmitControllerTest extends WebTestCase
         ];
     }
 
-    protected static function createClient(array $options = [], array $server = [])
+    protected static function createClient(array $options = [], array $server = []) : KernelBrowser
     {
         $client = parent::createClient($options, $server);
 

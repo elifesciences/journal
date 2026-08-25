@@ -3,6 +3,12 @@ parameters:
     api_url_search_page: "%env(API_URL_SEARCH_PAGE)%"
     api_url_public: "%env(API_URL_PUBLIC)%"
     api_key: "%env(API_KEY)%"
+    api_connect_timeout: 2
+    api_timeout: 5
+    api_connect_timeout_slow: 3
+    api_timeout_slow: 10
+    mustache_stat_props: [ size, mtime ]
+    honeypot_field: email_address
     side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal

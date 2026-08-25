@@ -1,0 +1,13 @@
+knpu_oauth2_client:
+    http_client: elife.journal.security.oauth.guzzle_adapter
+    clients:
+        # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration
+        elife:
+            type: generic
+            provider_class: eLife\Journal\Security\OAuth2\ElifeProvider
+            client_id: '%oauth2_client_id%'
+            client_secret: '%oauth2_client_secret%'
+            redirect_route: log-in-check
+            provider_options:
+                api_url: '%api_url%'
+                api_url_public: '%api_url_public%'

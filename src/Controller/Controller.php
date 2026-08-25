@@ -198,7 +198,7 @@ abstract class Controller implements ContainerAwareInterface
 
         foreach ($statusMessages as $level => $messages) {
             foreach ($messages as $message) {
-                $this->get('session')
+                $request->getSession()
                     ->getFlashBag()
                     ->add($level, $message);
             }

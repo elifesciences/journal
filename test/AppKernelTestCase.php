@@ -6,6 +6,7 @@ use eLife\Journal\AppKernel;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 trait AppKernelTestCase
 {
@@ -26,7 +27,7 @@ trait AppKernelTestCase
         }
     }
 
-    final protected static function bootKernel(array $options = [])
+    final protected static function bootKernel(array $options = []) : KernelInterface
     {
         parent::bootKernel($options);
 
@@ -41,7 +42,7 @@ trait AppKernelTestCase
         return static::$kernel;
     }
 
-    final protected static function createKernel(array $options = [])
+    final protected static function createKernel(array $options = []) : KernelInterface
     {
         $kernel = parent::createKernel($options);
 

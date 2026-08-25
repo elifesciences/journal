@@ -8,6 +8,11 @@ nelmio_security:
     content_type:
         nosniff: true
 
+    csp:
+        enforce:
+            frame-ancestors:
+                - none
+
     # Send a full URL in the `Referer` header when performing a same-origin request,
     # only send the origin of the document to secure destination (HTTPS->HTTPS),
     # and send no header to a less secure destination (HTTPS->HTTP).
@@ -16,5 +21,33 @@ nelmio_security:
     referrer_policy:
         enabled: true
         policies:
-            - 'no-referrer'
+            - 'no-referrer-when-downgrade'
             - 'strict-origin-when-cross-origin'
+
+    xss_protection:
+        enabled: true
+        mode_block: true
+
+when@prod: &prod_nelmio_security
+    nelmio_security:
+        csp:
+            enforce:
+                default-src:
+                    - 'data:'
+                    - 'https:'
+                    - 'https://*.hotjar.com:*'
+                    - 'https://*.hotjar.io'
+                    - 'wss://*.hotjar.com'
+                    - unsafe-eval
+                    - unsafe-inline
+        forced_ssl:
+            whitelist:
+                - ^/ # Hack to disable redirect.
+            hsts_max_age: 31536000 # 1 year
+            hsts_subdomains: true
+            hsts_preload: true
+
+when@demo: *prod_nelmio_security
+when@preview: *prod_nelmio_security
+when@continuumtest: *prod_nelmio_security
+when@continuumtestpreview: *prod_nelmio_security

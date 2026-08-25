@@ -1,6 +1,6 @@
 <?php
 
-use eLife\Journal\AppKernel;
+use eLife\Journal\Kernel;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,7 +28,7 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-$kernel = new AppKernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
+$kernel = new Kernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
 
 Request::enableHttpMethodParameterOverride();
 

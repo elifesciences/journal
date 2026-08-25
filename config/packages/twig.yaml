@@ -1,0 +1,16 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        gtm_id: '%gtm_id%'
+        google_optimize_id: '%google_optimize_id%'
+        cb_id: '%cb_id%'
+        hypothesis_api: '%hypothesis_api%'
+        hypothesis_authority: '%hypothesis_authority%'
+    paths:
+        '%kernel.project_dir%/build': 'build'
+        '%kernel.project_dir%/vendor/elife/patterns/resources': 'patterns'
+
+when@ci:
+    twig:
+        strict_variables: true
+        debug: true

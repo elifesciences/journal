@@ -104,7 +104,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertSame(Response::HTTP_NOT_MODIFIED, $client->getResponse()->getStatusCode());
     }
 
-    final protected static function createClient(array $options = [], array $server = [])
+    final protected static function createClient(array $options = [], array $server = []) : KernelBrowser
     {
         static::bootKernel($options);
 

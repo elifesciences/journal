@@ -1,0 +1,186 @@
+parameters:
+  api_connect_timeout: 2
+  api_timeout: 5
+  api_connect_timeout_slow: 3
+  api_timeout_slow: 10
+  mustache_stat_props: [size, mtime]
+  api_url: http://api.elifesciences.org
+  api_url_search_page: http://api.elifesciences.org
+  api_url_public: http://api.elifesciences.org
+  api_mock: '%kernel.project_dir%/var/fixtures/instance_%kernel.instance%'
+  cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
+  calls_to_action:
+    - id: cta1
+      from: 2100-01-01T00:00:00Z
+      path: ^/
+      text: Call to action 1
+      button:
+        text: Button text
+        path: https://elifesciences.org
+      image:
+        alt: ''
+        uri: https://www.example.com/iiif/thumb%2Fnail
+        source:
+          mediaType: image/jpg
+          uri: https://www.example.com/image.jpg
+          filename: image.jpg
+        size:
+          width: 800
+          height: 600
+    - id: cta2
+      path: ^/some-non-existent-path$
+      text: Call to action 2
+      button:
+        text: Button text
+        path: https://elifesciences.org
+      image:
+        alt: ''
+        uri: https://www.example.com/iiif/thumb%%2Fnail
+        source:
+          mediaType: image/jpg
+          uri: https://www.example.com/image.jpg
+          filename: image.jpg
+        size:
+          width: 800
+          height: 600
+    - id: cta3
+      from: 2000-01-01T00:00:00Z
+      path: ^/
+      text: Call to action 3
+      button:
+        text: Button text
+        path: https://elifesciences.org
+      image:
+        alt: ''
+        uri: https://www.example.com/iiif/thumb%2Fnail
+        source:
+          mediaType: image/jpg
+          uri: https://www.example.com/image.jpg
+          filename: image.jpg
+        size:
+          width: 800
+          height: 600
+    - id: cta4
+      from: 2100-01-01T00:00:00Z
+      text: Call to action 4
+      button:
+        text: Button text
+        path: https://elifesciences.org
+      image:
+        alt: ''
+        uri: https://www.example.com/iiif/thumb%%2Fnail
+        source:
+          mediaType: image/jpg
+          uri: https://www.example.com/image.jpg
+          filename: image.jpg
+        size:
+          width: 800
+          height: 600
+    - id: cta5
+      text: Call to action 5
+      button:
+        text: Button text
+        path: https://elifesciences.org
+      image:
+        alt: ''
+        uri: https://www.example.com/iiif/thumb%%2Fnail
+        source:
+          mediaType: image/jpg
+          uri: https://www.example.com/image.jpg
+          filename: image.jpg
+        size:
+          width: 800
+          height: 600
+  crm_url: http://crm.elifesciences.org/crm/civicrm/
+  feature_xpub: '%env(bool:FEATURE_XPUB)%'
+  env(FEATURE_XPUB): '0'
+  oauth2_client_id: journal_client_id
+  oauth2_client_secret: journal_client_secret
+  session_name: MOCKSESSID
+  status_checks:
+    Check 1: foo
+    Check 2: bar
+  subject_rewrites:
+    - from_id: old-subject
+      to_id: new-subject
+      to_name: New Subject
+  era_articles:
+    'id-of-article-with-era':
+      date: '2030-01-01T00:00:00Z'
+      display: https://repro.elifesciences.org/example.html
+      download: https://repro.elifesciences.org/archive.zip
+  submit_url: http://submit.elifesciences.org/path
+  dismissible_info_bars:
+    aging:
+      id: aging-special-issue
+      text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
+      article_ids:
+        - '26231'
+
+services:
+    _defaults:
+        public: true
+
+    elife.api_validator.validator:
+        class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
+        arguments:
+          - '@elife.api_validator.schema_finder'
+          - '@elife.api_validator.schema_validator'
+        tags:
+          - name: optional
+
+    elife.api_validator.validator.fake_https:
+        class: eLife\ApiValidator\MessageValidator\FakeHttpsMessageValidator
+        decorates: elife.api_validator.validator
+        arguments:
+          - '@elife.api_validator.validator.fake_https.inner'
+        tags:
+          - name: optional
+
+    elife.api_validator.schema_validator:
+        class: JsonSchema\Validator
+        public: false
+        tags:
+          - name: optional
+
+    elife.api_validator.schema_finder:
+        class: eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder
+        public: false
+        arguments:
+          - '@=composer_locate("elife/api")~"/dist/model"'
+        tags:
+          - name: optional
+
+    framework.http_client.clients.elife_api:
+        class: test\eLife\Journal\MockApiHttpClient
+        arguments:
+          - '%api_mock%'
+          - '%api_url%'
+          - ['authorization', 'content-length', 'host', 'referer', 'user-agent']
+          - '@?elife.api_validator.validator'
+
+    framework.http_client.clients.elife_api_search_page:
+        class: test\eLife\Journal\MockApiHttpClient
+        arguments:
+          - '%api_mock%'
+          - '%api_url_search_page%'
+          - ['authorization', 'content-length', 'host', 'referer', 'user-agent']
+          - '@?elife.api_validator.validator'
+
+    framework.http_client.clients.streamer:
+        class: test\eLife\Journal\MockApiHttpClient
+        arguments:
+          - '%api_mock%'
+          - ''
+          - ['accept', 'authorization', 'cache-control', 'content-length', 'host', 'if-modified-since', 'if-none-match', 'referer', 'user-agent', 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port', 'x-forwarded-proto']
+
+    framework.http_client.clients.oauth:
+        class: test\eLife\Journal\MockApiHttpClient
+        arguments:
+          - '%api_mock%'
+          - ''
+          - ['authorization', 'content-length', 'host', 'referer', 'user-agent']
+
+    elife.journal.google_client.opt_out_unsubscribe_reason:
+      class: eLife\Journal\GoogleClient\MockOptoutUnsubscribeReason
+

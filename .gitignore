@@ -1,6 +1,8 @@
 /.php_cs.cache
 /.web-server-pid
 /app/config/parameters.yml
+/config/parameters.yaml
+/config/parameters.yml
 /build/*
 !/build/.gitkeep
 !/build/critical-css/.gitkeep
@@ -21,3 +23,18 @@ docker-compose.override.yml
 /phpunit.xml
 /.phpunit.cache/
 ###< phpunit/phpunit ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

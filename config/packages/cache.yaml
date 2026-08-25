@@ -1,0 +1,18 @@
+framework:
+    cache:
+        # The "app" cache stores to the filesystem by default.
+        # The data in this cache should persist between deploys.
+
+        # Unique name of your app: used to compute stable namespaces for cache keys.
+        prefix_seed: 'elifesciences.org/journal'
+        default_redis_provider: '%redis_cache%'
+        pools:
+            cache.doi:
+                adapter: cache.app
+                default_lifetime: 31536000 # 1 year
+                public: true
+            cache.http:
+                adapter: cache.app
+                clearer: ~
+                default_lifetime: 31536000 # 1 year
+                public: true

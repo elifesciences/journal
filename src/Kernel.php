@@ -5,14 +5,18 @@ namespace eLife\Journal;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
 use PackageVersions\Versions;
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
-class AppKernel extends Kernel
+class Kernel extends BaseKernel
 {
-    private $version;
-    private $instance;
+    use MicroKernelTrait;
+
+    private string $version;
+    private ?string $instance;
 
     public function __construct(string $environment, bool $debug)
     {
@@ -32,17 +36,6 @@ class AppKernel extends Kernel
         $this->instance = getenv('JOURNAL_INSTANCE') ?: null;
     }
 
-    public function registerBundles(): iterable
-    {
-        $contents = require $this->getProjectDir().'/config/bundles.php';
-
-        foreach ($contents as $class => $envs) {
-            if ($envs[$this->getEnvironment()] ?? $envs['all'] ?? false) {
-                yield new $class();
-            }
-        }
-    }
-
     public function getName(): string
     {
         return 'journal';
@@ -51,16 +44,6 @@ class AppKernel extends Kernel
     public function getVersion(): string
     {
         return $this->version;
-    }
-
-    public function getRootDir(): string
-    {
-        return $this->getProjectDir().'/app';
-    }
-
-    public function getProjectDir(): string
-    {
-        return __DIR__.'/..';
     }
 
     public function getCacheDir(): string
@@ -72,6 +55,7 @@ class AppKernel extends Kernel
     {
         return $this->getProjectDir().'/var/logs';
     }
+
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
@@ -92,14 +76,7 @@ class AppKernel extends Kernel
         }
     }
 
-    public function run(Request $request): void
-    {
-        $response = $this->handle($request);
-        $response->send();
-        $this->terminate($request, $response);
-    }
-
-    protected function buildContainer(): \Symfony\Component\DependencyInjection\ContainerBuilder
+    protected function buildContainer(): ContainerBuilder
     {
         $builder = parent::buildContainer();
 
@@ -109,5 +86,12 @@ class AppKernel extends Kernel
         $builder->setParameter('kernel.instance', $this->instance ?? '');
 
         return $builder;
+    }
+
+    public function run(Request $request): void
+    {
+        $response = $this->handle($request);
+        $response->send();
+        $this->terminate($request, $response);
     }
 }

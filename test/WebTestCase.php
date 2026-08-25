@@ -19,7 +19,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     final protected function logIn(KernelBrowser $client)
     {
-        $session = $client->getContainer()->get('session');
+        $session = $client->getContainer()->get('session.factory')->createSession();
 
         $token = new PostAuthenticationGuardToken(new OAuthUser('jcarberry', $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);
 

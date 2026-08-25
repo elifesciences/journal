@@ -191,7 +191,7 @@ final class AuthenticationTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $session = $client->getContainer()->get('session');
+        $session = $client->getContainer()->get('session.factory')->createSession();
 
         $cookie = new Cookie($session->getName(), 'foo', null, null, 'localhost');
         $client->getCookieJar()->set($cookie);

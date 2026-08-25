@@ -1,0 +1,2 @@
+cocur_slugify:
+  strip_tags: true

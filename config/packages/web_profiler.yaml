@@ -1,0 +1,16 @@
+when@dev:
+    web_profiler:
+        toolbar: true
+
+    framework:
+        profiler: { only_exceptions: false }
+
+when@ci:
+    web_profiler:
+        toolbar: false
+        intercept_redirects: false
+
+    framework:
+        profiler: { collect: false }
+
+# TODO add the other env config
