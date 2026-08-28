@@ -2,6 +2,12 @@
     "name": "elife/journal",
     "type": "project",
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../patterns-php"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "eLife\\Journal\\": "src/"
@@ -24,7 +30,7 @@
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
         "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-feature-feature-eligibility-tool",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -80,6 +86,11 @@
         "allow-plugins": {
             "cweagans/composer-patches": true,
             "mindplay/composer-locator": true
+        },
+        "policy": {
+            "advisories": {
+                "ignore": []
+            }
         }
     },
     "extra": {

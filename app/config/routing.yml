@@ -286,6 +286,21 @@ event:
     requirements:
         id: '[a-z0-9-]+'
 
+eligibility:
+    path: /eligibility
+    defaults:
+        _controller: AppBundle:Eligibility:index
+
+eligibility_check:
+  path: /eligibility/check/{institution}
+  defaults:
+    _controller: AppBundle:Eligibility:check
+
+eligibility_search:
+  path: /eligibility/search
+  defaults:
+    _controller: AppBundle:Eligibility:search
+
 events:
     path: /events
     defaults:

@@ -1,0 +1,32 @@
+{% set criticalCss = 'institution-eligibility' %}
+
+{% extends '::page.html.twig' %}
+
+{% block title %}Check your institution's eligibility{% endblock %}
+
+{% block body %}
+
+    <div class="grid institution-eligibility-page">
+      <div class="grid__item one-whole x-large--six-twelfths push--x-large--three-twelfths">
+          {{ render_pattern(contentHeader) }}
+
+        {% block main %}
+
+          {% if checker ?? false %}
+
+            {{ render_pattern(checker) }}
+
+          {% endif %}
+
+          {% if outcome ?? false %}
+
+            {{ render_pattern(outcome) }}
+
+          {% endif %}
+
+        {% endblock %}
+
+      </div>
+    </div>
+
+{% endblock %}

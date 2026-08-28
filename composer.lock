@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e018f07a119b7e0d69b312bfcf22a99",
+    "content-hash": "a9e2a7edcd438c68fdfcb27feeda8bc3",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1374,17 +1374,11 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "68938eabece3dadbcb64d26180d79207852d6782"
-            },
+            "version": "dev-feature-feature-eligibility-tool",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/68938eabece3dadbcb64d26180d79207852d6782",
-                "reference": "68938eabece3dadbcb64d26180d79207852d6782",
-                "shasum": ""
+                "type": "path",
+                "url": "../patterns-php",
+                "reference": "4bb8874ace6f7582d86c06fa5aae4dde673feed5"
             },
             "require": {
                 "beberlei/assert": "^2.0",
@@ -1406,7 +1400,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1416,15 +1409,18 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "tests\\eLife\\Patterns\\": "./tests/src"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2026-06-27T13:59:44+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "fabpot/goutte",
@@ -5844,5 +5840,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
