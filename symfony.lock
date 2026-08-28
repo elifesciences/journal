@@ -23,9 +23,6 @@
             "config/packages/google_apiclient.yaml"
         ]
     },
-    "isometriks/spam-bundle": {
-        "version": "v1.2.0"
-    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "2.19",
         "recipe": {

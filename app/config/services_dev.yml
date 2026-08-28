@@ -1,4 +1,0 @@
-services:
-
-    elife.journal.google_client.opt_out_unsubscribe_reason:
-        class: eLife\Journal\GoogleClient\MockOptoutUnsubscribeReason

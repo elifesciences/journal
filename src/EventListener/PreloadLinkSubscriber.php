@@ -33,7 +33,7 @@ final class PreloadLinkSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        if (!$this->preloads || !$event->isMasterRequest() || 0 !== strpos($response->headers->get('Content-Type', 'text/html'), 'text/html')) {
+        if (!$this->preloads || !$event->isMainRequest() || 0 !== strpos($response->headers->get('Content-Type', 'text/html'), 'text/html')) {
             return;
         }
 

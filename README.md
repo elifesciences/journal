@@ -51,7 +51,7 @@ To remove all cached state and artifacts from your local copy, run `make clean`.
 
 Important : Creating `composer.lock` on local and permanent updates to composer files in general should only be done from the container, be aware that if this is done from local can generate additional errors. To avoid any errors running `composer update` in the container is safer than running it in the local dev env. ( ex: `docker-compose run composer update elife/patterns` )
 
-When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
+When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yml`.
 
 Using a feature branch of the `patterns-php` library
 ----------------------------------------------------

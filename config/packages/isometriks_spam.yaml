@@ -1,5 +1,0 @@
-isometriks_spam:
-    honeypot:
-        field: '%honeypot_field%'
-        global: true
-        message: Please try submitting the form again.
