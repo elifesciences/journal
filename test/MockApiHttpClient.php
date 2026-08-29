@@ -54,6 +54,11 @@ final class MockApiHttpClient implements HttpClientInterface
         return (new MockHttpClient())->stream($responses, $timeout);
     }
 
+    public function withOptions(array $options): static
+    {
+        return clone $this;
+    }
+
     public function save(RequestInterface $request, ResponseInterface $response): void
     {
         if ($this->validator) {

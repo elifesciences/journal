@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal;
 
-use eLife\Journal\AppKernel;
+use eLife\Journal\Kernel;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,7 +14,7 @@ trait AppKernelTestCase
 
     final protected static function getKernelClass() : string
     {
-        return AppKernel::class;
+        return Kernel::class;
     }
 
     protected function tearDown(): void

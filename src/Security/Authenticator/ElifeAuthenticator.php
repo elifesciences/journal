@@ -6,21 +6,22 @@ use GuzzleHttp\Psr7\Uri;
 use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use League\OAuth2\Client\Token\AccessToken;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
-final class ElifeAuthenticator extends SocialAuthenticator
+final class ElifeAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
     use TargetPathTrait;
 
@@ -35,34 +36,30 @@ final class ElifeAuthenticator extends SocialAuthenticator
         $this->httpUtils = $httpUtils;
     }
 
-    public function supports(Request $request) : bool
+    public function supports(Request $request) : ?bool
     {
         return 'log-in-check' === $request->attributes->get('_route');
     }
 
-    public function getCredentials(Request $request) : AccessToken
+    public function authenticate(Request $request) : Passport
     {
         try {
-            return $this->fetchAccessToken($this->getClient());
+            $accessToken = $this->fetchAccessToken($this->getClient());
         } catch (AuthenticationException $e) {
             throw $e;
         } catch (Throwable $e) {
             throw new AuthenticationException($e->getMessage(), 0, $e);
         }
+
+        $id = $this->getClient()->fetchUserFromToken($accessToken)->getId();
+
+        return new SelfValidatingPassport(new UserBadge($id));
     }
 
-    /**
-     * @param AccessToken $credentials
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider) : UserInterface
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName) : Response
     {
-        return $userProvider->loadUserByUsername($this->getClient()->fetchUserFromToken($credentials)->getId());
-    }
-
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey) : Response
-    {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-            $this->removeTargetPath($request->getSession(), $providerKey);
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+            $this->removeTargetPath($request->getSession(), $firewallName);
 
             try {
                 $uri = new Uri($targetPath);

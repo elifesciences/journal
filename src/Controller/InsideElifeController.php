@@ -12,11 +12,11 @@ use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
-use function GuzzleHttp\Promise\all;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class InsideElifeController extends Controller
 {
@@ -27,7 +27,7 @@ final class InsideElifeController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $latest = promise_for($this->get('elife.api_sdk.blog_articles'))
+        $latest = Create::promiseFor($this->get('elife.api_sdk.blog_articles'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -88,7 +88,7 @@ final class InsideElifeController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'inside-elife-article'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
             });

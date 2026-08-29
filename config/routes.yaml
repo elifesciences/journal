@@ -442,9 +442,9 @@ who-we-work-with:
 ping:
   path: /ping
   defaults:
-    _controller: elife.journal.status_controller:pingAction
+    _controller: elife.journal.status_controller::pingAction
 
 status:
   path: /status
   defaults:
-    _controller: elife.journal.status_controller:statusAction
+    _controller: elife.journal.status_controller::statusAction

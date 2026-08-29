@@ -33,7 +33,13 @@ $kernel = new Kernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
 Request::enableHttpMethodParameterOverride();
 
 if ($_SERVER['APP_ELB']) {
-    Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']], Request::HEADER_X_FORWARDED_ALL);
+    Request::setTrustedProxies(
+        [$_SERVER['REMOTE_ADDR']],
+        Request::HEADER_X_FORWARDED_FOR |
+        Request::HEADER_X_FORWARDED_HOST |
+        Request::HEADER_X_FORWARDED_PROTO |
+        Request::HEADER_X_FORWARDED_PORT
+    );
 }
 
 $kernel->run(Request::createFromGlobals());

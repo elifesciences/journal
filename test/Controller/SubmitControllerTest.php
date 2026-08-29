@@ -3,13 +3,13 @@
 namespace test\eLife\Journal\Controller;
 
 use Firebase\JWT\JWT;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use test\eLife\Journal\WebTestCase;
-use function GuzzleHttp\Psr7\parse_query;
 
 #[BackupGlobals(true)]
 final class SubmitControllerTest extends WebTestCase
@@ -43,7 +43,7 @@ final class SubmitControllerTest extends WebTestCase
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
         $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
-        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+        $state = Query::parse((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
         $this->readyToken();
 
@@ -118,7 +118,7 @@ final class SubmitControllerTest extends WebTestCase
         $locationWithoutToken = Uri::withoutQueryValue($location, 'token');
 
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
-        $query = parse_query($location->getQuery());
+        $query = Query::parse($location->getQuery());
 
         $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
 

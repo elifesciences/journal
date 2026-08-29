@@ -7,13 +7,13 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 trait HasPages
 {
     private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, callable $map = null) : PromiseInterface
     {
-        return promise_for($sdkClient)
+        return Create::promiseFor($sdkClient)
             ->then(function (Sequence $sequence) use ($page, $perPage, $map) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $map));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);

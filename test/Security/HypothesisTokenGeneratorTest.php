@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 
 final class HypothesisTokenGeneratorTest extends TestCase
 {
@@ -22,7 +22,7 @@ final class HypothesisTokenGeneratorTest extends TestCase
 
         $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret');
 
-        $token = $tokenGenerator->generate(new User('username', 'password'));
+        $token = $tokenGenerator->generate(new InMemoryUser('username', 'password'));
 
         $generated = (array) JWT::decode($token, 'client_secret', ['HS256']);
 

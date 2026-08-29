@@ -5,6 +5,7 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\WebTestCase;
 
@@ -34,7 +35,7 @@ final class ArticleXmlTest extends WebTestCase
             )
         );
 
-        $content = $this->captureContent(function () use ($client) {
+        $content = $this->captureContent($client, function () use ($client) {
             $client->request('GET', $this->getUrl());
         });
 
@@ -70,7 +71,7 @@ final class ArticleXmlTest extends WebTestCase
             )
         );
 
-        $content = $this->captureContent(function () use ($client) {
+        $content = $this->captureContent($client, function () use ($client) {
             $client->request('GET', $this->getPreviousVersionUrl());
         });
 
@@ -271,11 +272,10 @@ final class ArticleXmlTest extends WebTestCase
         return '/articles/00001v1.xml';
     }
 
-    private function captureContent(callable $callback) : string
+    private function captureContent(KernelBrowser $client, callable $callback) : string
     {
-        ob_start();
         $callback();
 
-        return ob_get_clean();
+        return $client->getInternalResponse()->getContent();
     }
 }

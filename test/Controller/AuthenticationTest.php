@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
@@ -10,8 +11,6 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\BrowserKit\Cookie;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
-use function GuzzleHttp\Psr7\build_query;
-use function GuzzleHttp\Psr7\parse_query;
 
 final class AuthenticationTest extends WebTestCase
 {
@@ -28,7 +27,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertTrue($response->isRedirect());
 
-        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+        $state = Query::parse((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
         $this->readyToken();
 
@@ -69,7 +68,7 @@ final class AuthenticationTest extends WebTestCase
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
         $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
-        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+        $state = Query::parse((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
         $client->followRedirects();
 
@@ -78,7 +77,7 @@ final class AuthenticationTest extends WebTestCase
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
                 ['Content-Type' => 'application/x-www-form-urlencoded'],
-                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
+                Query::build(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 400,
@@ -116,14 +115,14 @@ final class AuthenticationTest extends WebTestCase
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
         $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
-        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+        $state = Query::parse((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
         self::mockApiResponse(
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
                 ['Content-Type' => 'application/x-www-form-urlencoded'],
-                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
+                Query::build(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 400,

@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\Helper;
 
-use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UnexpectedValueException;
 

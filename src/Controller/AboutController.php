@@ -24,8 +24,8 @@ use eLife\Patterns\ViewModel\SelectOption;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class AboutController extends Controller
 {
@@ -127,7 +127,7 @@ final class AboutController extends Controller
                 });
         }
 
-        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title']), 'impactStatement' => promise_for($impactStatement ?? null)])
+        $arguments['contentHeader'] = Utils::all(['types' => $types, 'title' => Create::promiseFor($arguments['title']), 'impactStatement' => Create::promiseFor($impactStatement ?? null)])
             ->then(function (array $parts) {
                 $impactStatement = $parts['impactStatement'] ?? 'eLife’s editors, early-career advisors, governing board, and executive staff work in concert to realise our mission.';
 

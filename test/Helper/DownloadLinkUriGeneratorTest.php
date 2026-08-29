@@ -6,7 +6,7 @@ use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
-use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpFoundation\UriSigner;
 use test\eLife\Journal\KernelTestCase;
 use UnexpectedValueException;
 

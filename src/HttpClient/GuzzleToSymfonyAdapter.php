@@ -7,6 +7,7 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GuzzleToSymfonyAdapter implements ClientInterface
@@ -18,7 +19,7 @@ final class GuzzleToSymfonyAdapter implements ClientInterface
         $this->httpClient = $httpClient;
     }
 
-    public function send(RequestInterface $request, array $options = [])
+    public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
         $body = $request->getBody();
         $body->rewind();
@@ -45,7 +46,7 @@ final class GuzzleToSymfonyAdapter implements ClientInterface
         return new FulfilledPromise($this->send($request, $options));
     }
 
-    public function request($method, $uri, array $options = [])
+    public function request($method, $uri, array $options = []): ResponseInterface
     {
         $headers = $options['headers'] ?? [];
         $body = null;

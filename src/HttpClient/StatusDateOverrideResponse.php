@@ -117,7 +117,7 @@ class StatusDateOverrideResponse implements ResponseInterface
         $this->response->cancel();
     }
 
-    public function getInfo(?string $type = null)
+    public function getInfo(?string $type = null): mixed
     {
         return $this->response->getInfo($type);
     }

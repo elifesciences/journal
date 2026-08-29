@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 
 final class XpubTokenGeneratorTest extends TestCase
 {
@@ -22,7 +22,7 @@ final class XpubTokenGeneratorTest extends TestCase
 
         $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret');
 
-        $token = $tokenGenerator->generate(new User('username', 'password'), true);
+        $token = $tokenGenerator->generate(new InMemoryUser('username', 'password'), true);
 
         $generated = (array) JWT::decode($token, 'client_secret', ['HS256']);
 

@@ -9,8 +9,6 @@ COPY composer.json \
     composer.lock \
     ./
 
-COPY patches patches
-
 
 RUN composer --no-interaction install ${composer_dev_arg} --ignore-platform-reqs --no-autoloader --no-suggest --prefer-dist
 

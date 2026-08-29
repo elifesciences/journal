@@ -36,7 +36,7 @@ class StatusDateOverrideHttpClient implements HttpClientInterface
         return $this->client->stream($responses, $timeout);
     }
 
-    public function withOptions(array $options): StatusDateOverrideHttpClient
+    public function withOptions(array $options): static
     {
         $clone = clone $this;
         $clone->client = $this->client->withOptions($options);

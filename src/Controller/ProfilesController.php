@@ -12,7 +12,7 @@ use eLife\Patterns\ViewModel\ListingAnnotationTeasers;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class ProfilesController extends Controller
 {
@@ -26,14 +26,14 @@ final class ProfilesController extends Controller
             ->otherwise($this->mightNotExist());
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $user = $this->get('elife.journal.security.token_storage')->getToken()->getUser();
 
             if ($id === $user->getUsername()) {
                 $access = 'restricted';
             }
         }
 
-        $annotations = promise_for($this->get('elife.api_sdk.annotations')->list($id, $access ?? 'public'))
+        $annotations = Create::promiseFor($this->get('elife.api_sdk.annotations')->list($id, $access ?? 'public'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(AnnotationTeaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);

@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 final class ParameterResolvingRouter implements RouterInterface, RequestMatcherInterface, WarmableInterface
@@ -26,27 +27,27 @@ final class ParameterResolvingRouter implements RouterInterface, RequestMatcherI
         return $this->router->setContext($context);
     }
 
-    public function getContext()
+    public function getContext(): RequestContext
     {
         return $this->router->getContext();
     }
 
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         return $this->router->getRouteCollection();
     }
 
-    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         return $this->router->generate($name, $this->parameterResolver->resolve($name, $parameters), $referenceType);
     }
 
-    public function match($pathinfo)
+    public function match(string $pathinfo): array
     {
         return $this->router->match($pathinfo);
     }
 
-    public function matchRequest(Request $request)
+    public function matchRequest(Request $request): array
     {
         if (!$this->router instanceof RequestMatcherInterface) {
             throw new BadMethodCallException('Router does not implement '.RequestMatcherInterface::class);

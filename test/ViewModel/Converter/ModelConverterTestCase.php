@@ -14,7 +14,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Traversable;
-use function GuzzleHttp\json_decode;
 
 abstract class ModelConverterTestCase extends TestCase
 {

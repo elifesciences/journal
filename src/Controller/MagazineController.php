@@ -21,7 +21,7 @@ use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class MagazineController extends Controller
 {
@@ -32,7 +32,7 @@ final class MagazineController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $latestResearch = promise_for($this->get('elife.api_sdk.search')
+        $latestResearch = Create::promiseFor($this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {

@@ -18,8 +18,8 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class EventsController extends Controller
 {
@@ -30,7 +30,7 @@ final class EventsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $upcomingEvents = promise_for($this->get('elife.api_sdk.events')
+        $upcomingEvents = Create::promiseFor($this->get('elife.api_sdk.events')
             ->show('open')
             ->reverse())
             ->then(function (Sequence $sequence) use ($page, $perPage) {
@@ -99,7 +99,7 @@ final class EventsController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'event'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
             });

@@ -16,8 +16,8 @@ use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class JobAdvertsController extends Controller
 {
@@ -28,7 +28,7 @@ final class JobAdvertsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $latest = promise_for($this->get('elife.api_sdk.job_adverts')
+        $latest = Create::promiseFor($this->get('elife.api_sdk.job_adverts')
             ->show('open'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
@@ -84,7 +84,7 @@ final class JobAdvertsController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'job-advert'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class);
             });

@@ -19,8 +19,8 @@ use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class InterviewsController extends Controller
 {
@@ -31,7 +31,7 @@ final class InterviewsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $latest = promise_for($this->get('elife.api_sdk.interviews'))
+        $latest = Create::promiseFor($this->get('elife.api_sdk.interviews'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -93,7 +93,7 @@ final class InterviewsController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'interview'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
             });

@@ -53,9 +53,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 use function uksort;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class ArticlesController extends Controller
 {
@@ -124,7 +124,7 @@ final class ArticlesController extends Controller
             'article'
         );
 
-        $arguments['paginator'] = all(['paginator' => $arguments['paginator'], 'item' => $arguments['item']])
+        $arguments['paginator'] = Utils::all(['paginator' => $arguments['paginator'], 'item' => $arguments['item']])
             ->then(function (array $parts) {
                 if (in_array($parts['item']->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return null;
@@ -148,7 +148,7 @@ final class ArticlesController extends Controller
     private function createFirstPage(Request $request, string $id, array $arguments) : Response
     {
         $this->pageRequest = $request;
-        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles'], 'furtherReading' => $arguments['furtherReading']])
+        $arguments['relatedItem'] = Utils::all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles'], 'furtherReading' => $arguments['furtherReading']])
             ->then(function (array $parts) {
                 /** @var Article|null $relatedItem */
                 $relatedItem = $parts['relatedItem'];
@@ -230,12 +230,12 @@ final class ArticlesController extends Controller
                 ];
             }, []));
 
-        $arguments['hasData'] = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
+        $arguments['hasData'] = Utils::all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
             ->then(function (array $data) {
                 return $data['availability']->append(...$data['generated'], ...$data['used']);
             });
 
-        $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contextualData'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -260,7 +260,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load bioprotocols', []));
 
-        $context = all([
+        $context = Utils::all([
             'item' => $arguments['item'],
             'history' => $arguments['history'],
             'hasFigures' => $arguments['hasFigures'],
@@ -278,7 +278,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments, true);
 
-        $arguments['body'] = all([
+        $arguments['body'] = Utils::all([
             'item' => $arguments['item'],
             'isMagazine' => $arguments['isMagazine'],
             'history' => $arguments['history'],
@@ -650,7 +650,7 @@ final class ArticlesController extends Controller
             $arguments['hasPeerReview']
         );
 
-        $arguments['assessmentBlock'] = all(['item' => $arguments['item'], 'context' => $context])
+        $arguments['assessmentBlock'] = Utils::all(['item' => $arguments['item'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -680,7 +680,7 @@ final class ArticlesController extends Controller
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
+        $arguments['body'] = Utils::all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
                 $body = $parts['body'];
@@ -722,7 +722,7 @@ final class ArticlesController extends Controller
                 return 'Figures and data in '.$title;
             });
 
-        $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contextualData'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -765,7 +765,7 @@ final class ArticlesController extends Controller
                 return $item->getAdditionalFiles()->map($this->willConvertTo());
             });
 
-        $arguments['messageBar'] = all([
+        $arguments['messageBar'] = Utils::all([
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
@@ -800,7 +800,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['isMagazine'], $arguments['history']);
 
-        $arguments['body'] = all([
+        $arguments['body'] = Utils::all([
             'isMagazine' => $arguments['isMagazine'],
             'figures' => $figures,
             'videos' => $videos,
@@ -842,12 +842,12 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], Create::promiseFor(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
 
         $arguments['viewSelector'] = $this->createViewSelector(
             $arguments['item'],
             $arguments['isMagazine'],
-            promise_for(false),
+            Create::promiseFor(false),
             true,
             $arguments['history'],
             $arguments['body'],
@@ -855,11 +855,11 @@ final class ArticlesController extends Controller
             $arguments['hasPeerReview']
         );
 
-        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], Create::promiseFor(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+        $arguments['body'] = Utils::all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
@@ -881,7 +881,7 @@ final class ArticlesController extends Controller
                 return 'Peer review in '.$title;
             });
 
-        $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contextualData'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -906,7 +906,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load bioprotocols', []));
 
-        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $figures, 'bioprotocols' => $bioprotocols])
+        $context = Utils::all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $figures, 'bioprotocols' => $bioprotocols])
             ->then(function (array $parts) {
                 $context = [];
                 if ($parts['hasFigures']) {
@@ -920,7 +920,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context, 'history' => $arguments['history']])
+        $arguments['body'] = Utils::all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context, 'history' => $arguments['history']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1111,12 +1111,12 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle'], promise_for(true));
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle'], Create::promiseFor(true));
 
-        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], Create::promiseFor(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         // View Selector (left side menu in page) for peer reviews page on a feature article
-        $arguments['viewSelector'] =  all([
+        $arguments['viewSelector'] =  Utils::all([
             'item' => $arguments['item'],
             'body' => $arguments['body'],
             'downloadLinks' => $arguments['downloadLinks'],
@@ -1137,13 +1137,13 @@ final class ArticlesController extends Controller
                         $arguments['history'],
                         $arguments['body'],
                         $arguments['eraArticle'],
-                        promise_for(true)
+                        Create::promiseFor(true)
                     );
             });
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
+        $arguments['body'] = Utils::all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
                 $body = $parts['body'];
@@ -1325,7 +1325,7 @@ final class ArticlesController extends Controller
                 ];
             });
 
-        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle'], 'isMagazine' => $arguments['isMagazine']])
+        $arguments['infoBars'] = Utils::all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1409,7 +1409,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
-        $history = all(['history' => $arguments['history']])->then(function(array $parts) {
+        $history = Utils::all(['history' => $arguments['history']])->then(function(array $parts) {
             return $parts['history'];
         })->wait();
 
@@ -1430,7 +1430,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load downloads count'));
 
-        $arguments['contextualDataMetrics'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews'], 'downloads'=> $arguments['downloads']])
+        $arguments['contextualDataMetrics'] = Utils::all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews'], 'downloads'=> $arguments['downloads']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1463,12 +1463,12 @@ final class ArticlesController extends Controller
                 return $metrics;
             });
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine']]);
             });
 
-        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])
+        $arguments['downloadLinks'] = Utils::all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1495,7 +1495,7 @@ final class ArticlesController extends Controller
 
     private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, string $pageType, PromiseInterface $history, PromiseInterface $sections, array $eraArticle, PromiseInterface $hasPeerReview) : PromiseInterface
     {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'hasPeerReview' => $hasPeerReview])
+        return Utils::all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'hasPeerReview' => $hasPeerReview])
             ->then(function (array $sections) use ($pageType, $eraArticle) {
 
                 $history = $sections['history'];
@@ -1551,7 +1551,7 @@ final class ArticlesController extends Controller
 
     private function createJumpMenu(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+        return Utils::all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
 
                 $hasFigures = $sections['hasFigures'];
@@ -1595,7 +1595,7 @@ final class ArticlesController extends Controller
         PromiseInterface $hasPeerReview
     ) : PromiseInterface
     {
-        return all([
+        return Utils::all([
             'item' => $item,
             'isMagazine' => $isMagazine,
             'hasFigures' => $hasFigures,
@@ -1662,12 +1662,12 @@ final class ArticlesController extends Controller
 
     private function contentAsideArguments(array $arguments, bool $includeAltMetricBadge = false) : array
     {
-        $arguments['contentAside'] = all([
+        $arguments['contentAside'] = Utils::all([
             'item' => $arguments['item'],
             'isMagazine' => $arguments['isMagazine'],
             'metrics' => $arguments['contextualDataMetrics'],
             'history' => $arguments['history'],
-            'relatedItem' => $arguments['relatedItem'] ?? promise_for(null),
+            'relatedItem' => $arguments['relatedItem'] ?? Create::promiseFor(null),
         ])
             ->then(function (array $parts) use ($includeAltMetricBadge) {
                 /** @var ArticleVersion $item */
@@ -1877,7 +1877,7 @@ final class ArticlesController extends Controller
     }
 
     private function checkHasFigures($item, $figures) {
-        return all(['item' => $item, 'hasFigures' => $figures])
+        return Utils::all(['item' => $item, 'hasFigures' => $figures])
             ->then(function (array $parts) {
                 $item = $parts['item'];
                 $hasFigures = $parts['hasFigures'];
@@ -1887,7 +1887,7 @@ final class ArticlesController extends Controller
     }
 
     private function hasPeerReview($item, $isMagazine, $history) {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'history' => $history])
+        return Utils::all(['item' => $item, 'isMagazine' => $isMagazine, 'history' => $history])
             ->then(function (array $parts) {
                 $item = $parts['item'];
                 $isMagazine = $parts['isMagazine'];
@@ -2110,7 +2110,7 @@ final class ArticlesController extends Controller
         $citations
         )
     {
-        $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
+        $citationsForAllVersions = Utils::all($promisesOfCitationsForAllVersions)
             ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations){
                 $citationsForAllVersions = [];
                 for ($i = 0; $i < sizeof($citationsByVersion); $i += 1) {

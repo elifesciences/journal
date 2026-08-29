@@ -7,7 +7,7 @@ use eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\Teaser;
 use PHPUnit\Framework\Attributes\Before;
-use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpFoundation\UriSigner;
 
 final class AnnualReportTeaserConverterTest extends ModelConverterTestCase
 {

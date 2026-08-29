@@ -25,7 +25,7 @@ use eLife\Patterns\ViewModel\ViewSelector;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class HomeController extends Controller
 {
@@ -48,7 +48,7 @@ final class HomeController extends Controller
             'replication-study',
         ];
 
-        $latestResearch = promise_for($this->get('elife.api_sdk.search')
+        $latestResearch = Create::promiseFor($this->get('elife.api_sdk.search')
             ->forType(...$searchTypes)
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {

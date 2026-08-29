@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\ArrayLoader;
@@ -34,7 +34,7 @@ final class HypothesisTokenExtensionTest extends TestCase
         $twig = new Environment($twigLoader);
         $twig->addExtension(new HypothesisTokenExtension($tokenGenerator));
 
-        $user = new User('username', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         $this->assertSame($tokenGenerator->generate($user), $twig->render('foo', ['user' => $user]));
     }

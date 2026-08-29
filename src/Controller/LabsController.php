@@ -15,7 +15,7 @@ use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class LabsController extends Controller
 {
@@ -26,7 +26,7 @@ final class LabsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $posts = promise_for($this->get('elife.api_sdk.labs_posts'))
+        $posts = Create::promiseFor($this->get('elife.api_sdk.labs_posts'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);

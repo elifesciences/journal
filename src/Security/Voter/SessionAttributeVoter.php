@@ -28,7 +28,7 @@ final class SessionAttributeVoter extends Voter
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token) : bool
     {
-        $session = $this->requestStack->getMasterRequest()->getSession();
+        $session = $this->requestStack->getMainRequest()->getSession();
 
         if (!$session || !$session->isStarted() || !$session->has($this->sessionAttribute)) {
             return false;

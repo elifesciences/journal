@@ -14,7 +14,7 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class ArticleTypesController extends Controller
 {
@@ -31,7 +31,7 @@ final class ArticleTypesController extends Controller
             throw new NotFoundHttpException('Unknown type '.$type, $e);
         }
 
-        $latest = promise_for($this->get('elife.api_sdk.search')
+        $latest = Create::promiseFor($this->get('elife.api_sdk.search')
             ->forType($type)
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {

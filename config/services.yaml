@@ -365,6 +365,17 @@ services:
         arguments:
             - '@elife.journal.security.authorization.checker.missing_credentials.inner'
 
+    # security.token_storage and security.authorization_checker are private in the security
+    # bundle; these public aliases let the ContainerAware Controller base class fetch them
+    # with $this->get() without every controller needing constructor-injected dependencies.
+    elife.journal.security.token_storage:
+        alias: security.token_storage
+        public: true
+
+    elife.journal.security.authorization_checker:
+        alias: security.authorization_checker
+        public: true
+
     elife.journal.security.hypothesis.token_generator:
         class: eLife\Journal\Security\HypothesisTokenGenerator
         public: false

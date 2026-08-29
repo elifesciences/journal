@@ -29,8 +29,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class SubjectsController extends Controller
 {
@@ -102,7 +102,7 @@ final class SubjectsController extends Controller
             'reviewed-preprint',
         ];
 
-        $latestArticles = promise_for($this->get('elife.api_sdk.search')
+        $latestArticles = Create::promiseFor($this->get('elife.api_sdk.search')
             ->forSubject($id)
             ->forType(...$searchTypes)
             ->sortBy('date'))
@@ -116,7 +116,7 @@ final class SubjectsController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getName'));
 
-        $arguments['paginator'] = all(['item' => $arguments['item'], 'latestArticles' => $latestArticles])
+        $arguments['paginator'] = Utils::all(['item' => $arguments['item'], 'latestArticles' => $latestArticles])
             ->then(function (array $parts) use ($request) {
                 $item = $parts['item'];
                 $latestArticles = $parts['latestArticles'];

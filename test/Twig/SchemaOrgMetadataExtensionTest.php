@@ -44,7 +44,7 @@ use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\ArrayLoader;
 use TypeError;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class SchemaOrgMetadataExtensionTest extends TestCase
 {
@@ -205,8 +205,8 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             $this->defaultImage(),
             null,
             new ArraySequence([
-                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                    new EmptySequence(), Create::promiseFor($this->defaultImage()), Create::promiseFor($this->defaultImage())),
             ]),
             new EmptySequence(),
             new EmptySequence()
@@ -237,11 +237,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new DateTimeImmutable('2008-10-01 01:23:45'),
                 null,
                 'Blog article impact statement',
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence(),
                 new ArraySequence([
-                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
+                    new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                        new EmptySequence(), Create::promiseFor(self::defaultImage()), Create::promiseFor(self::defaultImage())),
                 ])
             ),
             null,
@@ -253,11 +253,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new DateTimeImmutable('2008-10-01 01:23:45'),
                 null,
                 'Blog article impact statement',
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence(),
                 new ArraySequence([
-                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
+                    new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                        new EmptySequence(), Create::promiseFor(self::defaultImage()), Create::promiseFor(self::defaultImage())),
                 ])
             ),
             function ($json) {
@@ -271,11 +271,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new DateTimeImmutable('2008-10-01 01:23:45'),
                 null,
                 'Blog article impact statement',
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence(),
                 new ArraySequence([
-                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
+                    new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                        new EmptySequence(), Create::promiseFor(self::defaultImage()), Create::promiseFor(self::defaultImage())),
                 ])
             ),
             function ($json) {
@@ -362,16 +362,16 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             null,
             null,
             null,
-            promise_for(null),
+            Create::promiseFor(null),
             new ArraySequence([
-                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                    new EmptySequence(), Create::promiseFor($this->defaultImage()), Create::promiseFor($this->defaultImage())),
             ]),
             [],
             [],
             null,
-            promise_for(null),
-            promise_for(new Copyright('copyright licence', 'copyright statement')),
+            Create::promiseFor(null),
+            Create::promiseFor(new Copyright('copyright licence', 'copyright statement')),
             new ArraySequence([
                 new PersonAuthor(new PersonDetails('Author name 1', 'Author name 1, index')),
                 new PersonAuthor(new PersonDetails('Author name 2', 'Author name 2, index')),
@@ -384,7 +384,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 'Keyword 1',
                 'Keyword <i>2</i>',
             ]),
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence(),
@@ -394,12 +394,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence(),
-            promise_for(null),
-            promise_for(null),
-            promise_for(null),
-            promise_for(null),
+            Create::promiseFor(null),
+            Create::promiseFor(null),
+            Create::promiseFor(null),
+            Create::promiseFor(null),
             new EmptySequence(),
-            promise_for(null)
+            Create::promiseFor(null)
         )]));
     }
 
@@ -457,25 +457,25 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'Collection impact statement',
             new DateTimeImmutable('2008-09-29 01:23:45'),
             null,
-            promise_for($this->defaultImage()),
+            Create::promiseFor($this->defaultImage()),
             $this->defaultImage(),
-            promise_for(null),
+            Create::promiseFor(null),
             new ArraySequence([
-                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                    new EmptySequence(), Create::promiseFor($this->defaultImage()), Create::promiseFor($this->defaultImage())),
             ]),
             new Person(
                 'id',
                 new PersonDetails('Curator name 1', 'Curator name 1, index'),
-                promise_for(null),
-                promise_for(null),
+                Create::promiseFor(null),
+                Create::promiseFor(null),
                 'Type',
                 'Type label',
                 null,
                 new EmptySequence(),
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence(),
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence()
             ),
             false,
@@ -483,29 +483,29 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new Person(
                     'id',
                     new PersonDetails('Curator name 1', 'Curator name 1, index'),
-                    promise_for(null),
-                    promise_for(null),
+                    Create::promiseFor(null),
+                    Create::promiseFor(null),
                     'Type',
                     'Type label',
                     null,
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence()
                 ),
                 new Person(
                     'id',
                     new PersonDetails('Curator name 2', 'Curator name 2, index'),
-                    promise_for(null),
-                    promise_for(null),
+                    Create::promiseFor(null),
+                    Create::promiseFor(null),
                     'Type',
                     'Type label',
                     null,
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence()
                 ),
             ]),
@@ -566,26 +566,26 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'Highlight impact statement',
             new DateTimeImmutable('2008-09-29 01:23:45'),
             null,
-            promise_for($this->defaultImage()),
+            Create::promiseFor($this->defaultImage()),
             $this->defaultImage(),
-            promise_for(null),
+            Create::promiseFor(null),
             new ArraySequence([
-                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                    new EmptySequence(), Create::promiseFor($this->defaultImage()), Create::promiseFor($this->defaultImage())),
             ]),
             new ArraySequence([
                 new Person(
                     'id',
                     new PersonDetails('Editor name 1', 'Editor name 1, index'),
-                    promise_for(null),
-                    promise_for(null),
+                    Create::promiseFor(null),
+                    Create::promiseFor(null),
                     'Type',
                     'Type label',
                     null,
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence(),
-                    promise_for(null),
+                    Create::promiseFor(null),
                     new EmptySequence()
                 ),
             ]),
@@ -633,7 +633,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-10-22 17:35:00'),
             new DateTimeZone('Z'),
             null,
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence()
         )]));
     }
@@ -681,11 +681,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-10-01 01:23:45'),
             null,
             'Blog article impact statement',
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence(),
             new ArraySequence([
-                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                new Subject('subject1', 'Subject 1 name', Create::promiseFor('Subject subject1 impact statement'),
+                    new EmptySequence(), Create::promiseFor($this->defaultImage()), Create::promiseFor($this->defaultImage())),
             ])
         )]));
     }
@@ -732,7 +732,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             null,
             'Labs post impact statement',
             $this->defaultImage(),
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence()
         )]));
     }
@@ -777,7 +777,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-10-02'),
             null,
             'Press pack impact statement',
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence(),
@@ -841,9 +841,9 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'Podcast episode impact statement',
             new DateTimeImmutable('2008-10-09'),
             null,
-            promise_for(null),
+            Create::promiseFor(null),
             $this->defaultImage(),
-            promise_for(null),
+            Create::promiseFor(null),
             [
                 new PodcastEpisodeSource('audio/mpeg', 'https://www.example.com/episode.mp3'),
             ],
@@ -922,7 +922,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'job-advert-id',
             'Job advert title',
             'Job advert impact statement',
-            promise_for(null),
+            Create::promiseFor(null),
             new DateTimeImmutable('2008-10-30 01:23:45'),
             new DateTimeImmutable('2008-11-30 01:23:45'),
             null,
@@ -982,7 +982,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             null,
             'Interview impact statement',
             $this->defaultImage(),
-            promise_for(null),
+            Create::promiseFor(null),
             new EmptySequence()
         )]));
     }

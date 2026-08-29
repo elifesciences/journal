@@ -24,7 +24,7 @@ final class XpubTokenGenerator
             'iss' => $this->clientId,
             'iat' => time(),
             'exp' => time() + self::TOKEN_TTL,
-            'id' => $user->getUsername(),
+            'id' => $user->getUserIdentifier(),
             'new-session' => $newSession,
         ], $this->clientSecret);
     }

@@ -38,7 +38,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UnexpectedValueException;
-use function GuzzleHttp\Promise\all;
+use GuzzleHttp\Promise\Utils;
 
 final class ArchiveController extends Controller
 {
@@ -101,7 +101,7 @@ final class ArchiveController extends Controller
             )
         );
 
-        $arguments['months'] = all($months)
+        $arguments['months'] = Utils::all($months)
             ->then(function (array $months) use ($year) {
                 return GridListing::forArchiveNavLinks(array_map(function (Sequence $covers = null, int $month) use ($year) {
                     $date = DateTimeImmutable::createFromFormat('j n Y', "1 $month $year", new DateTimeZone('Z'))->setTime(0, 0, 0);

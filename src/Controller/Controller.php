@@ -21,11 +21,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\exception_for;
-use function GuzzleHttp\Promise\promise_for;
-use function GuzzleHttp\Promise\rejection_for;
 use function preg_match;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -64,7 +62,7 @@ abstract class Controller implements ContainerAwareInterface
 
     final protected function getAuthorizationChecker() : AuthorizationCheckerInterface
     {
-        return $this->get('security.authorization_checker');
+        return $this->get('elife.journal.security.authorization_checker');
     }
 
     final protected function render(ViewModel ...$viewModels) : string
@@ -112,7 +110,7 @@ abstract class Controller implements ContainerAwareInterface
                 }
             }
 
-            return rejection_for($reason);
+            return Create::rejectionFor($reason);
         };
     }
 
@@ -120,7 +118,7 @@ abstract class Controller implements ContainerAwareInterface
     {
         return function ($reason) use ($message, $default) {
             //return new RejectedPromise($reason);
-            $e = exception_for($reason);
+            $e = Create::exceptionFor($reason);
 
             if (false === $e instanceof HttpException) {
                 $this->get('elife.logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
@@ -247,12 +245,12 @@ abstract class Controller implements ContainerAwareInterface
     final protected function magazinePageArguments($arguments, $type) {
         return [
             'hasSocialMedia' => true,
-            'socialMediaSharersLinks' => all(['item' => $arguments['item']])
+            'socialMediaSharersLinks' => Utils::all(['item' => $arguments['item']])
                 ->then(function (array $parts) use ($type) {
                     $context['variant'] = $type;
                     return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
                 }),
-            'contextualDataMetrics' => isset($arguments['pageViews']) ? all(['pageViews' => $arguments['pageViews']])
+            'contextualDataMetrics' => isset($arguments['pageViews']) ? Utils::all(['pageViews' => $arguments['pageViews']])
                 ->then(function (array $parts) {
                     /** @var int|null $pageViews */
                     $pageViews = $parts['pageViews'];
@@ -272,10 +270,10 @@ abstract class Controller implements ContainerAwareInterface
     final protected function defaultPageArguments(Request $request, PromiseInterface $item = null, $isHomePage = false) : array
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $user = $this->get('elife.journal.security.token_storage')->getToken()->getUser();
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
                 ->otherwise(function ($reason) use ($user) {
-                    $e = exception_for($reason);
+                    $e = Create::exceptionFor($reason);
                     $this->get('elife.logger')->error("Logging user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
 
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('log-out', [], UrlGeneratorInterface::ABSOLUTE_URL)));
@@ -283,7 +281,7 @@ abstract class Controller implements ContainerAwareInterface
         }
 
         return [
-            'header' => all(['item' => promise_for($item), 'profile' => promise_for($profile ?? null)])
+            'header' => Utils::all(['item' => Create::promiseFor($item), 'profile' => Create::promiseFor($profile ?? null)])
                 ->then(function (array $parts) use ($isHomePage) {
                     return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $isHomePage);
                 }),

@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         oauth:
@@ -9,9 +8,8 @@ security:
             pattern: ^/(_(profiler|wdt))/
             security: false
         main:
-            guard:
-                authenticators:
-                    - elife.journal.security.authenticator.elife
+            custom_authenticators:
+                - elife.journal.security.authenticator.elife
             logout:
                 delete_cookies:
                     session:
@@ -28,4 +26,4 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - path: ^/log-in
-          roles: IS_AUTHENTICATED_ANONYMOUSLY
+          roles: PUBLIC_ACCESS

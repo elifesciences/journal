@@ -11,7 +11,6 @@ use eLife\Patterns\ViewModel;
 use PHPUnit\Framework\Attributes\Before;
 use ReflectionClass;
 use Traversable;
-use function GuzzleHttp\json_decode;
 
 final class HighlightPodcastEpisodeChapterSecondaryTeaserConverterTest extends ModelConverterTestCase
 {

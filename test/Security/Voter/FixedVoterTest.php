@@ -6,7 +6,7 @@ use eLife\Journal\Security\Voter\FixedVoter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Traversable;
 
@@ -18,7 +18,7 @@ final class FixedVoterTest extends TestCase
     {
         $voter = new FixedVoter('role', $vote);
 
-        $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
+        $this->assertSame($expected, $voter->vote(new NullToken(), $subject, $roles));
     }
 
     public static function voteProvider() : Traversable

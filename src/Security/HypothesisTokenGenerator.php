@@ -25,7 +25,7 @@ final class HypothesisTokenGenerator
         return JWT::encode([
             'aud' => 'hypothes.is',
             'iss' => $this->clientId,
-            'sub' => "acct:{$user->getUsername()}@{$this->authority}",
+            'sub' => "acct:{$user->getUserIdentifier()}@{$this->authority}",
             'nbf' => time(),
             'exp' => time() + self::TOKEN_TTL,
         ], $this->clientSecret);

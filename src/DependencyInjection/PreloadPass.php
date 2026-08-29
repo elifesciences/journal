@@ -7,11 +7,10 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function file_get_contents;
-use function GuzzleHttp\json_decode;
 
 final class PreloadPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $file = ComposerLocator::getPath('elife/patterns').'/resources/assets/preload.json';
 

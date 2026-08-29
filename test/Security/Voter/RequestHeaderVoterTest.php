@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Traversable;
 
@@ -25,7 +25,7 @@ final class RequestHeaderVoterTest extends TestCase
 
         $voter = new RequestHeaderVoter($requestStack, 'role', 'header', $expectedValue, false);
 
-        $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
+        $this->assertSame($expected, $voter->vote(new NullToken(), $subject, $roles));
     }
 
     public static function voteProvider() : Traversable
@@ -48,6 +48,6 @@ final class RequestHeaderVoterTest extends TestCase
 
         $voter = new RequestHeaderVoter($requestStack, 'role', 'header', 'foo', true);
 
-        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote(new AnonymousToken('secret', 'anon.'), null, ['role']));
+        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote(new NullToken(), null, ['role']));
     }
 }

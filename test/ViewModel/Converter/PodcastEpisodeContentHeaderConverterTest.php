@@ -15,7 +15,7 @@ use eLife\Patterns\ViewModel\MediaSource;
 use eLife\Patterns\ViewModel\MediaType;
 use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Asset\Packages;
-use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpFoundation\UriSigner;
 
 final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestCase
 {

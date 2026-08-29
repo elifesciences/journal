@@ -15,11 +15,11 @@ use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
-use function GuzzleHttp\Promise\all;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Promise\Create;
 
 final class DigestsController extends Controller
 {
@@ -30,7 +30,7 @@ final class DigestsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $latest = promise_for($this->get('elife.api_sdk.digests'))
+        $latest = Create::promiseFor($this->get('elife.api_sdk.digests'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -93,7 +93,7 @@ final class DigestsController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'digest'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = Utils::all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
             });
@@ -108,12 +108,12 @@ final class DigestsController extends Controller
                 return ListingTeasers::basic($collections->toArray());
             });
 
-        $arguments['socialImage'] = all(['blocks' => $arguments['blocks']])
+        $arguments['socialImage'] = Utils::all(['blocks' => $arguments['blocks']])
             ->then(function($parts) {
                 return $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class))->offsetGet(0);
             });
 
-        $arguments['blocks'] = all(['blocks' => $arguments['blocks']])
+        $arguments['blocks'] = Utils::all(['blocks' => $arguments['blocks']])
             ->then(function($parts) {
                 return $parts['blocks']->filter(function($image) {
                     return !($image instanceof CaptionedAsset);

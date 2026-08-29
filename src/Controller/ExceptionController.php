@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Throwable;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class ExceptionController extends Controller
 {
@@ -32,7 +32,7 @@ final class ExceptionController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         foreach ($arguments as $key => $value) {
-            $arguments[$key] = promise_for($value)
+            $arguments[$key] = Create::promiseFor($value)
                 ->otherwise($this->softFailure('Failed to create '.$key));
         }
 

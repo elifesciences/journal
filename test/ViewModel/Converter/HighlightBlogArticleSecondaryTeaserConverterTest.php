@@ -12,7 +12,7 @@ use eLife\Patterns\ViewModel;
 use PHPUnit\Framework\Attributes\Before;
 use ReflectionClass;
 use Traversable;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class HighlightBlogArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
@@ -52,7 +52,7 @@ final class HighlightBlogArticleSecondaryTeaserConverterTest extends ModelConver
                 new DateTimeImmutable('2008-10-01 01:23:45'),
                 null,
                 'Blog article impact statement',
-                promise_for(null),
+                Create::promiseFor(null),
                 new EmptySequence(),
                 new EmptySequence()
             ),

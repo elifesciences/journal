@@ -10,7 +10,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use test\eLife\Journal\KernelTestCase;
 use Traversable;
 
@@ -27,7 +28,7 @@ final class FooterFactoryTest extends KernelTestCase
         static::bootKernel();
 
         $this->footerFactory = static::$kernel->getContainer()->get('elife.journal.view_model.factory.footer');
-        static::$kernel->getContainer()->get('security.token_storage')->setToken(new AnonymousToken('secret', 'anon.'));
+        self::getContainer()->get(TokenStorageInterface::class)->setToken(new NullToken());
     }
 
     #[Test]

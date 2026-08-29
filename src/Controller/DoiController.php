@@ -73,7 +73,7 @@ final class DoiController extends Controller
 
         $crawler = $crawler->filter(".doi__link[href='https://doi.org/$doi']");
         while (count($crawler)) {
-            $crawler = $crawler->parents();
+            $crawler = $crawler->ancestors()->first();
             if (false !== strpos($crawler->attr('class'), 'additional-asset__access')) {
                 // ID is in the preceding element rather than the parent.
                 $crawler = $crawler->previousAll();

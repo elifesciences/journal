@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Traversable;
 
@@ -29,7 +29,7 @@ final class SessionAttributeVoterTest extends TestCase
 
         $voter = new SessionAttributeVoter($requestStack, 'foo', 'attribute');
 
-        $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
+        $this->assertSame($expected, $voter->vote(new NullToken(), $subject, $roles));
     }
 
     public static function noSetValueProvider() : Traversable
@@ -54,7 +54,7 @@ final class SessionAttributeVoterTest extends TestCase
 
         $voter = new SessionAttributeVoter($requestStack, 'foo', 'attribute', $requiredValue);
 
-        $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
+        $this->assertSame($expected, $voter->vote(new NullToken(), $subject, $roles));
     }
 
     public static function setValueProvider() : Traversable

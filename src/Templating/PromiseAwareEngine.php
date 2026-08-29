@@ -3,7 +3,7 @@
 namespace eLife\Journal\Templating;
 
 use Twig\Environment;
-use function GuzzleHttp\Promise\all;
+use GuzzleHttp\Promise\Utils;
 
 final class PromiseAwareEngine
 {
@@ -16,6 +16,6 @@ final class PromiseAwareEngine
 
     public function render($name, array $parameters = [])
     {
-        return $this->twig->render($name, all($parameters)->wait());
+        return $this->twig->render($name, Utils::all($parameters)->wait());
     }
 }

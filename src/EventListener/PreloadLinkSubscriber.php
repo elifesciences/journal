@@ -9,8 +9,8 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use function GuzzleHttp\Psr7\uri_for;
 use function strpos;
+use GuzzleHttp\Psr7\Utils;
 
 final class PreloadLinkSubscriber implements EventSubscriberInterface
 {
@@ -40,7 +40,7 @@ final class PreloadLinkSubscriber implements EventSubscriberInterface
         $linkProvider = $request->attributes->get('_links', new GenericLinkProvider());
 
         foreach ($this->preloads as $preload) {
-            $uri = (string) UriResolver::resolve(uri_for('assets/patterns/'), uri_for($preload['uri']));
+            $uri = (string) UriResolver::resolve(Utils::uriFor('assets/patterns/'), Utils::uriFor($preload['uri']));
 
             $link = (new Link('preload', $this->packages->getUrl($uri)))
                 ->withAttribute('as', $preload['as'])

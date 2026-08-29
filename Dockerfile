@@ -18,7 +18,7 @@ RUN mkdir -p build var && \
 COPY --chown=elife:elife .docker/smoke_tests.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
-COPY --chown=elife:elife app/ app/
+#COPY --chown=elife:elife app/ app/
 COPY --chown=elife:elife build/critical-css/ build/critical-css/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=assets --chown=elife:elife /web/ /srv/journal/web/

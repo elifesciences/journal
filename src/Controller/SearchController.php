@@ -26,7 +26,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
+use GuzzleHttp\Promise\Create;
 
 final class SearchController extends Controller
 {
@@ -41,8 +41,8 @@ final class SearchController extends Controller
 
         $arguments['query'] = $query = [
             'for' => $for,
-            'subjects' => $request->query->get('subjects', []),
-            'types' => $request->query->get('types', []),
+            'subjects' => $request->query->all('subjects'),
+            'types' => $request->query->all('types'),
             'sort' => $request->query->get('sort', 'relevance'),
             'order' => $request->query->get('order', SortControlOption::DESC),
         ];
@@ -65,7 +65,7 @@ final class SearchController extends Controller
             $search = $search->reverse();
         }
 
-        $search = promise_for($search);
+        $search = Create::promiseFor($search);
 
         $pagerfanta = $search
             ->then(function (Sequence $sequence) use ($page, $perPage) {

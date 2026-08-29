@@ -8,9 +8,9 @@ use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
+use GuzzleHttp\Psr7\Query;
 use function GuzzleHttp\json_encode;
-use function GuzzleHttp\Psr7\build_query;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -21,7 +21,7 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $session = $client->getContainer()->get('session.factory')->createSession();
 
-        $token = new PostAuthenticationGuardToken(new OAuthUser('jcarberry', $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);
+        $token = new PostAuthenticationToken(new OAuthUser('jcarberry', $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);
 
         $session->set('_security_main', serialize($token));
         $session->save();
@@ -57,7 +57,7 @@ abstract class WebTestCase extends BaseWebTestCase
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
                 ['Content-Type' => 'application/x-www-form-urlencoded'],
-                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
+                Query::build(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 200,

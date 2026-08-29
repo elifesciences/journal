@@ -5,6 +5,7 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\WebTestCase;
 
@@ -35,7 +36,7 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        $content = $this->captureContent(function () use ($client) {
+        $content = $this->captureContent($client, function () use ($client) {
             $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3', 'test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         });
 
@@ -79,7 +80,7 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        $content = $this->captureContent(function () use ($client) {
+        $content = $this->captureContent($client, function () use ($client) {
             $client->request('GET', $this->createDownloadUri('http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical', 'test.pdf'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         });
 
@@ -106,12 +107,10 @@ final class DownloadControllerTest extends WebTestCase
         return self::$kernel->getContainer()->get('elife.uri_signer')->sign($uri);
     }
 
-    private function captureContent(callable $callback) : string
+    private function captureContent(KernelBrowser $client, callable $callback) : string
     {
-        ob_start();
-
         $callback();
 
-        return ob_get_clean();
+        return $client->getInternalResponse()->getContent();
     }
 }

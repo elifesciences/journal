@@ -30,7 +30,7 @@ final class RequestHeaderVoter extends Voter
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token) : bool
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if ($this->trustedProxy && !$request->isFromTrustedProxy()) {
             return false;

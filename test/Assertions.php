@@ -4,7 +4,7 @@ namespace test\eLife\Journal;
 
 use GuzzleHttp\Psr7\UriNormalizer;
 use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Utils;
 
 trait Assertions
 {
@@ -16,8 +16,8 @@ trait Assertions
     {
         $flags = UriNormalizer::PRESERVING_NORMALIZATIONS | UriNormalizer::SORT_QUERY_PARAMETERS;
 
-        $normalizedExpected = UriNormalizer::normalize(uri_for($expected), $flags)->__toString();
-        $normalizedActual = UriNormalizer::normalize(uri_for($actual), $flags)->__toString();
+        $normalizedExpected = UriNormalizer::normalize(Utils::uriFor($expected), $flags)->__toString();
+        $normalizedActual = UriNormalizer::normalize(Utils::uriFor($actual), $flags)->__toString();
 
         $this->assertEquals($normalizedExpected, $normalizedActual, $message);
     }
