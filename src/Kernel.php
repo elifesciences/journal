@@ -76,12 +76,19 @@ class Kernel extends BaseKernel
         }
     }
 
-    protected function buildContainer(): ContainerBuilder
+    protected function getContainerBuilder(): ContainerBuilder
     {
-        $builder = parent::buildContainer();
+        $builder = parent::getContainerBuilder();
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
         $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
+
+        return $builder;
+    }
+
+    protected function buildContainer(): ContainerBuilder
+    {
+        $builder = parent::buildContainer();
 
         $builder->setParameter('kernel.instance', $this->instance ?? '');
 

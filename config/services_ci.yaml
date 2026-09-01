@@ -151,7 +151,7 @@ services:
         tags:
           - name: optional
 
-    framework.http_client.clients.elife_api:
+    elife_api:
         class: test\eLife\Journal\MockApiHttpClient
         arguments:
           - '%api_mock%'
@@ -159,7 +159,7 @@ services:
           - ['authorization', 'content-length', 'host', 'referer', 'user-agent']
           - '@?elife.api_validator.validator'
 
-    framework.http_client.clients.elife_api_search_page:
+    elife_api_search_page:
         class: test\eLife\Journal\MockApiHttpClient
         arguments:
           - '%api_mock%'
@@ -167,14 +167,14 @@ services:
           - ['authorization', 'content-length', 'host', 'referer', 'user-agent']
           - '@?elife.api_validator.validator'
 
-    framework.http_client.clients.streamer:
+    streamer:
         class: test\eLife\Journal\MockApiHttpClient
         arguments:
           - '%api_mock%'
           - ''
           - ['accept', 'authorization', 'cache-control', 'content-length', 'host', 'if-modified-since', 'if-none-match', 'referer', 'user-agent', 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port', 'x-forwarded-proto']
 
-    framework.http_client.clients.oauth:
+    oauth:
         class: test\eLife\Journal\MockApiHttpClient
         arguments:
           - '%api_mock%'

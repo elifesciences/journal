@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\Expression;
 
-use ComposerLocator;
+use Composer\InstalledVersions;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
@@ -14,10 +14,10 @@ final class ComposerLocateFunctionProvider implements ExpressionFunctionProvider
             new ExpressionFunction(
                 'composer_locate',
                 function ($name) {
-                    return sprintf('\ComposerLocator::getPath(%s)', $name);
+                    return sprintf('\Composer\InstalledVersions::getInstallPath(%s)', $name);
                 },
                 function ($arguments, $name) {
-                    return ComposerLocator::getPath($name);
+                    return InstalledVersions::getInstallPath($name);
                 }
             ),
         ];

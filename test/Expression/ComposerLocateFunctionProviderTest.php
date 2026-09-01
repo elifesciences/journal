@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\Expression;
 
-use ComposerLocator;
+use Composer\InstalledVersions;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ final class ComposerLocateFunctionProviderTest extends TestCase
         $expressionLanguage->registerProvider(new ComposerLocateFunctionProvider());
 
         $this->assertSame(
-            ComposerLocator::getPath('elife/api'),
+            InstalledVersions::getInstallPath('elife/api'),
             $expressionLanguage->evaluate('composer_locate("elife/api")')
         );
     }

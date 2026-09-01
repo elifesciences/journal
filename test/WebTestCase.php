@@ -10,14 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use GuzzleHttp\Psr7\Query;
-use function GuzzleHttp\json_encode;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
     use AppKernelTestCase;
     use Assertions;
 
-    final protected function logIn(KernelBrowser $client)
+    final protected function logIn(KernelBrowser $client): void
     {
         $session = $client->getContainer()->get('session.factory')->createSession();
 

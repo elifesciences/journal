@@ -12,61 +12,14 @@ services:
     _defaults:
         public: true
 
-    # Manually wired until Symfony is upgraded to 4.3+ and http_client.yml can be loaded via framework config
-    framework.http_client.clients.elife_api:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            - base_uri: '%api_url%'
-              headers:
-                  Authorization: '%api_key%'
-              timeout: '%api_timeout%'
-
-    framework.http_client.clients.elife_api_search_page:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            - base_uri: '%api_url_search_page%'
-              headers:
-                  Authorization: '%api_key%'
-              timeout: '%api_timeout_slow%'
-
-    framework.http_client.clients.elife_crm:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            - base_uri: '%crm_url%'
-              timeout: '%api_timeout_slow%'
-
-    framework.http_client.clients.elife_crm_api:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            - base_uri: '%crm_api_url%'
-              timeout: '%api_timeout_slow%'
-
-    framework.http_client.clients.oauth:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            - timeout: '%api_timeout_slow%'
-
     elife.journal.security.oauth.guzzle_adapter:
         class: eLife\Journal\HttpClient\GuzzleToSymfonyAdapter
         arguments:
-            - '@framework.http_client.clients.oauth'
-
-    framework.http_client.clients.streamer:
-        class: Symfony\Contracts\HttpClient\HttpClientInterface
-        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
-        arguments:
-            -
-                timeout: '%api_timeout%'
-                buffer: false
+            - '@oauth'
 
     # elife.api_client.client (SymfonyHttpClient)
     #    └── @elife.api_client.client.status_date_override
-    #          └── @framework.http_client.clients.elife_api
+    #          └── @elife_api
 
     elife.api_client.client:
         class: eLife\Journal\HttpClient\SymfonyHttpClient
@@ -76,13 +29,13 @@ services:
     elife.api_client.client.status_date_override:
         class: eLife\Journal\HttpClient\StatusDateOverrideHttpClient
         arguments:
-            - '@framework.http_client.clients.elife_api'
+            - '@elife_api'
             - '%era_articles%'
 
     elife.api_client.client.search_page:
         class: eLife\Journal\HttpClient\SymfonyHttpClient
         arguments:
-            - '@framework.http_client.clients.elife_api_search_page'
+            - '@elife_api_search_page'
 
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
@@ -95,7 +48,7 @@ services:
         class: eLife\ApiClient\HttpClient\UserAgentPrependingHttpClient
         decorates: elife.api_client.client
         arguments:
-            - '@elife.api_client.client.warning_checking.inner'
+            - '@elife.api_client.client.user_agent_prepending.inner'
             - '@="eLifeJournal/"~service("kernel").getVersion()'
 
     elife.api_client.client.subject_rewriting:
@@ -242,13 +195,13 @@ services:
     elife.journal.goutte:
         class: Goutte\Client
         calls:
-            - ['setClient', ['@framework.http_client.clients.elife_crm']]
+            - ['setClient', ['@elife_crm']]
 
 
     elife.journal.status_controller:
         class: eLife\Journal\Controller\StatusController
         arguments:
-            - '@framework.http_client.clients.elife_api'
+            - '@elife_api'
 
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
@@ -263,7 +216,7 @@ services:
     elife.journal.helper.http_proxy:
         class: eLife\Journal\Helper\HttpProxy
         arguments:
-            - '@framework.http_client.clients.streamer'
+            - '@streamer'
 
     elife.journal.listener.authentication_error:
         class: eLife\Journal\EventListener\AuthenticationErrorSubscriber
