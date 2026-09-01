@@ -12,7 +12,7 @@ final class HttpCachePass implements CompilerPassInterface
     #TODO rewrite
     private static $packages = ['guzzlehttp/psr7'];
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition('cache.http');
 

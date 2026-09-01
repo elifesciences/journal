@@ -66,9 +66,7 @@ services:
 
     # elife.api_client.client (SymfonyHttpClient)
     #    └── @elife.api_client.client.status_date_override
-    #          └── @elife.api_client.stale_response_logging
-    #                └── @framework.http_client.clients.elife_api
-    # TODO: add CachingHttpClient between stale_response_logging and elife_api once upgraded to Symfony 4.3+
+    #          └── @framework.http_client.clients.elife_api
 
     elife.api_client.client:
         class: eLife\Journal\HttpClient\SymfonyHttpClient
@@ -78,15 +76,8 @@ services:
     elife.api_client.client.status_date_override:
         class: eLife\Journal\HttpClient\StatusDateOverrideHttpClient
         arguments:
-            - '@elife.api_client.stale_response_logging'
-            - '%era_articles%'
-
-    elife.api_client.stale_response_logging:
-        class: eLife\Journal\HttpClient\StaleResponseLoggingHttpClient
-        public: false
-        arguments:
             - '@framework.http_client.clients.elife_api'
-            - '@monolog.logger.api'
+            - '%era_articles%'
 
     elife.api_client.client.search_page:
         class: eLife\Journal\HttpClient\SymfonyHttpClient

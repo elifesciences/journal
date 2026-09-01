@@ -49,7 +49,7 @@ final class ElifeProvider extends AbstractProvider
         return [];
     }
 
-    protected function checkResponse(ResponseInterface $response, $data)
+    protected function checkResponse(ResponseInterface $response, $data): void
     {
         if (isset($data['error'])) {
             throw new IdentityProviderException($data['error_description'] ?? $data['error'], 0, (string) $response->getBody());

@@ -9,7 +9,7 @@ use function class_exists;
 
 final class RemoveOptionalServicesPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         foreach (array_keys($container->findTaggedServiceIds('optional')) as $id) {
             if (!class_exists($container->getDefinition($id)->getClass())) {

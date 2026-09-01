@@ -12,6 +12,7 @@ use eLife\ApiClient\Exception\NetworkProblem;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\Result\HttpResult;
 use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -27,6 +28,12 @@ final class SymfonyHttpClient implements HttpClient
         $this->httpClient = $httpClient;
     }
 
+    /**
+     * Issues the request without blocking, then wraps the still-pending Symfony response in
+     * a lazily-resolved promise. Reading the response is deferred to the promise's wait
+     * function, so requests started before ->wait() is called on any of them are multiplexed
+     * concurrently by the underlying Symfony HttpClient instead of being awaited one by one.
+     */
     public function send(RequestInterface $request): PromiseInterface
     {
         $body = $request->getBody();
@@ -41,10 +48,6 @@ final class SymfonyHttpClient implements HttpClient
                     'body' => (string) $body ?: null,
                 ]
             );
-
-            $statusCode = $symfonyResponse->getStatusCode();
-            $headers = $symfonyResponse->getHeaders(false);
-            $content = $symfonyResponse->getContent(false);
         } catch (TransportExceptionInterface $e) {
             if (stripos($e->getMessage(), 'timeout') !== false) {
                 return Create::rejectionFor(new ApiTimeout($e->getMessage(), $request, $e));
@@ -55,32 +58,62 @@ final class SymfonyHttpClient implements HttpClient
             return Create::rejectionFor(new ApiException($e->getMessage(), $e));
         }
 
-        $psr7Response = new Response($statusCode, $headers, $content);
+        $guard = new UnreadResponseGuard($symfonyResponse);
 
-        if ($statusCode >= 400) {
-            if ('application/problem+json' === $psr7Response->getHeaderLine('Content-Type')) {
-                try {
-                    return Create::rejectionFor(new ApiProblemResponse(
-                        ApiProblem::fromJson($content),
-                        $request,
-                        $psr7Response
-                    ));
-                } catch (JsonParseException $e) {
-                    // fall through to BadResponse
+        $promise = new Promise(function () use (&$promise, $request, $guard) {
+            $symfonyResponse = $guard->read();
+
+            try {
+                $statusCode = $symfonyResponse->getStatusCode();
+                $headers = $symfonyResponse->getHeaders(false);
+                $content = $symfonyResponse->getContent(false);
+            } catch (TransportExceptionInterface $e) {
+                if (stripos($e->getMessage(), 'timeout') !== false) {
+                    $promise->reject(new ApiTimeout($e->getMessage(), $request, $e));
+                } else {
+                    $promise->reject(new NetworkProblem($e->getMessage(), $request, $e));
                 }
+
+                return;
+            } catch (\Throwable $e) {
+                $promise->reject(new ApiException($e->getMessage(), $e));
+
+                return;
             }
 
-            return Create::rejectionFor(new BadResponse(
-                'Unexpected response status '.$statusCode,
-                $request,
-                $psr7Response
-            ));
-        }
+            $psr7Response = new Response($statusCode, $headers, $content);
 
-        try {
-            return Create::promiseFor(HttpResult::fromResponse($psr7Response));
-        } catch (\Throwable $e) {
-            return Create::rejectionFor(new ApiException($e->getMessage(), $e));
-        }
+            if ($statusCode >= 400) {
+                if ('application/problem+json' === $psr7Response->getHeaderLine('Content-Type')) {
+                    try {
+                        $promise->reject(new ApiProblemResponse(
+                            ApiProblem::fromJson($content),
+                            $request,
+                            $psr7Response
+                        ));
+
+                        return;
+                    } catch (JsonParseException $e) {
+                        // fall through to BadResponse
+                    }
+                }
+
+                $promise->reject(new BadResponse(
+                    'Unexpected response status '.$statusCode,
+                    $request,
+                    $psr7Response
+                ));
+
+                return;
+            }
+
+            try {
+                $promise->resolve(HttpResult::fromResponse($psr7Response));
+            } catch (\Throwable $e) {
+                $promise->reject(new ApiException($e->getMessage(), $e));
+            }
+        });
+
+        return $promise;
     }
 }

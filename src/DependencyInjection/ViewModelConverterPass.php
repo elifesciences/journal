@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class ViewModelConverterPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition('elife.journal.view_model.converter');
 

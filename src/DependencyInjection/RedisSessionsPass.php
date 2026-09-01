@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
 
 final class RedisSessionsPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->getParameter('redis_sessions')) {
             return;

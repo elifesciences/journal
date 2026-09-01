@@ -1763,7 +1763,7 @@ final class ArticlesController extends Controller
                     })->reverse()->toArray());
 
                 // Sort by index value.
-                usort($publicationHistory, function($first, $second) {
+                usort ($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
 
