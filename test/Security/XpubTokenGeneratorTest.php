@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Security;
 
 use eLife\Journal\Security\XpubTokenGenerator;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
@@ -20,11 +21,11 @@ final class XpubTokenGeneratorTest extends TestCase
 
         ClockMock::withClockMock($now);
 
-        $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret');
+        $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret_that_is_long_enough_for_hs256');
 
         $token = $tokenGenerator->generate(new InMemoryUser('username', 'password'), true);
 
-        $generated = (array) JWT::decode($token, 'client_secret', ['HS256']);
+        $generated = (array) JWT::decode($token, new Key('client_secret_that_is_long_enough_for_hs256', 'HS256'));
 
         $this->assertCount(5, $generated);
         $this->assertSame('client_id', $generated['iss']);

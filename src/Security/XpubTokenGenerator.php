@@ -26,6 +26,6 @@ final class XpubTokenGenerator
             'exp' => time() + self::TOKEN_TTL,
             'id' => $user->getUserIdentifier(),
             'new-session' => $newSession,
-        ], $this->clientSecret);
+        ], $this->clientSecret, 'HS256');
     }
 }

@@ -18,7 +18,7 @@ final class HypothesisTokenExtensionTest extends TestCase
     #[Test]
     public function it_is_a_twig_extension()
     {
-        $extension = new HypothesisTokenExtension(new HypothesisTokenGenerator('authority', 'client_id', 'client_secret'));
+        $extension = new HypothesisTokenExtension(new HypothesisTokenGenerator('authority', 'client_id', 'client_secret_that_is_long_enough_for_hs256'));
 
         $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
@@ -28,7 +28,7 @@ final class HypothesisTokenExtensionTest extends TestCase
     #[TimeSensitive(HypothesisTokenGenerator::class)]
     public function it_generates_a_token()
     {
-        $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret');
+        $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret_that_is_long_enough_for_hs256');
 
         $twigLoader = new ArrayLoader(['foo' => '{{ hypothesis_token(user) }}']);
         $twig = new Environment($twigLoader);

@@ -17,7 +17,7 @@ final class InfoLinkExtension extends AbstractTypeExtension
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options) : void
     {
         $view->vars['info_link'] = ['name' => 'Privacy notice', 'url' => $this->urlGenerator->generate('privacy')];
     }

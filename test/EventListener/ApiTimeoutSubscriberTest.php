@@ -23,7 +23,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $subscriber = new ApiTimeoutSubscriber();
 
         $exception = new ApiTimeout('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
@@ -36,7 +36,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $subscriber = new ApiTimeoutSubscriber();
 
         $exception = new BadResponse('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(504));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
@@ -49,7 +49,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $subscriber = new ApiTimeoutSubscriber();
 
         $exception = new NetworkProblem('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
@@ -62,7 +62,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $subscriber = new ApiTimeoutSubscriber();
 
         $exception = new BadResponse('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(503));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 

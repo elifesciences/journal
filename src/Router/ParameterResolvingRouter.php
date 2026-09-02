@@ -22,9 +22,9 @@ final class ParameterResolvingRouter implements RouterInterface, RequestMatcherI
         $this->parameterResolver = $parameterResolver;
     }
 
-    public function setContext(RequestContext $context)
+    public function setContext(RequestContext $context) : void
     {
-        return $this->router->setContext($context);
+        $this->router->setContext($context);
     }
 
     public function getContext(): RequestContext
@@ -56,7 +56,7 @@ final class ParameterResolvingRouter implements RouterInterface, RequestMatcherI
         return $this->router->matchRequest($request);
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         if (!$this->router instanceof WarmableInterface) {
             return [];

@@ -3,6 +3,7 @@
 namespace test\eLife\Journal\Controller;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\BackupGlobals;
@@ -61,7 +62,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), new Key($this->getParameter('xpub_client_secret'), 'HS256'));
 
         $this->assertTrue($jwt['new-session']);
     }
@@ -80,7 +81,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), new Key($this->getParameter('xpub_client_secret'), 'HS256'));
 
         $this->assertFalse($jwt['new-session']);
     }
@@ -99,7 +100,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), new Key($this->getParameter('xpub_client_secret'), 'HS256'));
 
         $this->assertFalse($jwt['new-session']);
     }
@@ -120,7 +121,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
         $query = Query::parse($location->getQuery());
 
-        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($query['token'] ?? '', new Key($this->getParameter('xpub_client_secret'), 'HS256'));
 
         $this->assertFalse($jwt['new-session']);
     }

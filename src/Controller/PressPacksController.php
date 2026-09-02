@@ -104,11 +104,11 @@ final class PressPacksController extends Controller
                 if ($package->getMediaContacts()->notEmpty()) {
                     $mediaContacts = Listing::ordered($package->getMediaContacts()->map($this->willConvertTo())->map($this->willRender())->toArray());
 
-                    $parts = $parts->append(ArticleSection::basic($this->render($mediaContacts), 'Media contacts', 2));
+                    $parts = $parts->append(ArticleSection::basic($this->renderViewModels($mediaContacts), 'Media contacts', 2));
                 }
 
                 if ($package->getAbout()->notEmpty()) {
-                    $parts = $parts->append(ArticleSection::basic($this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2]))), 'About', 2));
+                    $parts = $parts->append(ArticleSection::basic($this->renderViewModels(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2]))), 'About', 2));
                 }
 
                 return $parts->prepend(SpeechBubble::forArticleBody());

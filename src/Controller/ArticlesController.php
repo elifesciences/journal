@@ -321,7 +321,7 @@ final class ArticlesController extends Controller
                     'abstract',
                     'Abstract',
                     2,
-                    $this->render(...$this->convertContent($item->getAbstract(), 2, $context)),
+                    $this->renderViewModels(...$this->convertContent($item->getAbstract(), 2, $context)),
                     null,
                     null,
                     false,
@@ -351,7 +351,7 @@ final class ArticlesController extends Controller
                     $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
                     'Editor\'s evaluation',
                     2,
-                    $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
+                    $this->renderViewModels(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
                     $relatedLinks,
                     ArticleSection::STYLE_HIGHLIGHTED,
                     false,
@@ -367,7 +367,7 @@ final class ArticlesController extends Controller
                     'digest',
                     'eLife digest',
                     2,
-                    $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
+                    $this->renderViewModels(...$this->convertContent($item->getDigest(), 2, $context)),
                     null,
                     null,
                     false,
@@ -384,7 +384,7 @@ final class ArticlesController extends Controller
                 $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $isMagazine, $context) {
                     $section = ($isMagazine && $first) ?
                         ArticleSection::basic(
-                            $this->render(...$this->convertContent($section, 2, $context)),
+                            $this->renderViewModels(...$this->convertContent($section, 2, $context)),
                             null,
                             null,
                             $section->getId(),
@@ -397,7 +397,7 @@ final class ArticlesController extends Controller
                             $section->getId(),
                             $section->getTitle(),
                             2,
-                            $this->render(...$this->convertContent($section, 2, $context)),
+                            $this->renderViewModels(...$this->convertContent($section, 2, $context)),
                             null,
                             null,
                             $isInitiallyClosed,
@@ -416,13 +416,13 @@ final class ArticlesController extends Controller
             if ($item instanceof ArticleVoR) {
                 $parts = array_merge($parts, $item->getAppendices()->map(function (Appendix $appendix) use ($context) {
                     return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                        $this->render(...$this->convertContent($appendix, 2, $context)),
+                        $this->renderViewModels(...$this->convertContent($appendix, 2, $context)),
                         null, null, true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
                 })->toArray());
             }
 
             if ($data->notEmpty()) {
-                $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), null, null, false, $first);
+                $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->renderViewModels(...$data), null, null, false, $first);
             }
 
             if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
@@ -430,7 +430,7 @@ final class ArticlesController extends Controller
                     'references',
                     'References',
                     2,
-                    $this->render($this->convertTo($item, ViewModel\ReferenceList::class)),
+                    $this->renderViewModels($this->convertTo($item, ViewModel\ReferenceList::class)),
                     null,
                     null,
                     true
@@ -442,8 +442,8 @@ final class ArticlesController extends Controller
                     $item->getDecisionLetter()->getId() ?? 'decision-letter',
                     'Decision letter',
                     2,
-                    $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                    $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                    $this->renderViewModels($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                    $this->renderViewModels(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
                     null,
                     null,
                     true,
@@ -459,7 +459,7 @@ final class ArticlesController extends Controller
                     $item->getAuthorResponse()->getId() ?? 'author-response',
                     'Author response',
                     2,
-                    $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                    $this->renderViewModels(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
                     null,
                     null,
                     true,
@@ -503,17 +503,17 @@ final class ArticlesController extends Controller
                             'bullet'
                         );
 
-                        return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
+                        return ArticleSection::basic($this->renderViewModels($body), $title, 4, null, null, null, null, false, $headerLink);
                     })->toArray();
 
                 $funding[] = new Paragraph($item->getFunding()->getStatement());
 
-                $infoSections[] = ArticleSection::basic($this->render(...$funding), 'Funding', 3);
+                $infoSections[] = ArticleSection::basic($this->renderViewModels(...$funding), 'Funding', 3);
             }
 
             if ($item instanceof ArticleVoR && $item->getAcknowledgements()->notEmpty()) {
                 $infoSections[] = ArticleSection::basic(
-                    $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
+                    $this->renderViewModels(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
                     'Acknowledgements',
                     3
                 );
@@ -556,7 +556,7 @@ final class ArticlesController extends Controller
                     }
 
                     $infoSections[] = ArticleSection::basic(
-                        $this->render(Listing::ordered($reviewers)),
+                        $this->renderViewModels(Listing::ordered($reviewers)),
                         $role,
                         3
                     );
@@ -565,7 +565,7 @@ final class ArticlesController extends Controller
 
             if ($item->getEthics()->notEmpty()) {
                 $infoSections[] = ArticleSection::basic(
-                    $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
+                    $this->renderViewModels(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
                     'Ethics',
                     3
                 );
@@ -579,7 +579,7 @@ final class ArticlesController extends Controller
                 $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
                 $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
                 $infoSections[] = ArticleSection::basic(
-                    $this->render(
+                    $this->renderViewModels(
                         Listing::ordered($publicationHistory, 'bullet')
                     ),
                     $publicationHistoryTitle,
@@ -606,7 +606,7 @@ final class ArticlesController extends Controller
                     'info',
                     'Article'.($item->getAuthors()->notEmpty() ? ' and author' : '').' information',
                     2,
-                    $this->render(...$infoSections),
+                    $this->renderViewModels(...$infoSections),
                     null,
                     null,
                     true
@@ -618,7 +618,7 @@ final class ArticlesController extends Controller
                     'metrics',
                     'Metrics',
                     2,
-                    $this->render(...$metrics),
+                    $this->renderViewModels(...$metrics),
                     null,
                     null,
                     true
@@ -661,7 +661,7 @@ final class ArticlesController extends Controller
                     $elifeAssessmentArticlesSection = $elifeAssessment->getArticleSection();
                     $assessmentBuilder = new AssessmentBuilder();
                     return ArticleSection::basic(
-                        $this->render(...$this->convertContent($elifeAssessmentArticlesSection, 2, $context)),
+                        $this->renderViewModels(...$this->convertContent($elifeAssessmentArticlesSection, 2, $context)),
                         $elifeAssessment->getTitle(),
                         2,
                         'elife-assessment',
@@ -687,7 +687,7 @@ final class ArticlesController extends Controller
                 $downloadLinks = $parts['downloadLinks'];
                 $isMagazine = $parts['isMagazine'];
 
-                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+                $body[] = ArticleSection::basic($this->renderViewModels($downloadLinks), 'Download links', 2);
 
 
                 if (!$isMagazine && 'feature' !== $item->getType()) {
@@ -698,7 +698,7 @@ final class ArticlesController extends Controller
                         true,
                         true
                     );
-                    $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                    $body[] =  ArticleSection::basic($this->renderViewModels(...$share), 'Share this article', 3,
                         'share', null, null, null, false, null, null, 'article-section__sharers');
                 }
 
@@ -813,22 +813,22 @@ final class ArticlesController extends Controller
                 $first = true;
 
                 if ($all['figures']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->render(...$all['figures']), null, null, false, $first);
+                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->renderViewModels(...$all['figures']), null, null, false, $first);
                     $first = false;
                 }
 
                 if ($all['videos']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->render(...$all['videos']), null, null, false, $first);
+                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->renderViewModels(...$all['videos']), null, null, false, $first);
                     $first = false;
                 }
 
                 if ($all['tables']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), null, null, false, $first);
+                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->renderViewModels(...$all['tables']), null, null, false, $first);
                     $first = false;
                 }
 
                 if (!empty($all['additionalFiles'])) {
-                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->renderViewModels($all['additionalFiles']), null, null, false, $first);
                 }
 
                 if ($all['isMagazine'] && !empty($parts)) {
@@ -864,7 +864,7 @@ final class ArticlesController extends Controller
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
 
-                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+                $body[] = ArticleSection::basic($this->renderViewModels($downloadLinks), 'Download links', 2);
 
                 return $body;
             });
@@ -938,9 +938,9 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
                     $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
                     $peerReview[] = ArticleSection::basic(
-                        $this->render(
+                        $this->renderViewModels(
                             new ProcessBlock(
-                                $this->render($peerReviewText),
+                                $this->renderViewModels($peerReviewText),
                                 'vor',
                                 new Link(
                                     'Read more about eLife\'s peer review process.',
@@ -960,7 +960,7 @@ final class ArticlesController extends Controller
                     $publicationHistoryTitle = 'History';
 
                     $peerReview[] = ArticleSection::basic(
-                        $this->render(
+                        $this->renderViewModels(
                             Listing::ordered($publicationHistory, 'line')
                         ),
                         $publicationHistoryTitle,
@@ -981,7 +981,7 @@ final class ArticlesController extends Controller
                     'peer-review-process',
                     'Peer review process',
                     2,
-                    $this->render(...$peerReview),
+                    $this->renderViewModels(...$peerReview),
                     $relatedLinks ? $relatedLinks : null,
                     ArticleSection::STYLE_PEER_REVIEW,
                     true,
@@ -1027,7 +1027,7 @@ final class ArticlesController extends Controller
                         }
 
                         $infoSections[] = ArticleSection::basic(
-                            $this->render(Listing::ordered($reviewers)),
+                            $this->renderViewModels(Listing::ordered($reviewers)),
                             $role, null, null, null, null, 'editor', false, null, null, null, true
                         );
                     }
@@ -1036,7 +1036,7 @@ final class ArticlesController extends Controller
                         'editors',
                         'Editors',
                         2,
-                        $this->render(...$infoSections),
+                        $this->renderViewModels(...$infoSections),
                         null,
                         null,
                         true
@@ -1049,8 +1049,8 @@ final class ArticlesController extends Controller
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
                         2,
-                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        $this->renderViewModels($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->renderViewModels(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
                         null,
                         null,
                         true,
@@ -1065,7 +1065,7 @@ final class ArticlesController extends Controller
                             $publicReview->getId(),
                             $publicReview->getTitle(),
                             2,
-                            $this->render(...$this->convertContent($publicReview, 3, $context)),
+                            $this->renderViewModels(...$this->convertContent($publicReview, 3, $context)),
                             null,
                             null,
                             false,
@@ -1083,7 +1083,7 @@ final class ArticlesController extends Controller
                             $item->getRecommendationsForAuthors()->getId(),
                             $item->getRecommendationsForAuthorsTitle(),
                             2,
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
+                            $this->renderViewModels(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
                             null,
                             null,
                             false,
@@ -1098,7 +1098,7 @@ final class ArticlesController extends Controller
                         $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
                         2,
-                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        $this->renderViewModels(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
                         null,
                         null,
                         true,
@@ -1150,7 +1150,7 @@ final class ArticlesController extends Controller
                 $downloadLinks = $parts['downloadLinks'];
                 $isMagazine = $parts['isMagazine'];
 
-                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+                $body[] = ArticleSection::basic($this->renderViewModels($downloadLinks), 'Download links', 2);
 
 
                 if (!$isMagazine && 'feature' !== $item->getType()) {
@@ -1162,7 +1162,7 @@ final class ArticlesController extends Controller
                         true
                     );
 
-                    $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                    $body[] =  ArticleSection::basic($this->renderViewModels(...$share), 'Share this article', 3,
                         'share', null, null, null, false, null, null, 'article-section__sharers');
                 }
 

@@ -34,7 +34,7 @@ final class MockApiHttpClient implements HttpClientInterface
             $url = rtrim($this->baseUri, '/').'/'.ltrim($url, '/');
         }
 
-        $filename = $this->buildFilename($method, $url, $options['headers'] ?? []);
+        $filename = $this->buildFilename($method, $url, $this->normalizeHeaders($options['headers'] ?? []));
 
         if (!file_exists($filename)) {
             $mock = new MockResponse('', ['http_code' => 404]);
@@ -94,6 +94,29 @@ final class MockApiHttpClient implements HttpClientInterface
         $fs = new Filesystem();
         $fs->mkdir(dirname($filename));
         file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
+    /**
+     * Symfony's HttpClientInterface normalizes the 'headers' request option into a
+     * list of "Name: value" strings once a request passes through a decorator
+     * (e.g. ScopingHttpClient), rather than the associative name => value map this
+     * class receives when called directly. Reduce both shapes to one associative
+     * map so fingerprint() matches what save() recorded regardless of which form
+     * a given request arrived in.
+     */
+    private function normalizeHeaders(array $headers): array
+    {
+        if (!array_is_list($headers)) {
+            return $headers;
+        }
+
+        $normalized = [];
+        foreach ($headers as $line) {
+            [$name, $value] = explode(':', $line, 2);
+            $normalized[trim($name)] = trim($value);
+        }
+
+        return $normalized;
     }
 
     private function buildFilename(string $method, string $url, array $headers): string

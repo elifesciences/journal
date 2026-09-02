@@ -6,23 +6,10 @@ trait CanCheckAuthorization
 {
     use HasAuthorizationChecker;
 
-    final protected function ifGranted(array $attributes, callable $ifGranted) : callable
+    final protected function isGranted(mixed $attribute, mixed $subject = null) : bool
     {
-        return function ($object) use ($attributes, $ifGranted) {
-            if (!$this->isGranted(...$attributes)) {
-                return null;
-            }
-
-            return $ifGranted($object);
-        };
-    }
-
-    final protected function isGranted(string ...$attributes) : bool
-    {
-        foreach ($attributes as $attribute) {
-            if ($this->getAuthorizationChecker()->isGranted($attribute)) {
-                return true;
-            }
+        if ($this->getAuthorizationChecker()->isGranted($attribute, $subject)) {
+            return true;
         }
 
         return false;

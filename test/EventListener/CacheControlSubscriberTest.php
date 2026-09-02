@@ -22,7 +22,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1, stale-while-revalidate=2, stale-if-error=3');
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo')));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $response = new Response('foo')));
 
         $this->assertSame('max-age=1, public, stale-if-error=3, stale-while-revalidate=2', $response->headers->get('Cache-Control'));
         $this->assertSame(['Cookie'], $response->getVary());
@@ -34,7 +34,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo', Response::HTTP_OK, ['Cache-Control' => 'public'])));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $response = new Response('foo', Response::HTTP_OK, ['Cache-Control' => 'public'])));
 
         $this->assertSame('public', $response->headers->get('Cache-Control'));
         $this->assertSame(['Cookie'], $response->getVary());
@@ -47,7 +47,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber($cacheControl);
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo', Response::HTTP_NOT_FOUND)));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $response = new Response('foo', Response::HTTP_NOT_FOUND)));
 
         $this->assertSame($expected, $response->headers->get('Cache-Control'));
         $this->assertSame($expectedVary, $response->getVary());
@@ -70,7 +70,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), Request::create('foo', Request::METHOD_POST), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo')));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), Request::create('foo', Request::METHOD_POST), HttpKernelInterface::MAIN_REQUEST, $response = new Response('foo')));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
@@ -82,7 +82,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new StreamedResponse()));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $response = new StreamedResponse()));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
@@ -94,7 +94,7 @@ final class CacheControlSubscriberTest extends TestCase
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('', Response::HTTP_NOT_MODIFIED)));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $response = new Response('', Response::HTTP_NOT_MODIFIED)));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
@@ -110,7 +110,7 @@ final class CacheControlSubscriberTest extends TestCase
         $request->setSession($session = new Session(new MockArraySessionStorage()));
         $session->start();
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST, $response = new Response()));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST, $response = new Response()));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
@@ -126,7 +126,7 @@ final class CacheControlSubscriberTest extends TestCase
         $request->setSession($session = new Session(new MockArraySessionStorage()));
         $request->cookies->set($session->getName(), $session->getId());
 
-        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST, $response = new Response()));
+        $subscriber->onKernelResponse(new ResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST, $response = new Response()));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());

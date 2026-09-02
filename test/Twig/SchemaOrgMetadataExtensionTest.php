@@ -41,6 +41,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Traversable;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\ArrayLoader;
 use TypeError;
@@ -101,8 +102,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence()
         )]);
 
-        $this->expectException(TypeError::class);
-        $this->twig->render('foo', ['item' => 'not content model']);
+        try {
+            $this->twig->render('foo', ['item' => 'not content model']);
+            $this->fail('Expected a '.RuntimeError::class.' to be thrown');
+        } catch (RuntimeError $e) {
+            $this->assertInstanceOf(TypeError::class, $e->getPrevious());
+        }
     }
 
     #[Test]

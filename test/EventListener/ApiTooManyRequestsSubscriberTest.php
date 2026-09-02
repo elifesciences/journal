@@ -21,7 +21,7 @@ final class ApiTooManyRequestsSubscriberTest extends TestCase
         $subscriber = new ApiTooManyRequestsSubscriber();
 
         $exception = new BadResponse('Too Many Requests', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(429));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 
@@ -44,7 +44,7 @@ final class ApiTooManyRequestsSubscriberTest extends TestCase
         $subscriber = new ApiTooManyRequestsSubscriber();
 
         $exception = new BadResponse('Timeout', new GuzzleRequest('GET', 'http://www.example.com/'), new GuzzleResponse(400));
-        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $subscriber->onKernelException($event);
 

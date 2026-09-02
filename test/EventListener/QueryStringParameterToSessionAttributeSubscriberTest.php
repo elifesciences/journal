@@ -23,7 +23,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
 
         $request = Request::create($uri);
         $request->setSession(new Session(new MockArraySessionStorage()));
-        $event = new RequestEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber->onKernelRequest($event);
 

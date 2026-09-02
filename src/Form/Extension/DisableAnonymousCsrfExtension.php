@@ -16,7 +16,7 @@ final class DisableAnonymousCsrfExtension extends AbstractTypeExtension
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver) : void
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return;

@@ -115,7 +115,7 @@ final class InterviewsController extends Controller
                 })->toArray(), 'bullet');
 
                 return ArticleSection::basic(
-                    $this->render($cv),
+                    $this->renderViewModels($cv),
                     $interview->getInterviewee()->getPerson()->getPreferredName().' CV',
                     2
                 );

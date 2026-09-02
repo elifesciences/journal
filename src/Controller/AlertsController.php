@@ -23,26 +23,26 @@ final class AlertsController extends Controller
             'Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.');
 
         $arguments['body'] = [
-            ArticleSection::basic($this->render(
+            ArticleSection::basic($this->renderViewModels(
                 Listing::unordered([
                     'Receive <a href="/content-alerts">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">X (formerly Twitter) </a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>',
                 ], 'bullet')
             ), 'New Research', 2),
-            ArticleSection::basic($this->render(
+            ArticleSection::basic($this->renderViewModels(
                 Listing::unordered([
                     'Sign up to receive <a href="https://connect.elifesciences.org/magazine-highlights">eLife Magazine Highlights</a>, a fortnightly newsletter featuring content from the magazine section of eLife',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife Magazine</a>',
                 ], 'bullet')
             ), 'eLife Magazine', 2),
-            ArticleSection::basic($this->render(
+            ArticleSection::basic($this->renderViewModels(
                 Listing::unordered([
                     'Sign up to our monthly <a href="/content-alerts/early-career">eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             ), 'Community-building', 2),
-            ArticleSection::basic($this->render(
+            ArticleSection::basic($this->renderViewModels(
                 Listing::unordered([
                     'Sign up to receive our <a href="/content-alerts/elife-newsletter">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy</a>',
                 ], 'bullet')
@@ -56,7 +56,7 @@ final class AlertsController extends Controller
                 return 'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-recent-by-subject', [$subject]).'">'.$subject->getName().'</a>';
             })
             ->then(function (Sequence $links) use (&$arguments) {
-                $arguments['body'][] = ArticleSection::basic($this->render(
+                $arguments['body'][] = ArticleSection::basic($this->renderViewModels(
                     Listing::unordered($links->toArray(), 'bullet')
                 ), 'eLife&apos;s Subject specific RSS feeds', 2);
             })

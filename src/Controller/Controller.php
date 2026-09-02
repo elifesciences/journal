@@ -12,8 +12,8 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use GuzzleHttp\Promise\PromiseInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use \Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,19 +25,16 @@ use function preg_match;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Promise\Create;
 
-abstract class Controller implements ContainerAwareInterface
+abstract class Controller extends AbstractController
 {
     use CanCheckAuthorization;
     use CanConvertContent;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    final public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
-        $this->container = $container;
+        parent::setContainer($container);
+
+        return $container;
     }
 
     final protected function get(string $id)
@@ -45,7 +42,7 @@ abstract class Controller implements ContainerAwareInterface
         return $this->container->get($id);
     }
 
-    final protected function getParameter(string $id)
+    final protected function getParameter(string $id): \UnitEnum|float|int|bool|array|string|null
     {
         return $this->container->getParameter($id);
     }
@@ -60,12 +57,15 @@ abstract class Controller implements ContainerAwareInterface
         return $this->get('elife.journal.view_model.converter');
     }
 
+    /**
+     * @return AuthorizationCheckerInterface
+     */
     final protected function getAuthorizationChecker() : AuthorizationCheckerInterface
     {
         return $this->get('elife.journal.security.authorization_checker');
     }
 
-    final protected function render(ViewModel ...$viewModels) : string
+    final protected function renderViewModels(ViewModel ...$viewModels) : string
     {
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
     }
@@ -73,7 +73,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function willRender() : callable
     {
         return function (ViewModel $viewModel) {
-            return $this->render($viewModel);
+            return $this->renderViewModels($viewModel);
         };
     }
 
@@ -134,7 +134,7 @@ abstract class Controller implements ContainerAwareInterface
             ->otherwise($this->mightNotExist());
 
         if ($request->isXmlHttpRequest()) {
-            $response = new Response($this->render($arguments['listing']->wait()));
+            $response = new Response($this->renderViewModels($arguments['listing']->wait()));
         } else {
             $arguments['contentHeader'] = $arguments['paginator']
                 ->then(function (Paginator $paginator) {

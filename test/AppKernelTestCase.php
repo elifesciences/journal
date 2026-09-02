@@ -55,16 +55,17 @@ trait AppKernelTestCase
 
     final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response): void
     {
-        // Scoped http clients are auto-decorated with UriTemplateHttpClient by
-        // FrameworkExtension, so the plain service id resolves to the decorator;
-        // the ".uri_template.inner" id reaches the MockApiHttpClient underneath.
-        // getContainer() (not $kernel->getContainer()) is required because that
-        // inner id is private.
+        // Scoped http clients are auto-decorated by FrameworkExtension (currently
+        // UriTemplateHttpClient wrapping ScopingHttpClient, priorities 10 and 15
+        // respectively), so the plain service id resolves to the outermost
+        // decorator; the ".scoping.inner" id reaches the MockApiHttpClient
+        // underneath both. getContainer() (not $kernel->getContainer()) is
+        // required because that inner id is private.
         $container = static::getContainer();
-        $container->get('elife_api.uri_template.inner')->save($request, $response);
-        $container->get('elife_api_search_page.uri_template.inner')->save($request, $response);
-        $container->get('streamer.uri_template.inner')->save($request, $response);
-        $container->get('oauth.uri_template.inner')->save($request, $response);
+        $container->get('elife_api.scoping.inner')->save($request, $response);
+        $container->get('elife_api_search_page.scoping.inner')->save($request, $response);
+        $container->get('streamer.scoping.inner')->save($request, $response);
+        $container->get('oauth.scoping.inner')->save($request, $response);
     }
 
     final protected function getParameter(string $parameter)
