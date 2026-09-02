@@ -62,7 +62,7 @@ final class SiteHeaderFactory
             $subject = null;
         }
 
-        if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->get('_route')) {
+        if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->attributes->get('_route')) {
             $searchBox = new SearchBox(
                 new CompactForm(
                     new Form($this->urlGenerator->generate('search'), 'search', 'GET'),

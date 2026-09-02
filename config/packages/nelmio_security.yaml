@@ -24,10 +24,6 @@ nelmio_security:
             - 'no-referrer-when-downgrade'
             - 'strict-origin-when-cross-origin'
 
-    xss_protection:
-        enabled: true
-        mode_block: true
-
 when@prod: &prod_nelmio_security
     nelmio_security:
         csp:
@@ -38,10 +34,11 @@ when@prod: &prod_nelmio_security
                     - 'https://*.hotjar.com:*'
                     - 'https://*.hotjar.io'
                     - 'wss://*.hotjar.com'
-                    - unsafe-eval
-                    - unsafe-inline
+                script-src:
+                    - 'unsafe-eval'
+                    - 'unsafe-inline'
         forced_ssl:
-            whitelist:
+            allow_list:
                 - ^/ # Hack to disable redirect.
             hsts_max_age: 31536000 # 1 year
             hsts_subdomains: true

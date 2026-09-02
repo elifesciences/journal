@@ -63,6 +63,10 @@ when@dev:
     framework:
         session:
             cookie_secure: auto
+        profiler:
+            collect: true
+            collect_serializer_data: true
+            enabled: true
 
 when@ci:
     framework:
@@ -71,7 +75,8 @@ when@ci:
             cookie_secure: auto
             storage_factory_id: session.storage.factory.mock_file
         profiler:
-            collect: false
+            collect: true
+            collect_serializer_data: true
             enabled: true
 
 # trusted_hosts is a list, so a later when@ block can't override/clear it (Symfony merges
