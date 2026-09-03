@@ -2,7 +2,6 @@ ARG image_tag=latest
 ARG php_version
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-#FROM elifesciences/php_7.3_fpm:${php_version}
 FROM ghcr.io/elifesciences/php:8.3-fpm
 
 ENV PROJECT_FOLDER=/srv/journal
@@ -24,14 +23,6 @@ RUN apt-get update \
 RUN pie install xdebug/xdebug
 RUN pie install phpredis/phpredis
 
-#RUN pecl channel-update pecl.php.net && \
-#    pecl install redis-5.3.7 && \
-#    docker-php-ext-enable redis && \
-#    pecl update channels && \
-#    pecl install xdebug-2.9.8 && \
-#    docker-php-ext-enable xdebug && \
-#    rm -rf /tmp/pear/
-
 RUN mkdir -p build var && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
@@ -39,7 +30,6 @@ RUN mkdir -p build var && \
 COPY --chown=elife:elife .docker/smoke_tests.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
-#COPY --chown=elife:elife app/ app/
 COPY --chown=elife:elife build/critical-css/ build/critical-css/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=assets --chown=elife:elife /web/ /srv/journal/web/

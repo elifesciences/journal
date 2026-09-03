@@ -8,9 +8,17 @@ ENV PHP_ENTRYPOINT=web/app.php
 WORKDIR ${PROJECT_FOLDER}
 
 USER root
-RUN pecl install redis && \
-    docker-php-ext-enable redis && \
-    rm -rf /tmp/pear/
+
+RUN curl -fL --output /tmp/pie.phar https://github.com/php/pie/releases/latest/download/pie.phar
+RUN mv /tmp/pie.phar /usr/local/bin/pie
+RUN chmod +x /usr/local/bin/pie
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests unzip libtool \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pie install phpredis/phpredis
+
 RUN mkdir -p build var && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
@@ -18,7 +26,6 @@ RUN mkdir -p build var && \
 COPY --chown=elife:elife .docker/smoke_tests.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
-#COPY --chown=elife:elife app/ app/
 COPY --chown=elife:elife build/critical-css/ build/critical-css/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=assets --chown=elife:elife /web/ /srv/journal/web/

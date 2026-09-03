@@ -45,9 +45,9 @@ parameters:
     hypothesis_api: https://hypothes.is/api/
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
-    hypothesis_client_secret: ThisIsASecret
+    hypothesis_client_secret: ThisIsASecretThatIsLongEnoughForHS256Signing
     xpub_client_id: some-id
-    xpub_client_secret: ThisIsASecret
+    xpub_client_secret: ThisIsASecretThatIsLongEnoughForHS256Signing
     subject_rewrites: []
     era_articles:
         '30274':
