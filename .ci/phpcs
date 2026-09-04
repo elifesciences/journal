@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p app/ bin/ src/ web/
+vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p bin/ src/ web/
 vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p test/

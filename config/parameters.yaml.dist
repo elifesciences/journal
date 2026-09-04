@@ -3,6 +3,10 @@ parameters:
     api_url_search_page: https://api.elifesciences.org
     api_url_public: '%api_url%'
     api_key: public
+    api_connect_timeout: 2
+    api_timeout: 5
+    api_connect_timeout_slow: 3
+    api_timeout_slow: 10
     honeypot_field: email_address
     side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
