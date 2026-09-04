@@ -31,6 +31,8 @@ COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=assets --chown=elife:elife /web/ /srv/journal/web/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
+COPY --chown=elife:elife config/ config/
+COPY --chown=elife:elife templates/ templates/
 
 USER www-data
 

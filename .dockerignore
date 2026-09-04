@@ -1,4 +1,6 @@
 app/config/parameters.yml*
+config/parameters.yml*
+config/parameters.yaml*
 build/
 !build/critical-css/
 docker-compose*.yml

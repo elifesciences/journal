@@ -75,7 +75,7 @@
         ]
     },
     "symfony/console": {
-        "version": "6.4",
+        "version": "7.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
