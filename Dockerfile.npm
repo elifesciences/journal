@@ -1,7 +1,16 @@
 ARG node_version
 FROM node:${node_version} as npm
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
+# deb.debian.org's live mirror intermittently 404s on superseded bullseye-security package
+# versions (Debian's security repo only keeps the latest version of each package, and the CDN's
+# cached index can lag behind). Pin to the immutable snapshot.debian.org sources the base image
+# already ships (commented out) instead, so this never depends on the live mirror's current state.
+RUN sed -i \
+    -e 's|^deb http://deb.debian.org|# deb http://deb.debian.org|' \
+    -e 's|^# deb http://snapshot.debian.org|deb http://snapshot.debian.org|' \
+    /etc/apt/sources.list \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/10no--check-valid-until \
+    && apt-get update && apt-get install --no-install-recommends -y \
     nasm \
     libvips-dev \
     && wget http://archive.debian.org/debian/pool/main/p/phantomjs/phantomjs_2.1.1+dfsg-2_$(dpkg --print-architecture).deb \
