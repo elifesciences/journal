@@ -12,6 +12,7 @@ on:
       - master
       - develop
       - feature-*
+      - symfony7
 
 jobs:
   generate-date:
