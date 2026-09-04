@@ -88,9 +88,9 @@ publisher = {eLife Sciences Publications, Ltd},
 }
 EOT
             ,
-    ];
+        ];
 
-    yield 'complete VoR' => [
+        yield 'complete VoR' => [
         'vor',
         [
             'status' => 'vor',
@@ -222,9 +222,9 @@ publisher = {eLife Sciences Publications, Ltd},
 }
 EOT
             ,
-    ];
+        ];
 
-    yield 'structured abstract' => [
+        yield 'structured abstract' => [
         'poa',
         [
             'status' => 'poa',
@@ -288,8 +288,8 @@ publisher = {eLife Sciences Publications, Ltd},
 }
 EOT
             ,
-    ];
-}
+        ];
+    }
 
     #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()

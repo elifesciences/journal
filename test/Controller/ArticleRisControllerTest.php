@@ -87,9 +87,9 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-    ];
+        ];
 
-    yield 'complete VoR' => [
+        yield 'complete VoR' => [
         'vor',
         [
             'status' => 'vor',
@@ -223,9 +223,9 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-    ];
+        ];
 
-    yield 'structured abstract' => [
+        yield 'structured abstract' => [
         'poa',
         [
             'status' => 'poa',
@@ -287,8 +287,8 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-    ];
-}
+        ];
+    }
 
     #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()

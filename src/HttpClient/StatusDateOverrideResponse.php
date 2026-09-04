@@ -42,7 +42,7 @@ class StatusDateOverrideResponse implements ResponseInterface
 
     public function getStatusCode(): int
     {
-       return $this->response->getStatusCode();
+        return $this->response->getStatusCode();
     }
     public function getContent(bool $throw = true): string
     {
@@ -101,7 +101,6 @@ class StatusDateOverrideResponse implements ResponseInterface
             case (string) new MediaType(PressPackagesClient::TYPE_PRESS_PACKAGE, PressPackages::VERSION_PRESS_PACKAGE):
                 $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                 break;
-
         }
 
         return json_encode($data);

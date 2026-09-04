@@ -1821,7 +1821,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString('Read the most recent version of this article.',
             implode("\n", array_map('trim', $crawler->filter('.info-bar')->extract(['_text']))));
-
     }
 
     #[Test]

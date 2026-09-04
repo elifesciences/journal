@@ -34,8 +34,8 @@ final class ApiTooManyRequestsSubscriberTest extends TestCase
 
         $key = 'Retry-After';
         $value = 60;
-        $this->assertArrayHasKey($key,  $actual->getHeaders());
-        $this->assertSame($value,  $actual->getHeaders()[$key]);
+        $this->assertArrayHasKey($key, $actual->getHeaders());
+        $this->assertSame($value, $actual->getHeaders()[$key]);
     }
 
     #[Test]

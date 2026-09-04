@@ -81,7 +81,8 @@ final class MockApiHttpClient implements HttpClientInterface
         ];
 
         $requestHeaders = array_map(
-            function ($values) { return implode(', ', $values); },
+            function ($values) { return implode(', ', $values);
+            },
             $request->getHeaders()
         );
 

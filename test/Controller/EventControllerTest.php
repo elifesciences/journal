@@ -17,7 +17,7 @@ final class EventControllerTest extends PageTestCase
 {
     use Providers;
 
-   #[Test]
+    #[Test]
     public function it_displays_an_event_page()
     {
         $client = static::createClient();
@@ -30,7 +30,7 @@ final class EventControllerTest extends PageTestCase
         $this->assertStringContainsString('Event text.', $crawler->filter('main')->text());
     }
 
-   #[Test]
+    #[Test]
     public function it_displays_metrics()
     {
         $client = static::createClient();
@@ -78,7 +78,7 @@ final class EventControllerTest extends PageTestCase
         );
     }
 
-   #[Test]
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -105,7 +105,7 @@ final class EventControllerTest extends PageTestCase
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-   #[Test]
+    #[Test]
     public function it_displays_a_message_if_the_event_has_finished()
     {
         $client = static::createClient();
@@ -142,7 +142,7 @@ final class EventControllerTest extends PageTestCase
         $this->assertSame('noindex', $crawler->filter('head > meta[name="robots"]')->attr('content'));
     }
 
-   #[Test]
+    #[Test]
     public function it_redirects_if_the_event_has_a_uri()
     {
         $client = static::createClient();
@@ -191,7 +191,7 @@ final class EventControllerTest extends PageTestCase
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
     }
 
-   #[Test]
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -215,7 +215,7 @@ final class EventControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Event title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/name'));
     }
 
-   #[Test]
+    #[Test]
     public function it_displays_a_404_if_the_event_is_not_found()
     {
         $client = static::createClient();

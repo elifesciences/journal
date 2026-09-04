@@ -44,7 +44,8 @@ final class SymfonyHttpClient implements HttpClient
                 $request->getMethod(),
                 (string) $request->getUri(),
                 [
-                    'headers' => array_map(function ($values) { return implode(', ', $values); }, $request->getHeaders()),
+                    'headers' => array_map(function ($values) { return implode(', ', $values);
+                    }, $request->getHeaders()),
                     'body' => (string) $body ?: null,
                 ]
             );

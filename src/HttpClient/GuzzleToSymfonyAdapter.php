@@ -29,7 +29,8 @@ final class GuzzleToSymfonyAdapter implements ClientInterface
             $request->getMethod(),
             (string) $request->getUri(),
             [
-                'headers' => array_map(function ($values) { return implode(', ', $values); }, $request->getHeaders()),
+                'headers' => array_map(function ($values) { return implode(', ', $values);
+                }, $request->getHeaders()),
                 'body' => $bodyStr ?: null,
             ]
         );
