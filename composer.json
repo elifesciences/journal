@@ -2,12 +2,6 @@
     "name": "elife/journal",
     "type": "project",
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../patterns-php"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "eLife\\Journal\\": "src/"
@@ -23,7 +17,7 @@
         "ext-hash": "*",
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
-        "cocur/slugify": "^3.0",
+        "cocur/slugify": "^3.2",
         "composer/package-versions-deprecated": "1.11.99.2",
         "csa/guzzle-bundle": "^2.2",
         "cweagans/composer-patches": "^1.6",
@@ -89,7 +83,7 @@
         },
         "policy": {
             "advisories": {
-                "ignore": []
+                "block": false
             }
         }
     },
@@ -99,18 +93,8 @@
             "Sheets"
         ],
         "patches": {
-            "bobthecow/mustache-bundle": {
-                "Remove superfluous argument": "patches/bobthecow/BobthecowMustacheBundle/pull/9/remove-superflous-argument.patch.txt"
-            },
-            "cocur/slugify": {
-                "strip_tags": "patches/cocur/slugify/pull/201/strip-tags.patch.txt"
-            },
             "isometriks/spam-bundle": {
-                "Add field label": "patches/isometriks/IsometriksSpamBundle/pull/9/add-field-label.patch.txt",
                 "Use EmailType": "patches/isometriks/IsometriksSpamBundle/pull/17/use-emailtype.patch.txt"
-            },
-            "monolog/monolog": {
-                "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "patches/Seldaek/monolog/pull/1022/fix-whatfailuregrouphandler-handlebatch-when-handler-has-processors.patch.txt"
             }
         }
     }
