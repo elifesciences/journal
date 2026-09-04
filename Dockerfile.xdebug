@@ -1,5 +1,4 @@
 ARG image_tag=latest
-ARG php_version
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
 FROM ghcr.io/elifesciences/php:8.3-fpm
@@ -16,7 +15,16 @@ RUN curl -fL --output /tmp/pie.phar https://github.com/php/pie/releases/latest/d
 RUN mv /tmp/pie.phar /usr/local/bin/pie
 RUN chmod +x /usr/local/bin/pie
 
-RUN apt-get update \
+# deb.debian.org's live mirror intermittently 404s on superseded bullseye-security package
+# versions (Debian's security repo only keeps the latest version of each package, and the CDN's
+# cached index can lag behind). Pin to the immutable snapshot.debian.org sources the base image
+# already ships (commented out) instead, so this never depends on the live mirror's current state.
+RUN sed -i \
+    -e 's|^deb http://deb.debian.org|# deb http://deb.debian.org|' \
+    -e 's|^# deb http://snapshot.debian.org|deb http://snapshot.debian.org|' \
+    /etc/apt/sources.list \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/10no--check-valid-until \
+    && apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests unzip libtool \
     && rm -rf /var/lib/apt/lists/*
 

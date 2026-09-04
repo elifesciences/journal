@@ -8,7 +8,6 @@ const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
-const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const axios = require('axios');
 const rev = require('gulp-rev-all');
