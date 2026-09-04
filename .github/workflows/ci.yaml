@@ -35,7 +35,7 @@ jobs:
         with:
           version: v2.29.7
       - name: Bring up test stack
-        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up --build -d app web api_dummy redis selenium
       - name: Debug bring up test stack
         if: failure()
         run: docker compose logs
@@ -81,5 +81,14 @@ jobs:
 
           # Retag and push
           docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
+      - name: Smoke tests
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml cp app:/srv/journal/build/rev-manifest.json build/rev-manifest.json
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml exec app ./smoke_tests.sh
+          curl -sf http://localhost:8080/favicon.ico
+          curl -sf http://localhost:8080/ping | grep -q pong
+          curl -sf "http://localhost:8080/$(jq -r '.["assets/patterns/css/all.css"]' build/rev-manifest.json)"
+          curl -sf "http://localhost:8080/$(jq -r '.["assets/favicons/manifest.json"]' build/rev-manifest.json)"
+          curl -sf "http://localhost:8080/$(jq -r '.["assets/images/banners/magazine-1114x336@1.jpg"]' build/rev-manifest.json)"
       - name: Push container image
         run: docker push ${CONTAINER_REPO}:${CONTAINER_TAG}
