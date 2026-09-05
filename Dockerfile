@@ -33,6 +33,7 @@ RUN mkdir -p build var && \
     chown --recursive www-data:www-data var
 
 COPY --chown=elife:elife .docker/smoke_tests.sh ./
+COPY --chown=elife:elife composer.json composer.lock ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
 COPY --chown=elife:elife build/critical-css/ build/critical-css/

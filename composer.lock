@@ -617,12 +617,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "5aa9b037e6152bb4ecb8251cd49e855fed462681"
+                "reference": "a09f9e0b9a3b2c33bfe8eb3e0b3ecfe9cfb859a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/5aa9b037e6152bb4ecb8251cd49e855fed462681",
-                "reference": "5aa9b037e6152bb4ecb8251cd49e855fed462681",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a09f9e0b9a3b2c33bfe8eb3e0b3ecfe9cfb859a6",
+                "reference": "a09f9e0b9a3b2c33bfe8eb3e0b3ecfe9cfb859a6",
                 "shasum": ""
             },
             "require": {
@@ -663,7 +663,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/upgrade-patterns-to-php-8.3"
             },
-            "time": "2026-09-03T12:37:22+00:00"
+            "time": "2026-09-05T15:50:33+00:00"
         },
         {
             "name": "fig/link-util",
