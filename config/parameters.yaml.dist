@@ -2,30 +2,21 @@ parameters:
     api_url: https://api.elifesciences.org
     api_url_search_page: https://api.elifesciences.org
     api_url_public: '%api_url%'
-    api_key: public
     api_connect_timeout: 2
     api_timeout: 5
     api_connect_timeout_slow: 3
     api_timeout_slow: 10
     honeypot_field: email_address
     side_by_side_view_url: https://lens.elifesciences.org/
-    secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
     redis_cache: ~
     redis_sessions: ~
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_port: ~
-    mailer_username: ~
-    mailer_password: ~
-    mailer_encryption: ~
     submit_url: https://submit.elifesciences.org/
     submit_url_redirects:
         - .*\.elifesciences.org$
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     crm_api_url: https://crm.elifesciences.org/crm/sites/all/modules/civicrm/extern/rest.php
-    crm_api_key: ~
-    crm_api_site_key: ~
     gtm_id: ~
     google_optimize_id: ~
     cb_id: ~
@@ -34,22 +25,14 @@ parameters:
     status_checks:
         Articles: articles
     oauth2_client_id: some-id
-    oauth2_client_secret: ThisIsASecretThatIsLongEnoughForHS256Signing
     hypothesis_api: https://hypothes.is/api/
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
-    hypothesis_client_secret: ThisIsASecretThatIsLongEnoughForHS256Signing
     xpub_client_id: some-id
-    xpub_client_secret: ThisIsASecretThatIsLongEnoughForHS256Signing
     subject_rewrites:
       - from_id: from-subject
         to_id: to-subject
         to_name: To Subject Name
-    era_articles:
-        '26231':
-            date: '2030-01-01T00:00:00Z'
-            display: https://repro.elifesciences.org/example.html
-            download: https://repro.elifesciences.org/example.dar
     dismissible_info_bars: {}
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true

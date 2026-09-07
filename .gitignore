@@ -3,6 +3,8 @@
 /app/config/parameters.yml
 /config/parameters.yaml
 /config/parameters.yml
+/config/era_articles.yaml
+/config/secret_parameters.yaml
 /build/*
 !/build/.gitkeep
 !/build/critical-css/.gitkeep

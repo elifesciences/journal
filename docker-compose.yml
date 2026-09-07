@@ -42,6 +42,8 @@ services:
         image: elifesciences/journal:${IMAGE_TAG}
         volumes:
             - ./.docker/parameters.yml:/srv/journal/config/parameters.yaml
+            - ./.docker/era_articles.yml:/srv/journal/config/era_articles.yaml
+            - ./.docker/secret_parameters.yml:/srv/journal/config/secret_parameters.yaml
         depends_on:
             - assets_builder
             - composer

@@ -30,6 +30,8 @@ services:
         volumes:
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - ./.docker/parameters.yml:/srv/journal/config/parameters.yaml
+            - ./.docker/era_articles.yml:/srv/journal/config/era_articles.yaml
+            - ./.docker/secret_parameters.yml:/srv/journal/config/secret_parameters.yaml
             - fixtures:/srv/journal/var/fixtures
         environment:
             - APP_ENV=ci

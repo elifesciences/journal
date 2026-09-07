@@ -6,6 +6,8 @@
 
 imports:
     - resource: parameters.yaml
+    - resource: era_articles.yaml
+    - resource: secret_parameters.yaml
 
 services:
     # default configuration for services in *this* file
