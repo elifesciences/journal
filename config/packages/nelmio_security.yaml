@@ -9,6 +9,7 @@ nelmio_security:
         nosniff: true
 
     csp:
+        report_logger_service: logger
         enforce:
             frame-ancestors:
                 - none
@@ -34,6 +35,8 @@ nelmio_security:
 when@prod: &prod_nelmio_security
     nelmio_security:
         csp:
+            # Uncomment to log CSP non-compliant elements
+#            report_logger_service: logger
             enforce:
                 default-src:
                     - 'data:'

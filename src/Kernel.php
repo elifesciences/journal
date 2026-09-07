@@ -57,7 +57,6 @@ class Kernel extends BaseKernel
         return $this->getProjectDir().'/var/logs';
     }
 
-
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $configDir = $this->getProjectDir().'/config';
