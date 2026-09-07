@@ -6,6 +6,7 @@ use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
 use PackageVersions\Versions;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,16 @@ class Kernel extends BaseKernel
     {
         $configDir = $this->getProjectDir().'/config';
 
-        $loader->load($configDir.'/packages/*.{yaml,yml}', 'glob');
+        // web_profiler.yaml configures the WebProfilerBundle extension, which - like the bundle
+        // itself in config/bundles.php - is only registered when the (require-dev-only) class is
+        // actually installed. Loading its config when the bundle isn't there fails with
+        // "Container extension \"web_profiler\" is not registered."
+        foreach (glob($configDir.'/packages/*.{yaml,yml}', GLOB_BRACE) as $file) {
+            if ('web_profiler.yaml' === basename($file) && !class_exists(WebProfilerBundle::class)) {
+                continue;
+            }
+            $loader->load($file);
+        }
 
         $envPackages = $configDir.'/packages/'.$this->getEnvironment();
         if (is_dir($envPackages)) {

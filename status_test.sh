@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-. /opt/smoke.sh/smoke.sh
+. "$(dirname "${BASH_SOURCE[0]}")/.docker/smoke.sh"
 
 hostname="${1:-$(hostname)}"
 port="${2:-80}"

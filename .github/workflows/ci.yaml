@@ -53,6 +53,10 @@ jobs:
     env:
       CONTAINER_REPO: ghcr.io/elifesciences/journal
       CONTAINER_TAG: ${{ github.head_ref || github.ref_name }}-${{ github.sha }}-${{ needs.generate-date.outputs.date }}
+      SMOKE_TEST_APP_ENV: prod
+      # Skips smoke_tests.sh's /status + retry block, which checks status_checks entries that are
+      # only meaningfully configured for real deploy targets, not this ephemeral CI smoke test.
+      ENVIRONMENT_NAME: ci
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Compose
@@ -86,10 +90,6 @@ jobs:
         run: |
           docker compose -f docker-compose.yml -f docker-compose.ci.yml cp app:/srv/journal/build/rev-manifest.json build/rev-manifest.json
           docker compose -f docker-compose.yml -f docker-compose.ci.yml exec app ./smoke_tests.sh
-          curl -sf http://localhost:8080/favicon.ico
-          curl -sf http://localhost:8080/ping | grep -q pong
-          curl -sf "http://localhost:8080/$(jq -r '.["assets/patterns/css/all.css"]' build/rev-manifest.json)"
-          curl -sf "http://localhost:8080/$(jq -r '.["assets/favicons/manifest.json"]' build/rev-manifest.json)"
-          curl -sf "http://localhost:8080/$(jq -r '.["assets/images/banners/magazine-1114x336@1.jpg"]' build/rev-manifest.json)"
+          ./smoke_tests.sh localhost 8080
       - name: Push container image
         run: docker push ${CONTAINER_REPO}:${CONTAINER_TAG}

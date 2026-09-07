@@ -2,6 +2,9 @@ _routes_dir:
     resource: routes/*.yaml
     type: glob
 
+_web_profiler_routes:
+    resource: routes/web_profiler.php
+
 log-in:
   path: /log-in
   defaults:

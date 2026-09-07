@@ -902,13 +902,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     },
  * }
- * @psalm-type DebugConfig = array{
- *     max_items?: int|Param, // Max number of displayed items past the first level, -1 means no limit. // Default: 2500
- *     min_depth?: int|Param, // Minimum tree depth to clone all the items, 1 is default. // Default: 1
- *     max_string_length?: int|Param, // Max length of displayed strings, -1 means no limit. // Default: -1
- *     dump_destination?: scalar|Param|null, // A stream URL where dumps should be written to. // Default: null
- *     theme?: "dark"|"light"|Param, // Changes the color of the dump() output when rendered directly on the templating. "dark" (default) or "light". // Default: "dark"
- * }
  * @psalm-type MonologConfig = array{
  *     use_microseconds?: scalar|Param|null, // Default: true
  *     channels?: list<scalar|Param|null>,
@@ -1420,6 +1413,13 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         html_to_text_converter?: scalar|Param|null, // A service implementing the "Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface". // Default: null
  *     },
  * }
+ * @psalm-type DebugConfig = array{
+ *     max_items?: int|Param, // Max number of displayed items past the first level, -1 means no limit. // Default: 2500
+ *     min_depth?: int|Param, // Minimum tree depth to clone all the items, 1 is default. // Default: 1
+ *     max_string_length?: int|Param, // Max length of displayed strings, -1 means no limit. // Default: -1
+ *     dump_destination?: scalar|Param|null, // A stream URL where dumps should be written to. // Default: null
+ *     theme?: "dark"|"light"|Param, // Changes the color of the dump() output when rendered directly on the templating. "dark" (default) or "light". // Default: "dark"
+ * }
  * @psalm-type WebProfilerConfig = array{
  *     toolbar?: bool|array{ // Profiler toolbar configuration
  *         enabled?: bool|Param, // Default: false
@@ -1449,10 +1449,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         babdev_pagerfanta?: BabdevPagerfantaConfig,
  *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *         nelmio_security?: NelmioSecurityConfig,
- *         debug?: DebugConfig,
  *         monolog?: MonologConfig,
  *         security?: SecurityConfig,
  *         twig?: TwigConfig,
+ *         debug?: DebugConfig,
  *         web_profiler?: WebProfilerConfig,
  *     },
  *     "when@continuumtest"?: array{
@@ -1503,10 +1503,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         babdev_pagerfanta?: BabdevPagerfantaConfig,
  *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *         nelmio_security?: NelmioSecurityConfig,
- *         debug?: DebugConfig,
  *         monolog?: MonologConfig,
  *         security?: SecurityConfig,
  *         twig?: TwigConfig,
+ *         debug?: DebugConfig,
  *         web_profiler?: WebProfilerConfig,
  *     },
  *     "when@preview"?: array{

@@ -45,7 +45,11 @@ services:
         volumes:
             - fixtures:/srv/journal/var/fixtures
         environment:
-            - APP_ENV=ci
+            # ci: deterministic fixture-replay API mock + mock sessions, for the functional/Selenium
+            # tests in the "tests" job. The build-and-push job's smoke test overrides this to "prod"
+            # so the app instead uses its real API client (against the also-running api_dummy) and
+            # real Redis-backed sessions - ci's mocks are test-only classes not present in that build.
+            - APP_ENV=${SMOKE_TEST_APP_ENV:-ci}
     web:
         volumes:
             - ./assets/tests:/srv/journal/web/tests
