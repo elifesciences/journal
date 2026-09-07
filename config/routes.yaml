@@ -206,7 +206,6 @@ contact:
   defaults:
     _controller: eLife\Journal\Controller\ContactController::contactAction
 
-
 digest:
   path: /digests/{id}/{slug}
   defaults:
@@ -325,6 +324,11 @@ labs-post:
     slug: ''
   requirements:
     id: '[a-z0-9-]+'
+
+nelmio_security:
+  path:     /my-csp-report
+  defaults: { _controller: nelmio_security.csp_reporter_controller::indexAction }
+  methods:  [POST]
 
 podcast:
   path: /podcast

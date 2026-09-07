@@ -12,6 +12,13 @@ nelmio_security:
         enforce:
             frame-ancestors:
                 - none
+        report:
+            level1_fallback: true
+            browser_adaptive:
+                enabled: true
+            report-uri: '%router.request_context.base_url%/my-csp-report'
+            script-src:
+                - 'self'
 
     # Send a full URL in the `Referer` header when performing a same-origin request,
     # only send the origin of the document to secure destination (HTTPS->HTTPS),
@@ -35,8 +42,10 @@ when@prod: &prod_nelmio_security
                     - 'https://*.hotjar.io'
                     - 'wss://*.hotjar.com'
                 script-src:
+                    - 'self'
                     - 'unsafe-eval'
                     - 'unsafe-inline'
+                    - 'https://consent.cookiebot.com'
         forced_ssl:
             allow_list:
                 - ^/ # Hack to disable redirect.
