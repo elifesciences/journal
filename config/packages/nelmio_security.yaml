@@ -49,12 +49,14 @@ when@prod: &prod_nelmio_security
                     - 'https://cdn.jsdelivr.net' # MathJax
                     - 'https://cdnjs.cloudflare.com' # PhotoSwipe
                     - 'https://hypothes.is' # Hypothesis annotations
+                    - 'https://cdn.hypothes.is' # hypothes.is/embed.js redirects here
                     - 'https://d1bxh8uas1mnw7.cloudfront.net' # Altmetric badge embed
                     - 'https://www.googletagmanager.com'
                     - 'https://www.googleoptimize.com'
                 style-src:
                     - 'self'
                     - 'unsafe-inline' # Highcharts renders charts using inline style attributes
+                    - 'https://cdnjs.cloudflare.com' # PhotoSwipe CSS
         forced_ssl:
             allow_list:
                 - ^/ # Hack to disable redirect.
