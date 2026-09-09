@@ -4,7 +4,8 @@ FROM elifesciences/journal_composer:${image_tag} AS composer
 FROM elifesciences/journal_npm:${image_tag} as npm
 FROM node:${node_version}
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN sed -i -e 's|^# \(deb http://snapshot.debian.org.*\)|\1|' -e 's|^deb http://deb.debian.org.*|# &|' /etc/apt/sources.list
+RUN apt-get update -o Acquire::Check-Valid-Until=false && apt-get install --no-install-recommends -y \
     libvips \
     && rm -rf /var/lib/apt/lists/*
 
