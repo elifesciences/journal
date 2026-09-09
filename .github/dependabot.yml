@@ -1,0 +1,41 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: squizlabs/php_codesniffer
+    versions:
+    - 3.6.0
+  - dependency-name: guzzlehttp/psr7
+    versions:
+    - 1.8.1
+  - dependency-name: symfony/phpunit-bridge
+    versions:
+    - 5.2.1
+    - 5.2.3
+    - 5.2.4
+    - 5.2.6
+  - dependency-name: swiftmailer/swiftmailer
+    versions:
+    - 6.2.5
+    - 6.2.6
+    - 6.2.7
+  - dependency-name: nelmio/security-bundle
+    versions:
+    - 2.10.2
+    - 2.10.3
+  - dependency-name: guzzlehttp/promises
+    versions:
+    - 1.4.1
+  - dependency-name: fig/link-util
+    versions:
+    - 1.1.2
+  - dependency-name: firebase/php-jwt
+    versions:
+    - 5.2.1
+  - dependency-name: mindplay/composer-locator
+    versions:
+    - 2.1.4
