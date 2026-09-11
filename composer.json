@@ -63,6 +63,12 @@
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/phpunit-bridge": "^4.0"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../patterns-php"
+        }
+    ],
     "replace": {
         "paragonie/random_compat": "*",
         "symfony/polyfill-apcu": "*",
@@ -93,6 +99,9 @@
             "Sheets"
         ],
         "patches": {
+            "bobthecow/mustache-bundle": {
+                "Remove superfluous argument": "patches/bobthecow/BobthecowMustacheBundle/pull/9/remove-superflous-argument.patch.txt"
+            },
             "isometriks/spam-bundle": {
                 "Use EmailType": "patches/isometriks/IsometriksSpamBundle/pull/17/use-emailtype.patch.txt"
             }

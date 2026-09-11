@@ -25,126 +25,135 @@ final class EligibilityController extends Controller
      * 3. The institution does NOT have an agreement signed AND no one from the same institution/funder has published
      */
 
+    /**
+     * @var ContentHeaderSimple
+     */
+    private $contentHeader;
+
+    private $title;
+
     private const INSTITUTIONS = [
 
     ];
+
+    public function __construct()
+    {
+        $this->contentHeader = new ContentHeaderSimple(
+            'Check your eligibility',
+            'eLife has publishing agreements with more than x institutions that cover publishing fees for affiliated
+                researchers. Check your institution below, or see the <a href="#">full list of institutions.</a>'
+        );
+
+        $this->title = 'eLife Eligibility Tool';
+    }
 
     public function indexAction(Request $request)
     {
         $arguments = $this->defaultPageArguments($request);
 
-        $arguments ['title'] = 'eLife Eligibility Tool';
+        $arguments ['title'] = $this->title;
         $arguments['checker'] = new InstitutionEligibilityChecker(
-            'test label',
-            'test placeholder',
-            'cta string',
-            '/eligibility/search',
-            '',
-            null,
-            null,
             (new CompactForm(
                 new Form('/eligibility/search', 'eligibility_search', 'GET'),
                 new Input('Choose your institution:', 'search', 'institution', '', 'Enter text here'),
                 'Search'
-            ))->withVisibleLabel()->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
+            ))->withVisibleLabel()
+                ->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
+                ->withAutocompleteOff(),
+            null,
+            null,
+            '/eligibility.json'
         );
 
-        $arguments['contentHeader'] = (new ContentHeaderSimple(
-            'Check your eligibility',
-            'eLife has publishing agreements with more than x institutions that cover publishing fees for affiliated
-                researchers. Check your institution below, or see the full list of institutions.'
-        ));
+        $arguments['contentHeader'] = $this->contentHeader;
 
         return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
     }
 
     public function checkAction(Request $request, string $institution)
     {
-//        $type = $this->get('elife.journal.institution_eligibility_checker')->check($institution);
-
-        #TODO don't show the checker again. Show another page with the outcomes
-
         $arguments = $this->defaultPageArguments($request);
 
-        $agreementSigned = false;
-        foreach (self::INSTITUTIONS as $candidate) {
-            if ($candidate['name'] === $institution) {
-                $agreementSigned = $candidate['agreementSigned'];
-                break;
+        $eligibility_json = $this->getInstitutions();
+
+        $agreementSigned = null;
+        if (!empty($institution)) {
+            foreach ($eligibility_json as $candidate) {
+                if (strtolower($candidate['name']) === strtolower($institution)) {
+                    $agreementSigned = $candidate['has-deal'];
+                    break;
+                }
             }
         }
 
-        // TODO add the check for the third type too
         if ($agreementSigned) {
             $type = InstitutionEligibilityOutcome::TYPE_AGREED;
         } else {
             $type = InstitutionEligibilityOutcome::TYPE_NOT_AGREED_PUBLISHED;
         }
 
-        $arguments ['title'] = 'eLife Eligibility Tool';
-        #TODO add the outcome props to the checker
-        $arguments['outcome'] = new InstitutionEligibilityOutcome($type);
+        $arguments ['title'] = $this->title;
 
-        $arguments['contentHeader'] = (new ContentHeaderSimple(
-            'Check your eligibility',
-            'eLife has publishing agreements with more than x institutions that cover publishing fees for affiliated
-                researchers. Check your institution below, or see the full list of institutions.'
-        ));
+        $arguments['outcome'] = new InstitutionEligibilityOutcome($type, $institution);
+
+        $arguments['contentHeader'] = $this->contentHeader;
 
         return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
     }
 
+    /**
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function searchAction(Request $request)
     {
-        $search = $request->query->get('institution', '');
+        $query = $request->query->get('institution', '');
 
         $searchResults = [];
 
-        if (!empty($search)) {
-            foreach (self::INSTITUTIONS as $candidate) {
-                if (strpos(strtolower($candidate['name']), strtolower($search)) !== false) {
+        $eligibility_json = $this->getInstitutions();
+
+        if (!empty($query)) {
+            foreach ($eligibility_json as $candidate) {
+                if (strpos(strtolower($candidate['name']), strtolower($query)) !== false) {
+                    $urlencodedName = urldecode($candidate['name']);
                     $searchResults[] = new Link(
-                        $candidate['name'],
-                        "/eligibility/check/{$candidate['name']}"
+                        "{$candidate['name']} ({$candidate['city']}, {$candidate['country']})",
+                        "/eligibility/check/{$urlencodedName}"
                     );
                 }
             }
         }
 
-        $searchResultsObject = new InstitutionSearchResults(
-            $searchResults,
-            'No institutions found'
+        $searchResultsObject = new InstitutionSearchResults($searchResults);
+
+        $arguments = $this->defaultPageArguments($request);
+
+        $arguments ['title'] = $this->title;
+
+        $arguments['contentHeader'] = $this->contentHeader;
+
+        $arguments['checker'] = new InstitutionEligibilityChecker(
+            (new CompactForm(
+                new Form('/eligibility/search', 'eligibility_search', 'GET'),
+                new Input('Choose your institution:', 'search', 'institution', $query, 'Enter text here'),
+                'Search'
+            ))->withVisibleLabel()
+                ->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
+                ->withAutocompleteOff(),
+            $searchResultsObject,
+            null,
+            '/eligibility.json'
         );
 
-        if ($request->isXmlHttpRequest()) {
-            return new Response($this->render($searchResultsObject));
-        } else {
-            $arguments = $this->defaultPageArguments($request);
+        return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+    }
 
-            $arguments ['title'] = 'eLife Eligibility Tool';
+    private function getInstitutions(): array
+    {
+        $eligibility_file = file_get_contents(__DIR__ . '/../../eligibility.json');
 
-            $arguments['contentHeader'] = (new ContentHeaderSimple(
-                'Check your eligibility',
-                'eLife has publishing agreements with more than x institutions that cover publishing fees for affiliated
-                researchers. Check your institution below, or see the full list of institutions.'
-            ));
-
-            $arguments['checker'] = new InstitutionEligibilityChecker(
-                'test label',
-                'test placeholder',
-                'cta string',
-                '/eligibility/search',
-                $search,
-                $searchResultsObject,
-                null,
-                (new CompactForm(
-                    new Form('/eligibility/search', 'eligibility_search', 'GET'),
-                    new Input('Choose your institution:', 'search', 'institution', $search, 'Enter text here'),
-                    'Search'
-                ))->withVisibleLabel()->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
-            );   // whole page, outcome pre-filled
-
-            return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
-        }
+        return json_decode($eligibility_file, true);
     }
 }
