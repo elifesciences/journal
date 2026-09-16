@@ -17,3 +17,5 @@ docker-compose.override.yml
 .env
 .idea/
 .DS_Store
+eligibility.json
+web/eligibility.json
