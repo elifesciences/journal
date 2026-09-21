@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Agreed University",
+        "city": "Cambridge",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000agree",
+        "has-deal": true,
+        "until": null
+    },
+    {
+        "name": "Agreed Rolling University",
+        "city": "Oxford",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000rolli",
+        "has-deal": true,
+        "until": "3000-01-01"
+    },
+    {
+        "name": "Agreed Dated University",
+        "city": "Bristol",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000dated",
+        "has-deal": true,
+        "until": "2027-06-15"
+    },
+    {
+        "name": "Not Agreed University",
+        "city": "Leeds",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000notdl",
+        "has-deal": false,
+        "until": null
+    },
+    {
+        "name": "Zanzibar Institute",
+        "city": "Zanzibar City",
+        "country": "Tanzania",
+        "ror": "https://ror.org/00000zanzi",
+        "has-deal": false,
+        "until": null
+    }
+]
