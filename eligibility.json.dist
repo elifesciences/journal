@@ -1,0 +1,290 @@
+[
+  {
+    "city": "Dublin",
+    "name": "Health Research Board",
+    "ror": "https:\/\/ror.org\/003hb2249",
+    "has-deal": false,
+    "until": null,
+    "country": "Ireland"
+  },
+  {
+    "city": "Frederick",
+    "name": "Frederick National Laboratory for Cancer Research",
+    "ror": "https:\/\/ror.org\/03v6m3209",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Sheffield",
+    "name": "University of Sheffield",
+    "ror": "https:\/\/ror.org\/05krs5044",
+    "has-deal": false,
+    "until": null,
+    "country": "United Kingdom"
+  },
+  {
+    "city": "Sheffield",
+    "name": "Sheffield Hallam University",
+    "ror": "https:\/\/ror.org\/03yghzc09",
+    "has-deal": false,
+    "until": null,
+    "country": "United Kingdom"
+  },
+  {
+    "city": "Stanford",
+    "name": "Stanford University",
+    "ror": "https:\/\/ror.org\/00f54p054",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Madison",
+    "name": "University of Wisconsin Health",
+    "ror": "https:\/\/ror.org\/03e3qgk42",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Basel",
+    "name": "University Hospital of Basel",
+    "ror": "https:\/\/ror.org\/04k51q396",
+    "has-deal": false,
+    "until": null,
+    "country": "Switzerland"
+  },
+  {
+    "city": "Melbourne",
+    "name": "La Trobe University",
+    "ror": "https:\/\/ror.org\/01rxfrp27",
+    "has-deal": false,
+    "until": null,
+    "country": "Australia"
+  },
+  {
+    "city": "Luxembourg",
+    "name": "Musée national d'histoire naturelle Luxembourg",
+    "ror": "https:\/\/ror.org\/05natt857",
+    "has-deal": false,
+    "until": null,
+    "country": "Luxembourg"
+  },
+  {
+    "city": "Beauvoir-sur-Niort",
+    "name": "Centre d'Etudes Biologiques de Chizé",
+    "ror": "https:\/\/ror.org\/00s8hq550",
+    "has-deal": false,
+    "until": null,
+    "country": "France"
+  },
+  {
+    "city": "Dublin",
+    "name": "Technological University Dublin",
+    "ror": "https:\/\/ror.org\/04t0qbt32",
+    "has-deal": false,
+    "until": null,
+    "country": "Ireland"
+  },
+  {
+    "city": "Durham",
+    "name": "University of New Hampshire",
+    "ror": "https:\/\/ror.org\/01rmh9n78",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Huzhou",
+    "name": "Huzhou Normal University",
+    "ror": "https:\/\/ror.org\/04mvpxy20",
+    "has-deal": false,
+    "until": null,
+    "country": "China"
+  },
+  {
+    "city": "Jerusalem",
+    "name": "Jerusalem College of Technology",
+    "ror": "https:\/\/ror.org\/002kenh51",
+    "has-deal": false,
+    "until": null,
+    "country": "Israel"
+  },
+  {
+    "city": "Paris",
+    "name": "Nutrition et obésité : approches systémiques",
+    "ror": "https:\/\/ror.org\/00qdphm77",
+    "has-deal": false,
+    "until": null,
+    "country": "France"
+  },
+  {
+    "city": "Donostia \/ San Sebastian",
+    "name": "CIC biomaGUNE",
+    "ror": "https:\/\/ror.org\/004g03602",
+    "has-deal": false,
+    "until": null,
+    "country": "Spain"
+  },
+  {
+    "city": "Pamplona",
+    "name": "Navarrabiomed",
+    "ror": "https:\/\/ror.org\/03atdda90",
+    "has-deal": false,
+    "until": null,
+    "country": "Spain"
+  },
+  {
+    "city": "Bethpage",
+    "name": "Lustgarten Foundation",
+    "ror": "https:\/\/ror.org\/030635250",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Hangzhou",
+    "name": "Children's Hospital of Zhejiang University",
+    "ror": "https:\/\/ror.org\/025fyfd20",
+    "has-deal": false,
+    "until": null,
+    "country": "China"
+  },
+  {
+    "city": "Fontenay-aux-Roses",
+    "name": "Institut des Sciences du Vivant Frédéric Joliot",
+    "ror": "https:\/\/ror.org\/016pnwd02",
+    "has-deal": false,
+    "until": null,
+    "country": "France"
+  },
+  {
+    "city": "Sayō",
+    "name": "Japan Synchrotron Radiation Research Institute",
+    "ror": "https:\/\/ror.org\/01xjv7358",
+    "has-deal": false,
+    "until": null,
+    "country": "Japan"
+  },
+  {
+    "city": "New Haven",
+    "name": "Yale School of Medicine",
+    "ror": "https:\/\/ror.org\/03pnmqc26",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Villeurbanne",
+    "name": "Lyon 1 Université",
+    "ror": "https:\/\/ror.org\/029brtt94",
+    "has-deal": false,
+    "until": null,
+    "country": "France"
+  },
+  {
+    "city": "Taipei",
+    "name": "Institute of Biomedical Sciences, Academia Sinica",
+    "ror": "https:\/\/ror.org\/00tk6s776",
+    "has-deal": false,
+    "until": null,
+    "country": "Taiwan"
+  },
+  {
+    "city": "Atlanta",
+    "name": "Center for Global Health",
+    "ror": "https:\/\/ror.org\/02e5dc168",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Madison",
+    "name": "University of Wisconsin Health",
+    "ror": "https:\/\/ror.org\/03e3qgk42",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Hangzhou",
+    "name": "Zhejiang Gongshang University",
+    "ror": "https:\/\/ror.org\/0569mkk41",
+    "has-deal": false,
+    "until": null,
+    "country": "China"
+  },
+  {
+    "city": "Kunming",
+    "name": "Yunnan University",
+    "ror": "https:\/\/ror.org\/0040axw97",
+    "has-deal": false,
+    "until": null,
+    "country": "China"
+  },
+  {
+    "city": "Bethesda",
+    "name": "National Human Genome Research Institute",
+    "ror": "https:\/\/ror.org\/00baak391",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Québec",
+    "name": "Ministère de l’Éducation",
+    "ror": "https:\/\/ror.org\/00bhh3q35",
+    "has-deal": false,
+    "until": null,
+    "country": "Canada"
+  },
+  {
+    "city": "Sunnyvale",
+    "name": "LinkedIn (United States)",
+    "ror": "https:\/\/ror.org\/02fyxhe35",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Washington",
+    "name": "GW Medical Faculty Associates",
+    "ror": "https:\/\/ror.org\/02bn3v102",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  },
+  {
+    "city": "Changhua",
+    "name": "Changhua Christian Hospital",
+    "ror": "https:\/\/ror.org\/05d9dtr71",
+    "has-deal": false,
+    "until": null,
+    "country": "Taiwan"
+  },
+  {
+    "city": "Osaka",
+    "name": "Kobayashi Pharmaceutical (Japan)",
+    "ror": "https:\/\/ror.org\/04vf2n046",
+    "has-deal": false,
+    "until": null,
+    "country": "Japan"
+  },
+  {
+    "city": "Graz",
+    "name": "Ludwig Boltzmann Institute for Lung Vascular Research",
+    "ror": "https:\/\/ror.org\/009r5p347",
+    "has-deal": false,
+    "until": null,
+    "country": "Austria"
+  },
+  {
+    "city": "Houston",
+    "name": "Texas Children's Hospital",
+    "ror": "https:\/\/ror.org\/05cz92x43",
+    "has-deal": false,
+    "until": null,
+    "country": "United States"
+  }
+]

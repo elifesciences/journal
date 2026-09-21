@@ -17,7 +17,7 @@ services:
     assets_builder:
         volumes:
             #
-#            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
+            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
 
             - ./assets/images:/assets/images
             - assets:/web
@@ -39,6 +39,7 @@ services:
             - ./:/srv/journal
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - /srv/journal/vendor
+            - ../patterns-php:/srv/journal/vendor/elife/patterns
             - /srv/journal/var
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css

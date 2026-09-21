@@ -11,3 +11,5 @@ vendor/
 web/assets/
 web/bundles/
 web/favicon.ico
+eligibility.json
+web/eligibility.json

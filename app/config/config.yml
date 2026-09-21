@@ -10,6 +10,7 @@ parameters:
     api_timeout_slow: 10
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
+    eligibility_json_path: '%kernel.project_dir%/eligibility.json'
 
 bobthecow_mustache:
     globals:
@@ -70,6 +71,10 @@ framework:
                 adapter: cache.app
                 clearer: ~
                 default_lifetime: 31536000 # 1 year
+                public: true
+            cache.eligibility:
+                adapter: cache.app
+                default_lifetime: 3600 # 1 hour
                 public: true
     csrf_protection: ~
     form: ~

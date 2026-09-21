@@ -109,6 +109,7 @@ parameters:
             display: https://repro.elifesciences.org/example.html
             download: https://repro.elifesciences.org/archive.zip
     submit_url: http://submit.elifesciences.org/path
+    eligibility_json_path: '%kernel.project_dir%/test/fixtures/eligibility.json'
 
 framework:
     profiler:
@@ -116,6 +117,10 @@ framework:
         enabled: true
     session:
         storage_id: session.storage.mock_file
+    cache:
+        pools:
+            cache.eligibility:
+                adapter: test.cache.array_adapter
     test: ~
 
 monolog:

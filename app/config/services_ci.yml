@@ -3,6 +3,12 @@ services:
     _defaults:
         public: true
 
+    test.cache.array_adapter:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        arguments:
+          - 0
+          - true
+
     elife.api_validator.validator:
         class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
         arguments:
