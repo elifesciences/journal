@@ -4,7 +4,7 @@ eLife Journal
 [![Build Status](http://ci--alfred.elifesciences.org/buildStatus/icon?job=test-journal)](http://ci--alfred.elifesciences.org/job/test-journal/)
 
 Dependencies
-------------
+-------------
 
 * [Composer](https://getcomposer.org/)
 * [npm](https://www.npmjs.com/)
