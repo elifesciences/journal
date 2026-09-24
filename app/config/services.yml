@@ -1625,6 +1625,11 @@ services:
         tags:
             - { name: monolog.processor, method: __invoke }
 
+    monolog.processor.outgoing_http_message:
+        class: eLife\Journal\Log\OutgoingHttpMessageProcessor
+        tags:
+            - { name: monolog.processor, method: __invoke }
+
     # Public aliases for private services
 
     elife.assets.packages:
