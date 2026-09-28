@@ -10,7 +10,6 @@
 !/build/critical-css/.gitkeep
 /composer-switch-patterns-php.*
 /node_modules/
-/phpunit.xml
 /var/*
 !/var/.gitkeep
 /vendor/
@@ -41,3 +40,6 @@ docker-compose.override.yml
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+
+eligibility.json
+web/eligibility.json
