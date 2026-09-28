@@ -1,7 +1,7 @@
 ARG node_version
 FROM node:${node_version} as npm
 
-RUN sed -i -e 's|^# \(deb http://snapshot.debian.org.*\)|\1|' -e 's|^deb http://deb.debian.org.*|# &|' /etc/apt/sources.list
+RUN sed -i -E '$!N; s|^# (http://snapshot\.debian\.org/\S*)\nURIs: http://deb\.debian\.org/\S*|URIs: \1|; P; D' /etc/apt/sources.list.d/debian.sources
 RUN apt-get update -o Acquire::Check-Valid-Until=false && apt-get install --no-install-recommends -y \
     nasm \
     libvips-dev \

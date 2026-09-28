@@ -5,6 +5,8 @@ namespace eLife\Journal\Log;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\Exception\HttpProblem;
 use GuzzleHttp\Psr7\Message;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 use Psr\Http\Message\MessageInterface;
 use Throwable;
 
@@ -16,26 +18,26 @@ use Throwable;
  * attached to the log record. This walks the previous-exception chain to
  * find it regardless of wrapping.
  */
-final class OutgoingHttpMessageProcessor
+final class OutgoingHttpMessageProcessor implements ProcessorInterface
 {
-    public function __invoke(array $record) : array
+    public function __invoke(LogRecord $record) : LogRecord
     {
-        if (!array_key_exists('exception', $record['context'])) {
+        if (!array_key_exists('exception', $record->context)) {
             return $record;
         }
 
-        $httpProblem = $this->findHttpProblem($record['context']['exception']);
+        $httpProblem = $this->findHttpProblem($record->context['exception']);
 
         if (null === $httpProblem) {
             return $record;
         }
 
-        if (!isset($record['extra']['request'])) {
-            $record['extra']['request'] = $this->dumpHttpMessage($httpProblem->getRequest());
+        if (!isset($record->extra['request'])) {
+            $record->extra['request'] = $this->dumpHttpMessage($httpProblem->getRequest());
         }
 
-        if ($httpProblem instanceof BadResponse && !isset($record['extra']['response'])) {
-            $record['extra']['response'] = $this->dumpHttpMessage($httpProblem->getResponse());
+        if ($httpProblem instanceof BadResponse && !isset($record->extra['response'])) {
+            $record->extra['response'] = $this->dumpHttpMessage($httpProblem->getResponse());
         }
 
         return $record;
