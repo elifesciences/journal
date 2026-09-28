@@ -11,6 +11,8 @@ use eLife\Patterns\ViewModel\InstitutionEligibilityChecker;
 use eLife\Patterns\ViewModel\InstitutionEligibilityOutcome;
 use eLife\Patterns\ViewModel\InstitutionSearchResults;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\LinkCard;
+use eLife\Patterns\ViewModel\LinkCardCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +24,10 @@ final class EligibilityController extends Controller
     private $contentHeader;
 
     private $title;
+    /**
+     * @var LinkCardCollection
+     */
+    private $linkCardCollection;
 
     public function __construct()
     {
@@ -33,6 +39,23 @@ final class EligibilityController extends Controller
         );
 
         $this->title = 'eLife Eligibility Tool';
+
+        $this->linkCardCollection = new LinkCardCollection([
+            new LinkCard(
+                new Link(
+                    'Institutional publishing agreements',
+                    'https://elifesciences.org/about/institutional-publishing-agreements'
+                ),
+                'A guide for organisations about our different schemes, and how to join.'
+            ),
+            new LinkCard(
+                new Link(
+                    'Our fee waivers',
+                    'https://elifesciences.org'
+                ),
+                'We offer APC waivers to researchers in the global south and ...'
+            ),
+        ]);
     }
 
     public function indexAction(Request $request)
@@ -41,6 +64,7 @@ final class EligibilityController extends Controller
 
         $arguments ['title'] = $this->title;
         $arguments['contentHeader'] = $this->contentHeader;
+        $arguments['linkCardCollection'] = $this->linkCardCollection;
 
         $arguments['checker'] = new InstitutionEligibilityChecker(
             (new CompactForm(
@@ -66,6 +90,7 @@ final class EligibilityController extends Controller
         $arguments = $this->defaultPageArguments($request);
         $arguments['title'] = $this->title;
         $arguments['contentHeader'] = $this->contentHeader;
+        $arguments['linkCardCollection'] = $this->linkCardCollection;
 
         $candidate = null;
         if (!empty($institution)) {
@@ -149,7 +174,7 @@ final class EligibilityController extends Controller
      */
     private function getSearchIndex(): array
     {
-        $item = $this->get('cache.eligibility')->getItem('institutions_search_index_v2');
+        $item = $this->get('cache.eligibility')->getItem('institutions_search_index');
 
         if (!$item->isHit()) {
             $index = array_map(function (array $e) {

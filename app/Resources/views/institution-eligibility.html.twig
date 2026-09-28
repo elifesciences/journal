@@ -26,6 +26,16 @@
 
               {% endif %}
 
+                {% if linkCardCollection %}
+
+                    <div class="eligibility_tool_for_more_information">
+                        For more information:
+                    </div>
+
+                    {{ render_pattern(linkCardCollection) }}
+
+                {% endif %}
+
             {% endblock %}
       </div>
     </div>
