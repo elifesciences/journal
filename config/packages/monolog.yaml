@@ -43,8 +43,7 @@ when@prod: &prod_monolog
                 action_level: error
                 handler: composite
                 type: fingers_crossed
-                excluded_404s:
-                    - ^/
+                excluded_http_codes: [404]
             honeypot:
                 channels:
                     - 'honeypot'

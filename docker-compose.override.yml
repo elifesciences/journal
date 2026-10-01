@@ -25,12 +25,12 @@ services:
             - node_modules:/node_modules
             - ./gulpfile.js:/gulpfile.js
     app:
-        # Comment out the build section if you don't want to run the xdebug Dockerfile
+        # Set xdebug to "false" below if you don't want xdebug installed
         build:
             context: .
-            dockerfile: Dockerfile.xdebug
             args:
                 image_tag: ${IMAGE_TAG}
+                xdebug: "true"
         environment:
             - APP_ENV=${APP_ENV}
             - PHP_IDE_CONFIG=serverName=DockerApp

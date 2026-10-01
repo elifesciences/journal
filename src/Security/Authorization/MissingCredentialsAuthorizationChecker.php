@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Security\Authorization;
 
+use Symfony\Component\Security\Core\Authorization\AccessDecision;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
@@ -14,7 +15,7 @@ final class MissingCredentialsAuthorizationChecker implements AuthorizationCheck
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function isGranted($attributes, $object = null) : bool
+    public function isGranted($attributes, $object = null, ?AccessDecision $accessDecision = null) : bool
     {
         try {
             return $this->authorizationChecker->isGranted($attributes, $object);

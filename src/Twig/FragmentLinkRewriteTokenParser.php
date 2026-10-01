@@ -12,12 +12,12 @@ final class FragmentLinkRewriteTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
 
-        $link = $this->parser->getExpressionParser()->parseExpression();
+        $link = $this->parser->parseExpression();
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse([$this, 'decideForEnd'], true);
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new FragmentLinkRewriteNode($body, $link, $lineno, $this->getTag());
+        return new FragmentLinkRewriteNode($body, $link, $lineno);
     }
 
     public function decideForEnd(Token $token) : bool

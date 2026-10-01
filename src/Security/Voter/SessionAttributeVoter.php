@@ -4,6 +4,7 @@ namespace eLife\Journal\Security\Voter;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class SessionAttributeVoter extends Voter
@@ -26,7 +27,7 @@ final class SessionAttributeVoter extends Voter
         return $this->role === $attribute;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) : bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token, ?Vote $vote = null) : bool
     {
         $session = $this->requestStack->getMainRequest()->getSession();
 

@@ -3,6 +3,7 @@
 namespace eLife\Journal\Security\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class FixedVoter extends Voter
@@ -21,7 +22,7 @@ final class FixedVoter extends Voter
         return $this->role === $attribute;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) : bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token, ?Vote $vote = null) : bool
     {
         return $this->vote;
     }
