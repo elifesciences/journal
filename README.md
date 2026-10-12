@@ -32,7 +32,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
 
       How to install : [Guide 1](https://5balloons.info/how-to-install-php-v-7-3-on-ubuntu-20-04) / [Guide 2](https://computingforgeeks.com/how-to-install-php-ubuntu-debian/)
 
-    * `Composer version 2.2`
+    * `Composer version 2.2` 
 
       How to install : [Step 1](https://getcomposer.org/download/)
 </details>
