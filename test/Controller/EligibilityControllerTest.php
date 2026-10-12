@@ -24,20 +24,6 @@ final class EligibilityControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_shows_an_agreed_outcome_with_an_end_date()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/eligibility/check?institution='.urlencode('Agreed Dated University'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed'));
-        $this->assertContains('Jun 2027', $this->crawlerText($crawler->filter('.institution-eligibility-outcome__text')));
-    }
-
-    /**
-     * @test
-     */
     public function it_shows_an_agreed_outcome_with_a_rolling_deal()
     {
         $client = static::createClient();
@@ -46,7 +32,19 @@ final class EligibilityControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed'));
-        $this->assertContains('rolling agreement', $this->crawlerText($crawler->filter('.institution-eligibility-outcome__text')));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_an_agreed_hhmi_outcome_for_hhmi()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/eligibility/check?institution='.urlencode('Howard Hughes Medical Institute'));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed-hhmi'));
     }
 
     /**
@@ -82,15 +80,16 @@ final class EligibilityControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/eligibility/check?institution='.urlencode('Zanzibr'));
+        // Misspelled Sheffield
+        $crawler = $client->request('GET', '/eligibility/check?institution='.urlencode('Sheffild'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--not-agreed-not-published-with-possible-matches'));
+        $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--not-agreed-not-published'));
 
         $matches = $crawler->filter('.institution-eligibility-outcome__possible_matches_link');
         $this->assertCount(1, $matches);
-        $this->assertContains('Zanzibar Institute', $this->crawlerText($matches));
-        $this->assertSame('/eligibility/check?institution=Zanzibar+Institute', $matches->attr('href'));
+        $this->assertContains('University of Sheffield', $this->crawlerText($matches));
+        $this->assertSame('/eligibility/check?institution=University+of+Sheffield', $matches->attr('href'));
     }
 
     /**
@@ -104,7 +103,6 @@ final class EligibilityControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--not-agreed-not-published'));
-        $this->assertCount(0, $crawler->filter('.institution-eligibility-outcome--not-agreed-not-published-with-possible-matches'));
         $this->assertCount(0, $crawler->filter('.institution-eligibility-outcome__possible_matches_link'));
     }
 

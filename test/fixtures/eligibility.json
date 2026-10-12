@@ -1,7 +1,7 @@
 [
     {
         "name": "Agreed University",
-        "city": "Cambridge",
+        "city": "Agreed City",
         "country": "United Kingdom",
         "ror": "https://ror.org/00000agree",
         "has-deal": true,
@@ -9,7 +9,7 @@
     },
     {
         "name": "Agreed Rolling University",
-        "city": "Oxford",
+        "city": "Agreed Rolling City",
         "country": "United Kingdom",
         "ror": "https://ror.org/00000rolli",
         "has-deal": true,
@@ -17,7 +17,7 @@
     },
     {
         "name": "Agreed Dated University",
-        "city": "Bristol",
+        "city": "Agreed Dated City",
         "country": "United Kingdom",
         "ror": "https://ror.org/00000dated",
         "has-deal": true,
@@ -25,18 +25,26 @@
     },
     {
         "name": "Not Agreed University",
-        "city": "Leeds",
+        "city": "Not Agreed City",
         "country": "United Kingdom",
         "ror": "https://ror.org/00000notdl",
         "has-deal": false,
         "until": null
     },
     {
-        "name": "Zanzibar Institute",
-        "city": "Zanzibar City",
-        "country": "Tanzania",
-        "ror": "https://ror.org/00000zanzi",
+        "name": "University of Sheffield",
+        "city": "Sheffield",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000sheff",
         "has-deal": false,
         "until": null
+    },
+    {
+        "city": "Chevy Chase",
+        "name": "Howard Hughes Medical Institute",
+        "ror": "https://ror.org/006w34k90",
+        "country": "United States",
+        "until": null,
+        "has-deal": false
     }
 ]

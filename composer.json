@@ -80,11 +80,6 @@
         "allow-plugins": {
             "cweagans/composer-patches": true,
             "mindplay/composer-locator": true
-        },
-        "policy": {
-            "advisories": {
-                "block": false
-            }
         }
     },
     "extra": {

@@ -3,13 +3,11 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Patterns\ViewModel\CompactForm;
-use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Form;
 use eLife\Patterns\ViewModel\Input;
 use eLife\Patterns\ViewModel\InstitutionEligibilityChecker;
 use eLife\Patterns\ViewModel\InstitutionEligibilityOutcome;
-use eLife\Patterns\ViewModel\InstitutionSearchResults;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\LinkCard;
 use eLife\Patterns\ViewModel\LinkCardCollection;
@@ -28,15 +26,23 @@ final class EligibilityController extends Controller
      * @var LinkCardCollection
      */
     private $linkCardCollection;
+    /**
+     * @var string
+     */
+    private $contentHeaderStrapLine;
+
+    private $hhmiRors = [
+        'https://ror.org/006w34k90',
+        'https://ror.org/013sk6x84'
+    ];
 
     public function __construct()
     {
-        $this->contentHeader = new ContentHeaderSimple(
-            'Check your eligibility',
-            'eLife has publishing agreements with more than x institutions that cover publishing fees for affiliated
-                researchers. Check your institution below, or see the <a href="#">full list of institutions.</a>',
-            true
-        );
+        $this->contentHeaderStrapLine = '<p>Check your eligibility for financial support for Gold Open Access publishing
+            with eLife by entering your institution or funder below.
+            Names are listed as they appear in the <a href="https://ror.org">ROR database</a>.
+            </p><p>For any questions please contact us at 
+            <a href="mailto:editorial@elifesciences.org">editorial@elifesciences.org</a>.</p>';
 
         $this->title = 'eLife Eligibility Tool';
 
@@ -58,12 +64,21 @@ final class EligibilityController extends Controller
         ]);
     }
 
+    private function getContentHeader(bool $showStrapline = false): ContentHeaderSimple
+    {
+        return new ContentHeaderSimple(
+            'Check your eligibility',
+            $showStrapline === true ? $this->contentHeaderStrapLine : null,
+            true
+        );
+    }
+
     public function indexAction(Request $request)
     {
         $arguments = $this->defaultPageArguments($request);
 
         $arguments ['title'] = $this->title;
-        $arguments['contentHeader'] = $this->contentHeader;
+        $arguments['contentHeader'] = $this->getContentHeader(true);
         $arguments['linkCardCollection'] = $this->linkCardCollection;
 
         $arguments['checker'] = new InstitutionEligibilityChecker(
@@ -89,7 +104,7 @@ final class EligibilityController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
         $arguments['title'] = $this->title;
-        $arguments['contentHeader'] = $this->contentHeader;
+        $arguments['contentHeader'] = $this->getContentHeader(false);
         $arguments['linkCardCollection'] = $this->linkCardCollection;
 
         $candidate = null;
@@ -100,6 +115,8 @@ final class EligibilityController extends Controller
                     break;
                 }
             }
+        } else {
+            return $this->indexAction($request);
         }
 
         if ($candidate === null) {
@@ -114,9 +131,7 @@ final class EligibilityController extends Controller
             }, $possibleMatches);
 
             $arguments['outcome'] = new InstitutionEligibilityOutcome(
-                count($possibleMatches) > 0 ?
-                    InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED_WITH_POSSIBLE_MATCHES :
-                    InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED,
+                InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED,
                 ucfirst($institution),
                 null,
                 false,
@@ -126,7 +141,9 @@ final class EligibilityController extends Controller
             return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
         }
 
-        if ($candidate['has-deal']) {
+        if (in_array($candidate['ror'], $this->hhmiRors)) {
+            $type = InstitutionEligibilityOutcome::TYPE_AGREED_HHMI;
+        } elseif ($candidate['has-deal']) {
             $type = InstitutionEligibilityOutcome::TYPE_AGREED;
         } else {
             $type = InstitutionEligibilityOutcome::TYPE_NOT_AGREED_PUBLISHED;
@@ -142,8 +159,6 @@ final class EligibilityController extends Controller
                 $dealUntil = $datetime->format('M Y');
             }
         }
-
-        // TODO check for the 10 institutions
 
         $arguments['outcome'] = new InstitutionEligibilityOutcome(
             $type,
