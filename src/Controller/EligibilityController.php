@@ -130,6 +130,8 @@ final class EligibilityController extends Controller
                 ];
             }, $possibleMatches);
 
+            $arguments['criticalCss'] = 'institution-eligibility-not-agreed';
+
             $arguments['outcome'] = new InstitutionEligibilityOutcome(
                 InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED,
                 ucfirst($institution),
@@ -148,6 +150,11 @@ final class EligibilityController extends Controller
         } else {
             $type = InstitutionEligibilityOutcome::TYPE_NOT_AGREED_PUBLISHED;
         }
+
+        $arguments['criticalCss'] = in_array($type, [
+            InstitutionEligibilityOutcome::TYPE_AGREED_HHMI,
+            InstitutionEligibilityOutcome::TYPE_AGREED,
+        ]) ? 'institution-eligibility-agreed' : 'institution-eligibility-not-agreed';
 
         $dealUntil = null;
         $rollingDeal = false;

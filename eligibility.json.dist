@@ -19,7 +19,7 @@
     "city": "Sheffield",
     "name": "University of Sheffield",
     "ror": "https:\/\/ror.org\/05krs5044",
-    "has-deal": false,
+    "has-deal": true,
     "until": null,
     "country": "United Kingdom"
   },
