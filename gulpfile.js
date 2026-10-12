@@ -250,31 +250,42 @@ gulp.task('critical-css:clean', () => {
     return del([criticalCssConfig.baseFilePath + '/**/*']);
 });
 
-gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (callback) => {
+gulp.task('critical-css:generate', gulp.series('critical-css:clean', async () => {
+    // Fetching every page type at once floods the backing API with a burst of
+    // concurrent requests (each page render fans out into several backend
+    // calls on its own), which can push it past its request timeout. Cap how
+    // many page types are in flight at once instead.
+    const concurrency = 3;
+    const entries = Object.entries(criticalCssPageTypes);
 
-    for (let key in criticalCssPageTypes) {
-        let path = criticalCssPageTypes[key];
-        let name = key;
-        const uri = criticalCssConfig.baseUrl + path;
-        axios.get(uri)
-            .then(response => {
-                critical.generate({
-                    inline: false,
-                    base: `${criticalCssConfig.baseFilePath}`,
-                    dest: `${name}.css`,
-                    html: response.data,
-                    src: uri,
-                    include: criticalCssConfig.getInclusions(name),
-                    pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from/by-actual-path-double-dot/`,
-                    minify: true,
-                    dimensions: criticalCssConfig.dimensions,
-                    timeout: 90000
-                }, callback)
-            })
-            .catch(function (error) {
+    for (let i = 0; i < entries.length; i += concurrency) {
+        const batch = entries.slice(i, i + concurrency);
+
+        await Promise.all(batch.map(async ([name, path]) => {
+            const uri = criticalCssConfig.baseUrl + path;
+
+            try {
+                const response = await axios.get(uri);
+
+                await new Promise((resolve, reject) => {
+                    critical.generate({
+                        inline: false,
+                        base: `${criticalCssConfig.baseFilePath}`,
+                        dest: `${name}.css`,
+                        html: response.data,
+                        src: uri,
+                        include: criticalCssConfig.getInclusions(name),
+                        pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from/by-actual-path-double-dot/`,
+                        minify: true,
+                        dimensions: criticalCssConfig.dimensions,
+                        timeout: 90000
+                    }, (error) => error ? reject(error) : resolve());
+                });
+            } catch (error) {
                 // handle error
                 console.log(error);
-            })
+            }
+        }));
     }
 }));
 
