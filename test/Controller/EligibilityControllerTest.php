@@ -24,19 +24,6 @@ final class EligibilityControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_shows_an_agreed_outcome_with_a_rolling_deal()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/eligibility/check?institution='.urlencode('Agreed Rolling University'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed'));
-    }
-
-    /**
-     * @test
-     */
     public function it_shows_an_agreed_hhmi_outcome_for_hhmi()
     {
         $client = static::createClient();

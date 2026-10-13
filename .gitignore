@@ -21,5 +21,4 @@ docker-compose.override.yml
 config/
 /config/era_articles.yaml
 /config/secret_parameters.yaml
-/eligibility.json
 /web/eligibility.json

@@ -135,8 +135,6 @@ final class EligibilityController extends Controller
             $arguments['outcome'] = new InstitutionEligibilityOutcome(
                 InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED,
                 ucfirst($institution),
-                null,
-                false,
                 $possibleMatches
             );
 
@@ -156,22 +154,9 @@ final class EligibilityController extends Controller
             InstitutionEligibilityOutcome::TYPE_AGREED,
         ]) ? 'institution-eligibility-agreed' : 'institution-eligibility-not-agreed';
 
-        $dealUntil = null;
-        $rollingDeal = false;
-        if ($candidate['until']) {
-            $datetime = new \Datetime($candidate['until']);
-            if ($datetime->format('Y') == 3000) {
-                $rollingDeal = true;
-            } else {
-                $dealUntil = $datetime->format('M Y');
-            }
-        }
-
         $arguments['outcome'] = new InstitutionEligibilityOutcome(
             $type,
-            $institution,
-            $dealUntil,
-            $rollingDeal
+            $institution
         );
 
         return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
