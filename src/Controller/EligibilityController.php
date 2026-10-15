@@ -56,10 +56,10 @@ final class EligibilityController extends Controller
             ),
             new LinkCard(
                 new Link(
-                    'Our fee waivers',
-                    'https://elifesciences.org'
+                    'Read the author guide',
+                    'https://elife-rp.msubmit.net/html/elife-rp_author_instructions.html'
                 ),
-                'We offer APC waivers to researchers in the global south and ...'
+                'Full details of what to expect when publishing with eLife.'
             ),
         ]);
     }
