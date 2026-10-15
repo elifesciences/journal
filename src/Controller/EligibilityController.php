@@ -40,8 +40,8 @@ final class EligibilityController extends Controller
     {
         $this->contentHeaderStrapLine = '<p>Check your eligibility for financial support for Gold Open Access publishing
             with eLife by entering your institution or funder below.
-            Names are listed as they appear in the <a href="https://ror.org">ROR database</a>.
-            </p><p>For any questions please contact us at 
+            Names are listed as they appear in the <a target="_blank" href="https://ror.org">ROR database</a>.
+            </p><p>For any questions please contact eLife editorial
             <a href="mailto:editorial@elifesciences.org">editorial@elifesciences.org</a>.</p>';
 
         $this->title = 'eLife Eligibility Tool';
