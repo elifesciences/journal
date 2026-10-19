@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0a3394748ca000f81dd76a3a02a38f9",
+    "content-hash": "acc6380a883262ae5f3780e981efe851",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -613,16 +613,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-upgrade-patterns-to-php-8.3",
+            "version": "v1.0.0-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "663653ffb92df70a345dc62886a18d623498bf16"
+                "reference": "812a9d6c71b0fd75db59ce0966ab2044ed3a05ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/663653ffb92df70a345dc62886a18d623498bf16",
-                "reference": "663653ffb92df70a345dc62886a18d623498bf16",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/812a9d6c71b0fd75db59ce0966ab2044ed3a05ba",
+                "reference": "812a9d6c71b0fd75db59ce0966ab2044ed3a05ba",
                 "shasum": ""
             },
             "require": {
@@ -661,9 +661,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/upgrade-patterns-to-php-8.3"
+                "source": "https://github.com/elifesciences/patterns-php/tree/v1.0.0-beta"
             },
-            "time": "2026-09-07T15:11:14+00:00"
+            "time": "2026-10-19T13:07:47+00:00"
         },
         {
             "name": "fig/link-util",
@@ -7074,16 +7074,16 @@
         },
         {
             "name": "elife/api-validator",
-            "version": "dev-support-php-8.x",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "edf1eb635331b7cf2f5410824556fa65ddaee8bf"
+                "reference": "b24b87248abfc99cf7a6af14876329589ca95d7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/edf1eb635331b7cf2f5410824556fa65ddaee8bf",
-                "reference": "edf1eb635331b7cf2f5410824556fa65ddaee8bf",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b24b87248abfc99cf7a6af14876329589ca95d7f",
+                "reference": "b24b87248abfc99cf7a6af14876329589ca95d7f",
                 "shasum": ""
             },
             "require": {
@@ -7117,9 +7117,9 @@
             "description": "eLife Sciences API validator",
             "support": {
                 "issues": "https://github.com/elifesciences/api-validator-php/issues",
-                "source": "https://github.com/elifesciences/api-validator-php/tree/support-php-8.x"
+                "source": "https://github.com/elifesciences/api-validator-php/tree/v1.1.0"
             },
-            "time": "2024-10-18T07:21:40+00:00"
+            "time": "2024-10-25T05:29:21+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -9768,7 +9768,6 @@
     "stability-flags": {
         "elife/api-client": 20,
         "elife/api-sdk": 20,
-        "elife/api-validator": 20,
         "elife/patterns": 20
     },
     "prefer-stable": false,

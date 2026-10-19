@@ -25,7 +25,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "dev-symfony-7",
         "elife/api-sdk": "dev-symfony-7",
-        "elife/patterns": "dev-upgrade-patterns-to-php-8.3",
+        "elife/patterns": "^1.0@dev",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^7.0",
         "google/apiclient": "^2.19",
@@ -60,8 +60,8 @@
         "twig/twig": "^3.0"
     },
     "require-dev": {
-        "elife/api": "^2.31",
-        "elife/api-validator": "dev-support-php-8.x",
+        "elife/api": "^2.0",
+        "elife/api-validator": "^v1.1",
         "justinrainbow/json-schema": "^5.2",
         "ml/json-ld": "^1.1",
         "phpspec/prophecy": "^1.7",
