@@ -1,7 +1,7 @@
 ARG image_tag=latest
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-FROM ghcr.io/elifesciences/php:8.5-fpm
+FROM ghcr.io/elifesciences/php:8.5-fpm@sha256:934cd137db7dcd61b99dfdcf3eceb362532c12bcbece8163c9dfbcab4fcc304e
 
 ARG xdebug=false
 
