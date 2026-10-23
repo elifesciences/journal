@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Agreed University",
+        "city": "Agreed City",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000agree",
+        "has-deal": true
+    },
+    {
+        "name": "Agreed Rolling University",
+        "city": "Agreed Rolling City",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000rolli",
+        "has-deal": true
+    },
+    {
+        "name": "Agreed Dated University",
+        "city": "Agreed Dated City",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000dated",
+        "has-deal": true
+    },
+    {
+        "name": "Not Agreed University",
+        "city": "Not Agreed City",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000notdl",
+        "has-deal": false
+    },
+    {
+        "name": "University of Sheffield",
+        "city": "Sheffield",
+        "country": "United Kingdom",
+        "ror": "https://ror.org/00000sheff",
+        "has-deal": false
+    },
+    {
+        "city": "Chevy Chase",
+        "name": "Howard Hughes Medical Institute",
+        "ror": "https://ror.org/006w34k90",
+        "country": "United States",
+        "has-deal": false
+    }
+]

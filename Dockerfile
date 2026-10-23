@@ -45,6 +45,8 @@ COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
 COPY --chown=elife:elife config/ config/
 COPY --chown=elife:elife templates/ templates/
+COPY --chown=elife:elife eligibility.json eligibility.json
+COPY --chown=elife:elife eligibility.json /srv/journal/web/eligibility.json
 
 USER www-data
 

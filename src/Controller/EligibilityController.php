@@ -1,0 +1,243 @@
+<?php
+
+namespace eLife\Journal\Controller;
+
+use eLife\Patterns\ViewModel\CompactForm;
+use eLife\Patterns\ViewModel\ContentHeaderSimple;
+use eLife\Patterns\ViewModel\Form;
+use eLife\Patterns\ViewModel\Input;
+use eLife\Patterns\ViewModel\InstitutionEligibilityChecker;
+use eLife\Patterns\ViewModel\InstitutionEligibilityOutcome;
+use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\LinkCard;
+use eLife\Patterns\ViewModel\LinkCardCollection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+final class EligibilityController extends Controller
+{
+    /**
+     * @var ContentHeaderSimple
+     */
+    private $contentHeader;
+
+    private $title;
+    /**
+     * @var LinkCardCollection
+     */
+    private $linkCardCollection;
+    /**
+     * @var string
+     */
+    private $contentHeaderStrapLine;
+
+    private $hhmiRors = [
+        'https://ror.org/006w34k90',
+        'https://ror.org/013sk6x84'
+    ];
+
+    public function __construct()
+    {
+        $this->contentHeaderStrapLine = '<p>Check your eligibility for financial support for Gold Open Access publishing
+            in eLife by entering the name of your institution or funder below.
+            Names are listed as they appear in the <a target="_blank" href="https://ror.org">ROR database</a>.
+            </p><p>For any questions please contact eLife editorial
+            <a href="mailto:editorial@elifesciences.org">editorial@elifesciences.org</a>.</p>';
+
+        $this->title = 'eLife Eligibility Tool';
+
+        $this->linkCardCollection = new LinkCardCollection([
+            new LinkCard(
+                new Link(
+                    'Institutional publishing agreements',
+                    'https://elifesciences.org/about/institutional-publishing-agreements'
+                ),
+                'A guide for organisations about our different schemes, and how to join.'
+            ),
+            new LinkCard(
+                new Link(
+                    'Read the author guide',
+                    'https://elife-rp.msubmit.net/html/elife-rp_author_instructions.html'
+                ),
+                'Full details of what to expect when publishing with eLife.'
+            ),
+        ]);
+    }
+
+    private function getContentHeader(bool $showStrapline = false): ContentHeaderSimple
+    {
+        return new ContentHeaderSimple(
+            'Check your eligibility',
+            $showStrapline === true ? $this->contentHeaderStrapLine : null,
+            true
+        );
+    }
+
+    public function indexAction(Request $request)
+    {
+        $arguments = $this->defaultPageArguments($request);
+
+        $arguments ['title'] = $this->title;
+        $arguments['contentHeader'] = $this->getContentHeader(true);
+        $arguments['linkCardCollection'] = $this->linkCardCollection;
+
+        $arguments['checker'] = new InstitutionEligibilityChecker(
+            (new CompactForm(
+                new Form('/eligibility/check', 'eligibility_search', 'GET'),
+                new Input('Choose your institution:', 'search', 'institution', '', 'Enter text here'),
+                'Search'
+            ))->withVisibleLabel()
+                ->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
+                ->withAutocompleteOff(),
+            null,
+            null,
+            '/eligibility.json'
+        );
+
+        return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+    }
+
+    public function checkAction(Request $request)
+    {
+        $institution = $request->get('institution');
+        $eligibility_json = $this->getInstitutions();
+
+        $arguments = $this->defaultPageArguments($request);
+        $arguments['title'] = $this->title;
+        $arguments['contentHeader'] = $this->getContentHeader(false);
+        $arguments['linkCardCollection'] = $this->linkCardCollection;
+
+        $candidate = null;
+        if (!empty($institution)) {
+            foreach ($eligibility_json as $e) {
+                if (strtolower($e['name']) === strtolower($institution)) {
+                    $candidate = $e;
+                    break;
+                }
+            }
+        } else {
+            return $this->indexAction($request);
+        }
+
+        if ($candidate === null) {
+            $possibleMatches = $this->findPossibleMatches($institution);
+
+            $possibleMatches = array_map(function ($match) {
+                return [
+                    'name'    => ucfirst($match['name']),
+                    'country' => $match['country'],
+                    'url'     => '/eligibility/check?institution=' . urlencode($match['name']),
+                ];
+            }, $possibleMatches);
+
+            $arguments['criticalCss'] = 'institution-eligibility-not-agreed';
+
+            $arguments['outcome'] = new InstitutionEligibilityOutcome(
+                InstitutionEligibilityOutcome::TYPE_NOT_AGREED_NOT_PUBLISHED,
+                ucfirst($institution),
+                $possibleMatches
+            );
+
+            return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+        }
+
+        if (in_array($candidate['ror'], $this->hhmiRors)) {
+            $type = InstitutionEligibilityOutcome::TYPE_AGREED_HHMI;
+        } elseif ($candidate['has-deal']) {
+            $type = InstitutionEligibilityOutcome::TYPE_AGREED;
+        } else {
+            $type = InstitutionEligibilityOutcome::TYPE_NOT_AGREED_PUBLISHED;
+        }
+
+        $arguments['criticalCss'] = in_array($type, [
+            InstitutionEligibilityOutcome::TYPE_AGREED_HHMI,
+            InstitutionEligibilityOutcome::TYPE_AGREED,
+        ]) ? 'institution-eligibility-agreed' : 'institution-eligibility-not-agreed';
+
+        $arguments['outcome'] = new InstitutionEligibilityOutcome(
+            $type,
+            $institution
+        );
+
+        return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+    }
+
+    private function getInstitutions(): array
+    {
+        $item = $this->get('cache.eligibility')->getItem('institutions');
+
+        if (!$item->isHit()) {
+            $eligibility_file = file_get_contents($this->getParameter('eligibility_json_path'));
+            $item->set(json_decode($eligibility_file, true));
+            $this->get('cache.eligibility')->save($item);
+        }
+
+        return $item->get();
+    }
+
+    /**
+     * Pre-lowercased name + word list for each institution, built once per
+     * cache lifetime instead of on every search request.
+     */
+    private function getSearchIndex(): array
+    {
+        $item = $this->get('cache.eligibility')->getItem('institutions_search_index');
+
+        if (!$item->isHit()) {
+            $index = array_map(function (array $e) {
+                $lowerName = strtolower($e['name']);
+
+                return [
+                    'name' => $e['name'],
+                    'country' => $e['country'],
+                    'lower' => $lowerName,
+                    'words' => array_filter(preg_split('/[\s,-]+/', $lowerName)),
+                ];
+            }, $this->getInstitutions());
+
+            $item->set($index);
+            $this->get('cache.eligibility')->save($item);
+        }
+
+        return $item->get();
+    }
+
+    private function findPossibleMatches(string $institution, int $limit = 3): array
+    {
+        $needle = strtolower(trim($institution));
+        $needleLength = strlen($needle);
+        $threshold = $needleLength <= 5 ? 1 : ($needleLength <= 8 ? 2 : 3);
+
+        $distances = [];
+        $countries = [];
+        foreach ($this->getSearchIndex() as $entry) {
+            if (strpos($entry['lower'], $needle) !== false) {
+                $distances[$entry['name']] = 0;
+                $countries[$entry['name']] = $entry['country'];
+                continue;
+            }
+
+            foreach ($entry['words'] as $word) {
+                if (abs(strlen($word) - $needleLength) > 2) {
+                    continue;
+                }
+
+                $distance = levenshtein($needle, $word);
+
+                if ($distance <= $threshold) {
+                    $distances[$entry['name']] = min($distances[$entry['name']] ?? PHP_INT_MAX, $distance);
+                    $countries[$entry['name']] = $entry['country'];
+                }
+            }
+        }
+
+        asort($distances);
+
+        return array_map(function ($name) use ($countries) {
+            return [
+                'name' => $name,
+                'country' => $countries[$name],
+            ];
+        }, array_slice(array_keys($distances), 0, $limit));
+    }
+}

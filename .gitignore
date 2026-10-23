@@ -1,6 +1,5 @@
 /.php_cs.cache
 /.web-server-pid
-/app/config/parameters.yml
 /config/parameters.yaml
 /config/parameters.yml
 /config/era_articles.yaml
@@ -12,7 +11,6 @@
 /node_modules/
 /var/*
 !/var/.gitkeep
-/vendor/
 /web/assets/
 /web/bundles/
 /web/favicon.ico
@@ -41,5 +39,4 @@ docker-compose.override.yml
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
-eligibility.json
 web/eligibility.json
