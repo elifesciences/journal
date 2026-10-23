@@ -209,11 +209,16 @@ services:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
 
+    elife.journal.helper.legacy_uri_signer:
+        class: eLife\Journal\Helper\LegacyUriSigner
+        arguments:
+            - '%secret%'
+
     elife.journal.helper.download_link_uri_generator:
         class: eLife\Journal\Helper\DownloadLinkUriGenerator
         arguments:
             - '@router'
-            - '@uri_signer'
+            - '@elife.journal.helper.legacy_uri_signer'
 
     elife.journal.helper.http_proxy:
         class: eLife\Journal\Helper\HttpProxy

@@ -4,9 +4,9 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
+use eLife\Journal\Helper\LegacyUriSigner;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
-use Symfony\Component\HttpFoundation\UriSigner;
 use test\eLife\Journal\KernelTestCase;
 use UnexpectedValueException;
 
@@ -15,7 +15,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     /** @var DownloadLinkUriGenerator */
     private $downloadLinkUriGenerator;
 
-    /** @var UriSigner */
+    /** @var LegacyUriSigner */
     private $uriSigner;
 
     /** @var string */
@@ -28,7 +28,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
 
         $container = static::$kernel->getContainer();
         $this->downloadLinkUriGenerator = $container->get('elife.journal.helper.download_link_uri_generator');
-        $this->uriSigner = $container->get('elife.uri_signer');
+        $this->uriSigner = $container->get('elife.journal.helper.legacy_uri_signer');
         $this->defaultBaseUrl =
             $container->getParameter('router.request_context.scheme')
             .'://'

@@ -104,7 +104,7 @@ final class DownloadControllerTest extends WebTestCase
     {
         $uri = 'http://localhost/download/'.base64_encode($fileUri)."/$name";
 
-        return self::$kernel->getContainer()->get('elife.uri_signer')->sign($uri);
+        return self::$kernel->getContainer()->get('elife.journal.helper.legacy_uri_signer')->sign($uri);
     }
 
     private function captureContent(KernelBrowser $client, callable $callback) : string
