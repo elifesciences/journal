@@ -2,7 +2,7 @@ DOCKER_COMPOSE = docker-compose
 TEST = test/
 BRANCH = master
 
-.PHONY: build dev prod stop clean test feature-test lint lint-fix check update-patterns
+.PHONY: build dev prod stop clean test feature-test lint lint-fix check update-patterns eligibility-json-from-s3 eligibility-json-push
 
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
@@ -17,10 +17,20 @@ vendor: composer.json composer.lock
 	composer install
 	@touch vendor
 
-dev: build vendor
+web/eligibility.json:
+	cp eligibility.json web/eligibility.json
+
+eligibility-json-push:
+	$(DOCKER_COMPOSE) cp web/eligibility.json web:/srv/journal/web/eligibility.json
+
+dev: build vendor web/eligibility.json
+	$(DOCKER_COMPOSE) up -d
+	$(MAKE) eligibility-json-push
 	$(DOCKER_COMPOSE) up
 
-prod: build vendor
+prod: build vendor web/eligibility.json
+	CRITICAL_CSS_JSON=prod API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up -d
+	$(MAKE) eligibility-json-push
 	CRITICAL_CSS_JSON=prod API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up
 
 stop:

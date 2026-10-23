@@ -10,5 +10,8 @@
     "people": "/about/people",
     "post": "/inside-elife/359325/media-coverage-slime-can-see",
     "collection": "/collections/tropical-disease/tropical-disease",
-    "podcast-episode": "/podcast/episode4"
+    "podcast-episode": "/podcast/episode4",
+    "institution-eligibility": "/eligibility",
+    "institution-eligibility-agreed": "/eligibility/check?institution=Agreed%20University",
+    "institution-eligibility-not-agreed": "/eligibility/check?institution=Not%20Agreed%20University"
 }

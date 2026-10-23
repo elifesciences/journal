@@ -10,5 +10,8 @@
     "people": "/about/people",
     "post": "/inside-elife/499126fd/elife-and-clockss-partners-in-preservation",
     "collection": "/collections/8d233d47/meta-research-a-collection-of-articles",
-    "podcast-episode": "/podcast/episode4"
+    "podcast-episode": "/podcast/episode4",
+    "institution-eligibility": "/eligibility",
+    "institution-eligibility-agreed": "/eligibility/check?institution=University%20of%20Sheffield",
+    "institution-eligibility-not-agreed": "/eligibility/check?institution=Texas%20Children%27s%20Hospital"
 }
