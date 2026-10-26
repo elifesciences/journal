@@ -238,6 +238,16 @@ download:
   defaults:
     _controller: eLife\Journal\Controller\DownloadController::fileAction
 
+eligibility:
+  path: /eligibility
+  defaults:
+    _controller: AppBundle:Eligibility:index
+
+eligibility_check:
+  path: /eligibility/check
+  defaults:
+    _controller: AppBundle:Eligibility:check
+
 event:
   path: /events/{id}/{slug}
   defaults:
