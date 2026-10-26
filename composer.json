@@ -25,7 +25,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "dev-symfony-7",
         "elife/api-sdk": "dev-symfony-7",
-        "elife/patterns": "^1.0@dev",
+        "elife/patterns": "dev-master",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^7.0",
         "google/apiclient": "^2.19",
