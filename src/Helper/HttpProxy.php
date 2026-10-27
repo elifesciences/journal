@@ -92,7 +92,6 @@ final class HttpProxy
 
         $response->headers->add(array_filter([
             'Cache-Control' => $headers['cache-control'][0] ?? null,
-            'Content-Length' => $headers['content-length'][0] ?? null,
             'Content-Type' => $headers['content-type'][0] ?? null,
             'Date' => $headers['date'][0] ?? null,
             'ETag' => $headers['etag'][0] ?? null,

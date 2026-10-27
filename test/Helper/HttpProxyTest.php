@@ -153,7 +153,6 @@ final class HttpProxyTest extends TestCase
         foreach (
             [
                 'cache-control' => ['max-age=100, public'],
-                'content-length' => ['4'],
                 'content-type' => ['text/plain'],
                 'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
                 'etag' => ['1234567890'],
@@ -165,7 +164,35 @@ final class HttpProxyTest extends TestCase
             $this->assertSame($value, $response->headers->all()[$key]);
         }
 
+        $this->assertArrayNotHasKey('content-length', $response->headers->all());
+
         $this->assertSame('test', $this->captureContent($response));
+    }
+
+    #[Test]
+    public function it_does_not_truncate_a_body_longer_than_the_backends_content_length()
+    {
+        // Simulates a gzip-compressed backend response: the HTTP client transparently
+        // decompresses the body, but the backend's Content-Length header still reflects
+        // the compressed (smaller) size. Forwarding that header would truncate the response.
+        $this->mockResponses['http://www.example.com/test.xml'] = new MockResponse(
+            'a much longer decompressed body than the backend reported',
+            [
+                'http_code' => 200,
+                'response_headers' => [
+                    'Content-Encoding: gzip',
+                    'Content-Length: 4',
+                    'Content-Type: application/xml',
+                ],
+            ]
+        );
+
+        $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');
+
+        $response = $this->httpProxy->send($request, 'http://www.example.com/test.xml');
+
+        $this->assertArrayNotHasKey('content-length', $response->headers->all());
+        $this->assertSame('a much longer decompressed body than the backend reported', $this->captureContent($response));
     }
 
     #[Test]
