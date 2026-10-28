@@ -241,12 +241,12 @@ download:
 eligibility:
   path: /eligibility
   defaults:
-    _controller: AppBundle:Eligibility:index
+    _controller: eLife\Journal\Controller\EligibilityController::indexAction
 
 eligibility_check:
   path: /eligibility/check
   defaults:
-    _controller: AppBundle:Eligibility:check
+    _controller: eLife\Journal\Controller\EligibilityController::checkAction
 
 event:
   path: /events/{id}/{slug}

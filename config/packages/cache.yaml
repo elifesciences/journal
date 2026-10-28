@@ -16,3 +16,7 @@ framework:
                 clearer: ~
                 default_lifetime: 31536000 # 1 year
                 public: true
+            cache.eligibility:
+                adapter: cache.app
+                default_lifetime: 3600 # 1 hour
+                public: true

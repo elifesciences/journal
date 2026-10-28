@@ -8,6 +8,7 @@ parameters:
     api_timeout_slow: 10
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
+    eligibility_json_path: '%kernel.project_dir%/eligibility.json'
     preload_links: []
     side_by_side_view_url: https://lens.elifesciences.org/
     session_name: journal

@@ -1,0 +1,14 @@
+framework:
+    cache:
+        # Redis-backed pools (see config/packages/cache.yaml) persist across test runs
+        # because the redis container isn't recreated between them. Swapping to the
+        # in-memory array adapter for ci means every run starts with an empty cache,
+        # so stale data (e.g. from test/fixtures/eligibility.json changing) can't
+        # linger past its TTL and mask fixes.
+        pools:
+            cache.doi:
+                adapter: cache.adapter.array
+            cache.http:
+                adapter: cache.adapter.array
+            cache.eligibility:
+                adapter: cache.adapter.array

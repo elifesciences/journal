@@ -82,11 +82,11 @@ final class EligibilityController extends Controller
         $arguments['linkCardCollection'] = $this->linkCardCollection;
 
         $arguments['checker'] = new InstitutionEligibilityChecker(
-            (new CompactForm(
+            new CompactForm(
                 new Form('/eligibility/check', 'eligibility_search', 'GET'),
                 new Input('Choose your institution:', 'search', 'institution', '', 'Enter text here'),
                 'Search'
-            ))->withVisibleLabel()
+            )->withVisibleLabel()
                 ->withVariant(CompactForm::VARIANT_INSTITUTION_ELIGIBILITY)
                 ->withAutocompleteOff(),
             null,
@@ -94,12 +94,12 @@ final class EligibilityController extends Controller
             '/eligibility.json'
         );
 
-        return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+        return new Response($this->get('templating')->render('institution-eligibility.html.twig', $arguments));
     }
 
     public function checkAction(Request $request)
     {
-        $institution = $request->get('institution');
+        $institution = $request->query->get('institution');
         $eligibility_json = $this->getInstitutions();
 
         $arguments = $this->defaultPageArguments($request);
@@ -138,7 +138,7 @@ final class EligibilityController extends Controller
                 $possibleMatches
             );
 
-            return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+            return new Response($this->get('templating')->render('institution-eligibility.html.twig', $arguments));
         }
 
         if (in_array($candidate['ror'], $this->hhmiRors)) {
@@ -159,7 +159,7 @@ final class EligibilityController extends Controller
             $institution
         );
 
-        return new Response($this->get('templating')->render('::institution-eligibility.html.twig', $arguments));
+        return new Response($this->get('templating')->render('institution-eligibility.html.twig', $arguments));
     }
 
     private function getInstitutions(): array

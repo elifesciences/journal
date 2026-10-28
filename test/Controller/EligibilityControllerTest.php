@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class EligibilityControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_eligibility_search_form()
     {
         $client = static::createClient();
@@ -21,9 +21,7 @@ final class EligibilityControllerTest extends PageTestCase
         $this->assertCount(1, $checker->selectButton('Search'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_an_agreed_hhmi_outcome_for_hhmi()
     {
         $client = static::createClient();
@@ -34,9 +32,7 @@ final class EligibilityControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed-hhmi'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_matches_institutions_case_insensitively()
     {
         $client = static::createClient();
@@ -47,9 +43,7 @@ final class EligibilityControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--agreed'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_a_not_agreed_outcome_for_a_known_institution()
     {
         $client = static::createClient();
@@ -60,9 +54,7 @@ final class EligibilityControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.institution-eligibility-outcome--not-agreed-published'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_possible_matches_for_an_unrecognised_but_similar_institution()
     {
         $client = static::createClient();
@@ -75,13 +67,11 @@ final class EligibilityControllerTest extends PageTestCase
 
         $matches = $crawler->filter('.institution-eligibility-outcome__possible_matches_link');
         $this->assertCount(1, $matches);
-        $this->assertContains('University of Sheffield', $this->crawlerText($matches));
+        $this->assertStringContainsString('University of Sheffield', $this->crawlerText($matches));
         $this->assertSame('/eligibility/check?institution=University+of+Sheffield', $matches->attr('href'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_no_possible_matches_for_a_completely_unrecognised_institution()
     {
         $client = static::createClient();
