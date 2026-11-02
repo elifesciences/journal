@@ -8,7 +8,7 @@ Dependencies
 
 * [Composer](https://getcomposer.org/)
 * [npm](https://www.npmjs.com/)
-* [PHP 7](https://www.php.net/)
+* [PHP 8.5](https://www.php.net/)
 * [Docker](https://www.docker.com/)
 * [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
@@ -26,12 +26,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
     * [Guide to use WSL](https://adamtheautomator.com/windows-subsystem-for-linux/)
     * [Guide to use Git Bash](https://www.geeksforgeeks.org/working-on-git-bash/)
 
-3. Use the recommended versions for PHP + extensions and Composer :
-
-    * `PHP 7.3.33-7+ubuntu22.04.1+deb.sury.org+2 (cli) (built: Sep 29 2022 22:23:16) ( NTS )`
-
-      How to install : [Guide 1](https://5balloons.info/how-to-install-php-v-7-3-on-ubuntu-20-04) / [Guide 2](https://computingforgeeks.com/how-to-install-php-ubuntu-debian/)
-
+3. Use the recommended versions for PHP 8.5 + extensions and Composer :
     * `Composer version 2.2` 
 
       How to install : [Step 1](https://getcomposer.org/download/)
