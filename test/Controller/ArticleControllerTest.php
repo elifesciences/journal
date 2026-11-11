@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Traversable;
@@ -1725,10 +1726,8 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
+    #[Test]
+    #[BackupGlobals(true)]
     public function it_displays_era_info_bar_when_it_has_associated_era()
     {
         $client = static::createClient();
@@ -1738,7 +1737,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString(
             'See this research in an executable code view.',
-            array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
+            implode("\n", array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text'])))
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
@@ -1746,10 +1745,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertStringContainsString('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
+    #[Test]
+    #[BackupGlobals(true)]
     public function it_does_not_display_era_info_bar_when_it_has_associated_era_but_it_is_not_the_latest_version()
     {
         $client = static::createClient();
@@ -1776,10 +1773,8 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
+    #[Test]
+    #[BackupGlobals(true)]
     public function it_does_not_display_era_info_bar_when_it_has_no_associated_era()
     {
         $client = static::createClient();
@@ -1787,12 +1782,12 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl('00001'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'executable code view',
-            array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
+            implode("\n", array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text'])))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
+        $this->assertStringNotContainsString('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     #[Test]
