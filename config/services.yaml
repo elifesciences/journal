@@ -1603,6 +1603,13 @@ services:
             - '@=composer_locate("elife/patterns")'
             - stat_props: '%mustache_stat_props%'
 
+    elife.helper.article_recommendations:
+        class: eLife\Journal\Controller\Helper\ArticleRecommendations
+        arguments:
+            - '@elife.api_sdk.articles'
+            - '@elife.api_sdk.collections'
+            - '@elife.api_sdk.podcast_episodes'
+
     monolog.processor.http_message:
         class: eLife\ApiClient\Log\HttpMessageProcessor
         tags:

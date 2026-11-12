@@ -16,7 +16,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_displays_an_article_page()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
@@ -33,91 +33,43 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
         $this->assertEmpty($crawler->filter('.institution_list'));
-        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame(
+            'Jan 1, 2010',
+            trim(
+                preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())
+            )
+        );
     }
 
     #[Test]
     public function it_displays_an_preview_article_page()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'preview',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
+        $this->mockArticleAndVersions();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
+        $previewArticle = $this->articleFixture('vor', [
+            'stage' => 'preview',
+            'body' => [
                 [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
+                    'type' => 'section',
+                    'id' => 's-1',
+                    'title' => 'Introduction',
+                    'content' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'preview',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
+                            'type' => 'paragraph',
+                            'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                         ],
                     ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
+
+        $this->mockArticleGet($previewArticle);
+
+        $vorVersion = $this->articleFixture('vor');
+
+        $this->mockArticleVersions([$vorVersion]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -127,13 +79,16 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertCount(0, $crawler->filter('.contextual-data__cite_wrapper'));
 
-        $this->assertSame('Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($crawler->filter('.article-download-links-list__group .reference')));
+        $this->assertSame(
+            'Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001',
+            $this->crawlerText($crawler->filter('.article-download-links-list__group .reference'))
+        );
     }
 
     #[Test]
     public function it_has_metadata()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
@@ -141,12 +96,31 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Article title | eLife', $crawler->filter('title')->text());
         $this->assertSame('/articles/00001', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame(
+            'http://localhost/articles/00001',
+            $crawler->filter('meta[property="og:url"]')->attr('content')
+        );
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame(
+            'http://localhost/'.ltrim(
+                self::$kernel->getContainer()->get('elife.assets.packages')
+                    ->getUrl('assets/images/social/icon-600x600@1.png'),
+                '/'
+            ),
+            $crawler->filter('meta[name="twitter:image"]')
+                ->attr('content')
+        );
+        $this->assertSame(
+            'http://localhost/'.ltrim(
+                self::$kernel->getContainer()->get('elife.assets.packages')
+                    ->getUrl('assets/images/social/icon-600x600@1.png'),
+                '/'
+            ),
+            $crawler->filter('meta[property="og:image"]')
+                ->attr('content')
+        );
         $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
@@ -154,7 +128,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
-        $this->assertSame('© 2010 Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
+        $this->assertSame(
+            '© 2010 Bar. Copyright statement.',
+            $crawler->filter('meta[name="dc.rights"]')
+                ->attr('content')
+        );
 
         $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
     }
@@ -162,7 +140,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_may_have_a_social_image()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         self::mockApiResponse(
             new Request(
@@ -215,7 +193,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                                 ],
                                 [
                                     'type' => 'section',
@@ -257,201 +235,151 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 3,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $v1 = $this->articleFixture('vor', overrides: [
+            'version' => 3,
+            'authorLine' => 'Foo Bar',
+        ]);
+
+        $this->mockArticleVersions([$v1]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/social/full/full/0/default.jpg', $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/social/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame(
+            'https://www.example.com/iiif/image/social/full/full/0/default.jpg',
+            $crawler->filter('meta[name="twitter:image"]')->attr('content')
+        );
+        $this->assertSame(
+            'https://www.example.com/iiif/image/social/full/full/0/default.jpg',
+            $crawler->filter('meta[property="og:image"]')->attr('content')
+        );
         $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     #[Test]
-    public function it_has_citation_metadata()
+    public function itHasCitationMetadata()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 4,
-                    'type' => 'research-advance',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'titlePrefix' => 'Title prefix',
-                    'published' => '2007-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2009-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'pdf' => 'http://www.example.com/pdf',
-                    'xml' => 'http://www.example.com/xml',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
-                            'role' => 'Role',
+        $this->mockArticleGet(
+            $this->articleFixture('vor', overrides: [
+                'titlePrefix' => 'Title prefix',
+                'pdf' => 'http://www.example.com/pdf',
+                'xml' => 'http://www.example.com/xml',
+                'published' => '2007-01-01T00:00:00Z',
+                'versionDate' => '2010-01-01T00:00:00Z',
+                'statusDate' => '2009-01-01T00:00:00Z',
+                'authorLine' => 'Foo Bar',
+                'authors' => [
+                    [
+                        'type' => 'person',
+                        'name' => [
+                            'preferred' => 'Foo Bar',
+                            'index' => 'Bar, Foo',
                         ],
-                        [
-                            'type' => 'group',
-                            'name' => 'Baz',
-                        ],
+                        'role' => 'Role',
                     ],
-                    'reviewers' => [
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'role',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
+                    [
+                        'type' => 'group',
+                        'name' => 'Baz',
+                    ],
+                ],
+                'reviewers' => [
+                    [
+                        'name' => [
+                            'preferred' => 'Reviewer 1',
+                            'index' => 'Reviewer 1',
+                        ],
+                        'role' => 'role',
+                        'affiliations' => [
+                            [
+                                'name' => ['Institution'],
+                                'address' => [
+                                    'formatted' => ['Country'],
+                                    'components' => [
+                                        'country' => 'Country',
                                     ],
                                 ],
                             ],
                         ],
+                    ],
+                    [
+                        'name' => [
+                            'preferred' => 'Reviewer 2',
+                            'index' => 'Reviewer 2',
+                        ],
+                        'role' => 'role',
+                    ],
+                ],
+                'abstract' => [
+                    'doi' => '10.7554/eLife.09560.001',
+                    'content' => [
                         [
-                            'name' => [
-                                'preferred' => 'Reviewer 2',
-                                'index' => 'Reviewer 2',
-                            ],
-                            'role' => 'role',
+                            'type' => 'paragraph',
+                            'text' => 'Abstract text',
                         ],
                     ],
-                    'abstract' => [
-                        'doi' => '10.7554/eLife.09560.001',
+                ],
+                'digest' => [
+                    'doi' => '10.7554/eLife.09560.002',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Digest text',
+                        ],
+                    ],
+                ],
+                'body' => [
+                    [
+                        'type' => 'section',
+                        'id' => 's-1',
+                        'title' => 'Body title',
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Abstract text',
+                                'text' => 'Body text',
                             ],
-                        ],
-                    ],
-                    'digest' => [
-                        'doi' => '10.7554/eLife.09560.002',
-                        'content' => [
                             [
-                                'type' => 'paragraph',
-                                'text' => 'Digest text',
-                            ],
-                        ],
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Body title',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Body text',
-                                ],
-                                [
-                                    'type' => 'figure',
-                                    'assets' => [
-                                        [
-                                            'type' => 'image',
-                                            'id' => 'image1',
-                                            'label' => 'Image 1 label',
-                                            'title' => 'Image 1 title',
-                                            'image' => [
-                                                'uri' => 'https://www.example.com/iiif/image',
-                                                'alt' => '',
-                                                'source' => [
-                                                    'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://www.example.com/image.jpg',
-                                                    'filename' => 'image.jpg',
-                                                ],
-                                                'size' => [
-                                                    'width' => 800,
-                                                    'height' => 600,
-                                                ],
+                                'type' => 'figure',
+                                'assets' => [
+                                    [
+                                        'type' => 'image',
+                                        'id' => 'image1',
+                                        'label' => 'Image 1 label',
+                                        'title' => 'Image 1 title',
+                                        'image' => [
+                                            'uri' => 'https://www.example.com/iiif/image',
+                                            'alt' => '',
+                                            'source' => [
+                                                'mediaType' => 'image/jpeg',
+                                                'uri' => 'https://www.example.com/image.jpg',
+                                                'filename' => 'image.jpg',
+                                            ],
+                                            'size' => [
+                                                'width' => 800,
+                                                'height' => 600,
                                             ],
                                         ],
-                                        [
-                                            'type' => 'image',
-                                            'id' => 'image1s1',
-                                            'label' => 'Image 1 supplement 1 label',
-                                            'title' => 'Image 1 supplement 1 title',
-                                            'image' => [
-                                                'uri' => 'https://www.example.com/iiif/image',
-                                                'alt' => '',
-                                                'source' => [
-                                                    'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://www.example.com/image.jpg',
-                                                    'filename' => 'image.jpg',
-                                                ],
-                                                'size' => [
-                                                    'width' => 800,
-                                                    'height' => 600,
-                                                ],
+                                    ],
+                                    [
+                                        'type' => 'image',
+                                        'id' => 'image1s1',
+                                        'label' => 'Image 1 supplement 1 label',
+                                        'title' => 'Image 1 supplement 1 title',
+                                        'image' => [
+                                            'uri' => 'https://www.example.com/iiif/image',
+                                            'alt' => '',
+                                            'source' => [
+                                                'mediaType' => 'image/jpeg',
+                                                'uri' => 'https://www.example.com/image.jpg',
+                                                'filename' => 'image.jpg',
+                                            ],
+                                            'size' => [
+                                                'width' => 800,
+                                                'height' => 600,
                                             ],
                                         ],
                                     ],
@@ -459,129 +387,152 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'appendices' => [
-                        [
-                            'id' => 'app1',
-                            'doi' => '10.7554/eLife.09560.005',
-                            'title' => 'Appendix 1',
-                            'content' => [
-                                [
-                                    'type' => 'section',
-                                    'id' => 'app1-1',
-                                    'title' => 'Appendix title',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Appendix text',
-                                        ],
+                ],
+                'appendices' => [
+                    [
+                        'id' => 'app1',
+                        'doi' => '10.7554/eLife.09560.005',
+                        'title' => 'Appendix 1',
+                        'content' => [
+                            [
+                                'type' => 'section',
+                                'id' => 'app1-1',
+                                'title' => 'Appendix title',
+                                'content' => [
+                                    [
+                                        'type' => 'paragraph',
+                                        'text' => 'Appendix text',
                                     ],
                                 ],
                             ],
                         ],
                     ],
-                    'references' => [
+                ],
+                'references' => [
+                    [
+                        'type' => 'journal',
+                        'id' => 'bib1',
+                        'date' => '2013',
+                        'authors' => [
+                            [
+                                'type' => 'person',
+                                'name' => [
+                                    'preferred' => 'One Person',
+                                    'index' => 'One, Person',
+                                ],
+                            ],
+                        ],
+                        'articleTitle' => 'Journal article',
+                        'journal' => 'A journal',
+                        'pages' => 'In press',
+                    ],
+                ],
+                'acknowledgements' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Acknowledgements text',
+                    ],
+                ],
+                'ethics' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Ethics text',
+                    ],
+                ],
+                'funding' => [
+                    'awards' => [
                         [
-                            'type' => 'journal',
-                            'id' => 'bib1',
-                            'date' => '2013',
-                            'authors' => [
+                            'id' => 'award1',
+                            'source' => [
+                                'name' => [
+                                    'Funding source',
+                                ],
+                            ],
+                            'awardId' => 'Award ID',
+                            'recipients' => [
                                 [
                                     'type' => 'person',
                                     'name' => [
-                                        'preferred' => 'One Person',
-                                        'index' => 'One, Person',
+                                        'preferred' => 'Foo Bar',
+                                        'index' => 'Bar, Foo',
                                     ],
                                 ],
                             ],
-                            'articleTitle' => 'Journal article',
-                            'journal' => 'A journal',
-                            'pages' => 'In press',
+                        ],
+                        [
+                            'id' => 'award2',
+                            'source' => [
+                                'name' => [
+                                    'Other funding source',
+                                ],
+                            ],
+                            'recipients' => [
+                                [
+                                    'type' => 'group',
+                                    'name' => 'Baz',
+                                ],
+                            ],
+                        ],
+                        [
+                            'id' => 'award3',
+                            'source' => [
+                                'name' => [
+                                    'Other funding source',
+                                ],
+                            ],
                         ],
                     ],
-                    'acknowledgements' => [
+                    'statement' => 'Funding statement',
+                ],
+                'decisionLetter' => [
+                    'doi' => '10.7554/eLife.09560.003',
+                    'description' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'Acknowledgements text',
+                            'text' => 'Decision letter description',
                         ],
                     ],
-                    'ethics' => [
+                    'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'Ethics text',
+                            'text' => 'Decision letter text',
                         ],
                     ],
-                    'funding' => [
-                        'awards' => [
-                            [
-                                'id' => 'award1',
-                                'source' => [
-                                    'name' => [
-                                        'Funding source',
-                                    ],
-                                ],
-                                'awardId' => 'Award ID',
-                                'recipients' => [
-                                    [
-                                        'type' => 'person',
-                                        'name' => [
-                                            'preferred' => 'Foo Bar',
-                                            'index' => 'Bar, Foo',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id' => 'award2',
-                                'source' => [
-                                    'name' => [
-                                        'Other funding source',
-                                    ],
-                                ],
-                                'recipients' => [
-                                    [
-                                        'type' => 'group',
-                                        'name' => 'Baz',
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id' => 'award3',
-                                'source' => [
-                                    'name' => [
-                                        'Other funding source',
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'statement' => 'Funding statement',
-                    ],
-                    'decisionLetter' => [
-                        'doi' => '10.7554/eLife.09560.003',
-                        'description' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Decision letter description',
-                            ],
-                        ],
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Decision letter text',
-                            ],
+                ],
+                'authorResponse' => [
+                    'doi' => '10.7554/eLife.09560.003',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Author response text',
                         ],
                     ],
-                    'authorResponse' => [
-                        'doi' => '10.7554/eLife.09560.003',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Author response text',
-                            ],
-                        ],
-                    ],
-                ])
-            )
+                ],
+            ])
         );
+
+        $v1 = $this->articleFixture(overrides: [
+            'type' => 'research-advance',
+            'titlePrefix' => 'Title prefix',
+        ]);
+
+        $v2 = $this->articleFixture(overrides: [
+            'version' => 2,
+            'type' => 'research-advance',
+            'titlePrefix' => 'Title prefix',
+        ]);
+
+        $v3 = $this->articleFixture('vor', overrides: [
+            'version' => 3,
+            'type' => 'research-advance',
+            'titlePrefix' => 'Title prefix',
+        ]);
+
+        $v4 = $this->articleFixture('vor', overrides: [
+            'version' => 4,
+            'type' => 'research-advance',
+            'titlePrefix' => 'Title prefix',
+        ]);
 
         self::mockApiResponse(
             new Request(
@@ -599,92 +550,7 @@ final class ArticleControllerTest extends PageTestCase
                 json_encode([
                     'received' => '2006-12-30',
                     'accepted' => '2006-12-31',
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2007-01-01T00:00:00Z',
-                            'statusDate' => '2007-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2008-01-01T00:00:00Z',
-                            'statusDate' => '2007-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 3,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2009-01-01T00:00:00Z',
-                            'statusDate' => '2009-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 4,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2008-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2009-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
+                    'versions' => [$v1, $v2, $v3, $v4],
                 ])
             )
         );
@@ -708,7 +574,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_has_schema_org_metadata()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
@@ -732,7 +598,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         static::mockApiResponse(
             new Request(
@@ -782,174 +648,85 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Department One', 'Institution One'],
-                                    'address' => [
-                                        'formatted' => ['Locality One', 'Country One'],
-                                        'components' => [
-                                            'locality' => ['Locality One'],
-                                            'country' => 'Country One',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'name' => ['Department Two', 'Institution Two'],
-                                    'address' => [
-                                        'formatted' => ['Locality Two', 'Country Two'],
-                                        'components' => [
-                                            'locality' => ['Locality Two'],
-                                            'country' => 'Country Two',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'equalContributionGroups' => [1],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Two',
-                                'index' => 'Author Two',
-                            ],
-                            'equalContributionGroups' => [1],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Three',
-                                'index' => 'Author Three',
-                            ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Department One', 'Institution One'],
-                                    'address' => [
-                                        'formatted' => ['Locality One', 'Country One'],
-                                        'components' => [
-                                            'locality' => ['Locality One'],
-                                            'country' => 'Country One',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Four',
-                                'index' => 'Author Four',
-                            ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution Three'],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'on-behalf-of',
-                            'onBehalfOf' => 'on behalf of Institution Four',
-                        ],
-                    ],
-                    'abstract' => [
-                        'doi' => '10.7554/eLife.09560.001',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Abstract text',
+        $authorSection = [
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+            [
+                'type' => 'person',
+                'name' => [
+                    'preferred' => 'Author One',
+                    'index' => 'Author One',
+                ],
+                'affiliations' => [
+                    [
+                        'name' => ['Department One', 'Institution One'],
+                        'address' => [
+                            'formatted' => ['Locality One', 'Country One'],
+                            'components' => [
+                                'locality' => ['Locality One'],
+                                'country' => 'Country One',
                             ],
                         ],
                     ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
+                    [
+                        'name' => ['Department Two', 'Institution Two'],
+                        'address' => [
+                            'formatted' => ['Locality Two', 'Country Two'],
+                            'components' => [
+                                'locality' => ['Locality Two'],
+                                'country' => 'Country Two',
                             ],
                         ],
                     ],
-                ])
-            )
-        );
+                ],
+                'equalContributionGroups' => [1],
+            ],
+            [
+                'type' => 'person',
+                'name' => [
+                    'preferred' => 'Author Two',
+                    'index' => 'Author Two',
+                ],
+                'equalContributionGroups' => [1],
+            ],
+            [
+                'type' => 'person',
+                'name' => [
+                    'preferred' => 'Author Three',
+                    'index' => 'Author Three',
+                ],
+                'affiliations' => [
+                    [
+                        'name' => ['Department One', 'Institution One'],
+                        'address' => [
+                            'formatted' => ['Locality One', 'Country One'],
+                            'components' => [
+                                'locality' => ['Locality One'],
+                                'country' => 'Country One',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'type' => 'person',
+                'name' => [
+                    'preferred' => 'Author Four',
+                    'index' => 'Author Four',
+                ],
+                'affiliations' => [
+                    [
+                        'name' => ['Institution Three'],
+                    ],
+                ],
+            ],
+            [
+                'type' => 'on-behalf-of',
+                'onBehalfOf' => 'on behalf of Institution Four',
+            ],
+        ]];
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $this->mockArticleAndVersions('vor', $authorSection);
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -961,105 +738,32 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Author Two', trim($authors->eq(1)->text(), " \n,"));
         $this->assertSame('Author Three', trim($authors->eq(2)->text(), " \n,"));
         $this->assertSame('Author Four', trim($authors->eq(3)->text(), " \n,"));
-        $this->assertSame('on behalf of Institution Four',
-            trim($authors->eq(4)->text(), " \n,"));
+        $this->assertSame(
+            'on behalf of Institution Four',
+            trim($authors->eq(4)->text(), " \n,")
+        );
         $institutions = $crawler->filter('.content-header .institution_list_item');
         $this->assertCount(3, $institutions);
-        $this->assertSame('Institution One, Country One',
-            trim($institutions->eq(0)->text(), " \n;"));
-        $this->assertSame('Institution Two, Country Two',
-            trim($institutions->eq(1)->text(), " \n;"));
-        $this->assertSame('Institution Three',
-            trim($institutions->eq(2)->text(), " \n;"));
+        $this->assertSame(
+            'Institution One, Country One',
+            trim($institutions->eq(0)->text(), " \n;")
+        );
+        $this->assertSame(
+            'Institution Two, Country Two',
+            trim($institutions->eq(1)->text(), " \n;")
+        );
+        $this->assertSame(
+            'Institution Three',
+            trim($institutions->eq(2)->text(), " \n;")
+        );
     }
 
     #[Test]
     public function it_may_not_have_authors()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
+        $this->mockArticleAndVersions('vor');
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -1075,7 +779,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_displays_bioprotocols()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         self::mockApiResponse(
             new Request(
@@ -1120,7 +824,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_displays_metrics()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         self::mockApiResponse(
             new Request(
@@ -1328,7 +1032,6 @@ final class ArticleControllerTest extends PageTestCase
     #[DataProvider('contextualDataMetricsProvider')]
     public function it_may_display_contextual_data_metrics(array $citations, array $pageViews, array $expected)
     {
-
         $client = static::createClient();
 
         self::mockApiResponse(
@@ -1379,106 +1082,38 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
+        $this->mockArticleAndVersions('poa', [
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
                     ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
+                ],
+            ],
+            'reviewers' => [
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer 1',
+                        'index' => 'Reviewer 1',
                     ],
-                    'reviewers' => [
+                    'role' => 'Reviewer',
+                    'affiliations' => [
                         [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
+                            'name' => ['Institution'],
+                            'address' => [
+                                'formatted' => ['Country'],
+                                'components' => [
+                                    'country' => 'Country',
                                 ],
                             ],
                         ],
                     ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -1510,66 +1145,75 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 2,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
+        $v1 = $this->articleFixture('poa', [
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
                     ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
+                ],
+            ],
+            'reviewers' => [
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer 1',
+                        'index' => 'Reviewer 1',
                     ],
-                    'reviewers' => [
+                    'role' => 'Reviewer',
+                    'affiliations' => [
                         [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
+                            'name' => ['Institution'],
+                            'address' => [
+                                'formatted' => ['Country'],
+                                'components' => [
+                                    'country' => 'Country',
                                 ],
                             ],
                         ],
                     ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
+
+        $v2 = $this->articleFixture('poa', [
+            'version' => 2,
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
+                    ],
+                ],
+            ],
+            'reviewers' => [
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer 1',
+                        'index' => 'Reviewer 1',
+                    ],
+                    'role' => 'Reviewer',
+                    'affiliations' => [
+                        [
+                            'name' => ['Institution'],
+                            'address' => [
+                                'formatted' => ['Country'],
+                                'components' => [
+                                    'country' => 'Country',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->mockArticleGet($v2);
+        $this->mockArticleVersions([$v1, $v2]);
 
         self::mockApiResponse(
             new Request(
@@ -1580,115 +1224,7 @@ final class ArticleControllerTest extends PageTestCase
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
-                    'reviewers' => [
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
+                json_encode($v1)
             )
         );
 
@@ -1713,7 +1249,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_does_not_display_pdf_only_info_bar_if_vor_available()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getPreviousVersionUrl());
 
@@ -1855,7 +1391,7 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_has_citation_metadata_on_previous_versions()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getPreviousVersionUrl(), [], [], ['HTTP_X_ELIFE_GOOGLE_SCHOLAR_METADATA' => '1']);
 
@@ -2469,6 +2005,11 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
+        $v1 = $this->articleFixture(overrides: ['type' => 'research-advance']);
+        $v2 = $this->articleFixture(overrides: ['version' => 2, 'type'  => 'research-advance']);
+        $v3 = $this->articleFixture('vor', overrides: ['version' => 3, 'type' => 'research-advance']);
+        $v4 = $this->articleFixture('vor', overrides: ['version' => 4, 'type' => 'research-advance']);
+
         self::mockApiResponse(
             new Request(
                 'GET',
@@ -2504,90 +2045,10 @@ final class ArticleControllerTest extends PageTestCase
                             'uri' => 'https://doi.org/10.1101/2006.12.31',
                             'date' => '2006-12-31T00:00:00Z',
                         ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2007-01-01T00:00:00Z',
-                            'statusDate' => '2007-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2008-01-01T00:00:00Z',
-                            'statusDate' => '2007-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 3,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2007-01-01T00:00:00Z',
-                            'versionDate' => '2009-01-01T00:00:00Z',
-                            'statusDate' => '2009-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 4,
-                            'type' => 'research-advance',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'titlePrefix' => 'Title prefix',
-                            'published' => '2008-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2009-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
+                        $v1,
+                        $v2,
+                        $v3,
+                        $v4,
                     ],
                 ])
             )
@@ -2900,9 +2361,8 @@ final class ArticleControllerTest extends PageTestCase
         string $expectImpactStatement,
         array $expectedBreadcrumb,
         array $expectedViewSelectorItems
-    )
-    {
-        $client = static::createClient();
+    ) {
+        $client = ArticleControllerTest::createClient();
 
         self::mockApiResponse(
             new Request(
@@ -3033,11 +2493,11 @@ final class ArticleControllerTest extends PageTestCase
                         [
                             'content' => [
                                 [
-                                    'text' => 'Bacteria are masters at tuning their metabolism to thrive in diverse environments, including during infection. Constant, life-or-death competition with host immune systems and other microorganisms rewards species that maximize the amount of energy they derive from limited resources.',
+                                    'text' => 'Bacteria are masters at tuning their metabolism to thrive in diverse environments.',
                                     'type' => 'paragraph',
                                 ],
                                 [
-                                    'text' => 'Living organisms produce energy in the form of a small molecule called adenosine triphosphate (ATP). ATP is generated by breaking down, or oxidizing, high energy molecules such as sugars through a series of electron transfer reactions. These redox (reduction/oxidation) reactions require an intermediate electron carrier such as nicotine adenine dinucleotide (NADH) that must be re-oxidized (NAD<sup>+</sup>) in order for the cell to continue producing ATP by oxidizing high-energy electron donors.',
+                                    'text' => 'Living organisms produce energy in the form of a small molecule called adenosine triphosphate (ATP).',
                                     'type' => 'paragraph',
                                 ],
                                 [
@@ -3045,7 +2505,7 @@ final class ArticleControllerTest extends PageTestCase
                                     'type' => 'paragraph',
                                 ],
                                 [
-                                    'text' => '<i>Listeria monocytogenes</i> is an important foodborne pathogen with an unusual metabolic strategy that falls somewhere between respiration and fermentation. This bacterium carries the genes for two respiratory electron transport chains that can use either oxygen or an extracellular metabolite such as fumarate or iron as a terminal electron acceptor (<a href="#bib2">Corbett et al., 2017</a>; <a href="#bib3">Light et al., 2019</a>). However, unlike most respiring organisms, <i>L. monocytogenes</i> lacks the enzymes required to fully oxidize sugars and instead produces partially reduced fermentative end products including lactic and acetic acid (<a href="#bib9">Trivett and Meyer, 1971</a>). Despite this, respiration is absolutely essential for <i>L. monocytogenes</i> to cause disease (<a href="#bib2">Corbett et al., 2017</a>) – in fact, mutants that cannot respire are considered safe enough to be used in vaccine development (<a href="#bib7">Stritzker et al., 2004</a>).',
+                                    'text' => '<i>Listeria monocytogenes</i> is an important foodborne pathogen with an unusual metabolic strategy that falls somewhere between respiration and fermentation.',
                                     'type' => 'paragraph',
                                 ],
                                 [
@@ -3231,7 +2691,7 @@ final class ArticleControllerTest extends PageTestCase
                             'volume' => '85',
                         ],
                         [
-                            'articleTitle' => 'Extracellular electron transfer powers flavinylated extracellular reductases in Gram-positive bacteria',
+                            'articleTitle' => 'Extracellular electron transfer powers flavinylated extracellular...',
                             'authors' => [
                                 [
                                     'name' => [
@@ -3908,63 +3368,61 @@ final class ArticleControllerTest extends PageTestCase
     public function it_may_have_content_aside(
         string $type,
         bool $hasContentAside
-    )
-    {
-        $client = static::createClient();
+    ) {
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 2,
-                    'type' => $type,
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article 1 title',
-                    'published' => '2009-12-31T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
+        $article = $this->articleFixture('vor', [
+            'title' => 'Article 1 title',
+            'type' => $type,
+            'authorLine' => 'Foo Bar',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Foo Bar',
+                        'index' => 'Bar, Foo',
                     ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
+                ],
+            ],
+            'body' => [
+                [
+                    'type' => 'section',
+                    'id' => 's-1',
+                    'title' => 'Introduction',
+                    'content' => [
                         [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
+                            'type' => 'paragraph',
+                            'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                         ],
                     ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
+
+        $this->mockArticleGet($article);
+
+        $preprintVersion = [
+            'status' => 'preprint',
+            'description' => 'Description of preprint',
+            'uri' => 'http://example.preprint.com',
+            'date' => '2009-12-28T00:00:00Z',
+        ];
+
+        $poaVersion = $this->articleFixture(overrides: [
+            'version' => 1,
+            'type' => $type,
+            'title' => 'Article 1 title',
+            'authorLine' => 'Foo Bar'
+        ]);
+
+        $vorVersion = $this->articleFixture(status : 'vor', overrides: [
+            'version' => 2,
+            'type' => $type,
+            'title' => 'Article 1 title',
+            'versionDate' => '2010-01-02T00:00:00Z',
+            'statusDate' => '2010-01-02T00:00:00Z',
+            'authorLine' => 'Foo Bar'
+        ]);
 
         self::mockApiResponse(
             new Request(
@@ -3984,52 +3442,9 @@ final class ArticleControllerTest extends PageTestCase
                     'accepted' => '2009-12-31',
                     'sentForReview' => '2009-12-29',
                     'versions' => [
-                        [
-                            'status' => 'preprint',
-                            'description' => 'Description of preprint',
-                            'uri' => 'http://example.preprint.com',
-                            'date' => '2009-12-28T00:00:00Z',
-                        ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => $type,
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => $type,
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-02T00:00:00Z',
-                            'statusDate' => '2010-01-02T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
+                        $preprintVersion,
+                        $poaVersion,
+                        $vorVersion
                     ],
                 ])
             )
@@ -4162,7 +3577,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                                 ],
                             ],
                         ],
@@ -4171,45 +3586,10 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $v1 = $this->articleFixture('vor', overrides: [
+            'title' => 'Article 1 title'
+        ]);
+        $this->mockArticleVersions([$v1]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -4246,47 +3626,112 @@ final class ArticleControllerTest extends PageTestCase
     }
 
     #[Test]
-    public function it_displays_recommendations_no_further_reading()
+    public function it_displays_recommendations_without_pagination()
     {
         $client = static::createClient();
 
+        $this->mockArticleAndVersions(additions: [
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
+                    ],
+                ],
+            ],
+        ]);
+
+        $v1 = $this->articleFixture(overrides: [
+            'authorLine' => 'Author One et al.'
+        ]);
+        $this->mockArticleVersions([$v1]);
+
+        $correction = $this->articleFixture('vor', [
+            'id' => '00002',
+            'type' => 'correction',
+            'title' => 'Correction title',
+            'doi' => '10.7554/eLife.00002',
+            'elocationId' => 'e00002',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $retraction = $this->articleFixture('vor', [
+            'id' => '00003',
+            'type' => 'retraction',
+            'title' => 'Retraction title',
+            'doi' => '10.7554/eLife.00003',
+            'elocationId' => 'e00003',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $insight1 = $this->articleFixture('vor', [
+            'id' => '00004',
+            'type' => 'insight',
+            'title' => 'Insight 1 title',
+            'doi' => '10.7554/eLife.00004',
+            'elocationId' => 'e00004',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $insight2 = $this->articleFixture('vor', [
+            'id' => '00005',
+            'type' => 'insight',
+            'title' => 'Insight 2 title',
+            'doi' => '10.7554/eLife.00005',
+            'elocationId' => 'e00005',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $expressionConcern = $this->articleFixture('vor', [
+            'id' => '00006',
+            'type' => 'expression-concern',
+            'title' => 'Expression of Concern Title',
+            'doi' => '10.7554/eLife.00006',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $this->mockRelatedArticles([
+            $correction,
+            $retraction,
+            $insight1,
+            $insight2,
+            $expressionConcern,
+            [
+                'id' => '80494',
+                'doi' => '10.1101/2022.06.24.497502',
+                'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
+                'status' => 'reviewed',
+                'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
+                'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
+                'stage' => 'published',
+                'type' => 'reviewed-preprint',
+                'published' => '2022-10-20T03:00:00Z',
+                'reviewedDate' => '2022-10-20T03:00:00Z',
+                'versionDate' => '2022-10-20T03:00:00Z',
+                'statusDate' => '2022-10-20T03:00:00Z',
+                'subjects' => [
+                    [
+                        'id' => 'cell-biology',
+                        'name' => 'Cell Biology',
+                    ],
+                ],
+            ],
+        ]);
+
         self::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
+                'http://api.elifesciences.org/collections?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
                 json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
+                    'total' => 0,
+                    'items' => [],
                 ])
             )
         );
@@ -4294,263 +3739,20 @@ final class ArticleControllerTest extends PageTestCase
         self::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
             ),
-            new Response(
+          new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
                 json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
+                    'total' => 0,
+                    'items' => [],
                 ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/related',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-related+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
-                json_encode([
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00002',
-                        'version' => 1,
-                        'type' => 'correction',
-                        'doi' => '10.7554/eLife.00002',
-                        'title' => 'Correction title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00002',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00003',
-                        'version' => 1,
-                        'type' => 'retraction',
-                        'doi' => '10.7554/eLife.00003',
-                        'title' => 'Retraction title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00003',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00004',
-                        'version' => 1,
-                        'type' => 'insight',
-                        'doi' => '10.7554/eLife.00004',
-                        'title' => 'Insight 1 title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00004',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00005',
-                        'version' => 1,
-                        'type' => 'insight',
-                        'doi' => '10.7554/eLife.00005',
-                        'title' => 'Insight 2 title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00005',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00006',
-                        'version' => 1,
-                        'type' => 'expression-concern',
-                        'doi' => '10.7554/eLife.00006',
-                        'title' => 'Expression of concern title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00006',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'id' => '80494',
-                        'doi' => '10.1101/2022.06.24.497502',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
-                            [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology',
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=3',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
-                json_encode([
-                    'total' => 1,
-                    'items' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00002',
-                            'version' => 1,
-                            'type' => 'correction',
-                            'doi' => '10.7554/eLife.00002',
-                            'title' => 'Correction title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00002',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00003',
-                            'version' => 1,
-                            'type' => 'retraction',
-                            'doi' => '10.7554/eLife.00003',
-                            'title' => 'Retraction title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00003',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00004',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00004',
-                            'title' => 'Insight 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00004',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+        ));
 
         $crawler = $client->request('GET', '/articles/00001');
+
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
@@ -4558,413 +3760,268 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
         $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
         $this->assertStringContainsString('Insight 1 title', $crawler->filter('.teaser--related')->text());
-        $this->assertEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
+        $this->assertNotEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
-        $this->assertCount(1, $furtherReading);
+        $this->assertCount(3, $furtherReading);
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
         $this->assertStringContainsString('Insight 1 title', $furtherReading->eq(0)->text());
+        $this->assertStringContainsString('Insight 2 title', $furtherReading->eq(1)->text());
+        $this->assertStringContainsString('Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis', $furtherReading->eq(2)->text());
     }
 
     #[Test]
     public function it_displays_recommendations()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
+        $this->mockArticleGet(
+            $this->articleFixture(overrides: [
+                'authorLine' => 'Author One et al.',
+                'authors' => [
+                    [
+                        'type' => 'person',
+                        'name' => [
+                            'preferred' => 'Author One',
+                            'index' => 'Author One',
                         ],
                     ],
-                ])
-            )
+                ],
+            ])
         );
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
+        $v1 = $this->articleFixture(overrides: [
+            'authorLine' => 'Author One et al.'
+        ]);
+
+        $this->mockArticleVersions([$v1]);
+
+        $correction = $this->articleFixture('vor', overrides: [
+            'id' => '00002',
+            'type' => 'correction',
+            'title' => 'Correction title',
+            'elocationId' => 'e00002',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $retraction = $this->articleFixture('vor', overrides: [
+            'id' => '00003',
+            'type' => 'retraction',
+            'title' => 'Retraction title',
+            'elocationId' => 'e00003',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $insight1 = $this->articleFixture('vor', [
+            'id' => '00004',
+            'type' => 'insight',
+            'title' => 'Insight 1 title',
+            'doi' => '10.7554/eLife.00004',
+            'elocationId' => 'e00004',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $insight2 = $this->articleFixture('vor', [
+            'id' => '00005',
+            'type' => 'insight',
+            'title' => 'Insight 2 title',
+            'doi' => '10.7554/eLife.00005',
+            'elocationId' => 'e00005',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $expressionConcern = $this->articleFixture('vor', [
+            'id' => '00006',
+            'type' => 'expression-concern',
+            'title' => 'Expression of Concern Title',
+            'doi' => '10.7554/eLife.00006',
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $this->mockRelatedArticles([
+            $correction,
+            $retraction,
+            $insight1,
+            $insight2,
+            $expressionConcern,
+            [
+                'id' => '80494',
+                'doi' => '10.1101/2022.06.24.497502',
+                'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
+                'status' => 'reviewed',
+                'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
+                'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
+                'stage' => 'published',
+                'type' => 'reviewed-preprint',
+                'published' => '2022-10-20T03:00:00Z',
+                'reviewedDate' => '2022-10-20T03:00:00Z',
+                'versionDate' => '2022-10-20T03:00:00Z',
+                'statusDate' => '2022-10-20T03:00:00Z',
+                'subjects' => [
+                    [
+                        'id' => 'cell-biology',
+                        'name' => 'Cell Biology',
                     ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
 
         self::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/00001/related',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-related+json; version=2',
-                    ],
-                ]
+                'http://api.elifesciences.org/collections?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
                 json_encode([
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00002',
-                        'version' => 1,
-                        'type' => 'correction',
-                        'doi' => '10.7554/eLife.00002',
-                        'title' => 'Correction title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00002',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00003',
-                        'version' => 1,
-                        'type' => 'retraction',
-                        'doi' => '10.7554/eLife.00003',
-                        'title' => 'Retraction title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00003',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00004',
-                        'version' => 1,
-                        'type' => 'insight',
-                        'doi' => '10.7554/eLife.00004',
-                        'title' => 'Insight 1 title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00004',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00005',
-                        'version' => 1,
-                        'type' => 'insight',
-                        'doi' => '10.7554/eLife.00005',
-                        'title' => 'Insight 2 title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00005',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00006',
-                        'version' => 1,
-                        'type' => 'expression-concern',
-                        'doi' => '10.7554/eLife.00006',
-                        'title' => 'Expression of concern title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00006',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'id' => '80494',
-                        'doi' => '10.1101/2022.06.24.497502',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
-                            [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology',
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=3',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
-                json_encode([
-                    'total' => 8,
+                    'total' => 1,
                     'items' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00002',
-                            'version' => 1,
-                            'type' => 'correction',
-                            'doi' => '10.7554/eLife.00002',
-                            'title' => 'Correction title',
+                            'id' => '1',
+                            'title' => 'Recommended collection title',
                             'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00002',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
                             ],
-                            'authorLine' => 'Author One et al.',
+                            'selectedCurator' => [
+                                'id' => 'person',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
+                                'name' => [
+                                    'preferred' => 'Person One',
+                                    'index' => 'Person One',
+                                ],
+                            ],
                         ],
+                    ],
+                ])
+            )
+        );
+
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00003',
-                            'version' => 1,
-                            'type' => 'retraction',
-                            'doi' => '10.7554/eLife.00003',
-                            'title' => 'Retraction title',
+                            'number' => 42,
+                            'title' => 'Podcast episode title',
                             'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00003',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
                             ],
-                            'authorLine' => 'Author One et al.',
+                            'sources' => [
+                                [
+                                    'mediaType' => 'audio/mpeg',
+                                    'uri' => 'https://www.example.com/episode42.mp3',
+                                ],
+                            ],
                         ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00004',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00004',
-                            'title' => 'Insight 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00004',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                    ],
+                ])
+            )
+        );
+
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/podcast-episodes/42',
+                ['Accept' => 'application/vnd.elife.podcast-episode+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.podcast-episode+json; version=1'],
+                json_encode([
+                    'number' => 42,
+                    'title' => 'Podcast episode title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'image' => [
+                        'banner' => [
+                            'uri' => 'https://www.example.com/iiif/image',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
                             ],
-                            'authorLine' => 'Author One et al.',
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
                         ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00005',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00005',
-                            'title' => 'Insight 2 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00005',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                        'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
                             ],
-                            'authorLine' => 'Author One et al.',
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
                         ],
+                    ],
+                    'sources' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00006',
-                            'version' => 1,
-                            'type' => 'expression-concern',
-                            'doi' => '10.7554/eLife.00006',
-                            'title' => 'Expression of concern title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00006',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
+                            'mediaType' => 'audio/mpeg',
+                            'uri' => 'https://www.example.com/episode42.mp3',
                         ],
+                    ],
+                    'chapters' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00007',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00007',
-                            'title' => 'Insight 3 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00007',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                            'number' => 1,
+                            'title' => 'Podcast chapter title',
+                            'time' => 0,
+                            'content' => [
+                                [
+                                    'status' => 'poa',
+                                    'stage' => 'published',
+                                    'id' => '00001',
+                                    'version' => 1,
+                                    'type' => 'research-article',
+                                    'doi' => '10.7554/eLife.00001',
+                                    'title' => 'Article title',
+                                    'volume' => 1,
+                                    'elocationId' => 'e00001',
+                                ],
                             ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00008',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00008',
-                            'title' => 'Insight 4 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00008',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00009',
-                            'version' => 1,
-                            'type' => 'expression-concern',
-                            'doi' => '10.7554/eLife.00009',
-                            'title' => 'Expression of concern title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00009',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -4986,235 +4043,100 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
         $this->assertStringContainsString('Insight 1 title', $furtherReading->eq(0)->text());
         $this->assertStringContainsString('Insight 2 title', $furtherReading->eq(1)->text());
-        $this->assertStringContainsString('Insight 3 title', $furtherReading->eq(2)->text());
+        $this->assertStringContainsString('Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis', $furtherReading->eq(2)->text());
 
         $crawler = $client->click($crawler->selectLink('Load more')->link());
 
         $furtherReading = $crawler->filter('.listing-list__item');
         $this->assertCount(2, $furtherReading);
         $this->assertCount(0, $crawler->filter('.listing-list__item--related'));
-        $this->assertStringContainsString('Insight 4 title', $furtherReading->eq(0)->text());
-        $this->assertStringContainsString('Expression of concern title', $furtherReading->eq(1)->text());
+        $this->assertStringContainsString('Recommended collection title', $furtherReading->eq(0)->text());
+        $this->assertStringContainsString('Podcast chapter title', $furtherReading->eq(1)->text());
     }
 
     #[Test]
     public function it_displays_reviewed_preprint_in_recommendations()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'doiVersion' => '10.7554/eLife.00001.1',
-                    'title' => 'Article 1 title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'RP00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
-                        ],
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
+        $article = $this->articleFixture('vor', overrides: [
+            'title' => 'Article 1 title',
+            'authorLine' => 'Foo Bar',
+            'authors' => [
                 [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Foo Bar',
+                        'index' => 'Bar, Foo',
                     ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
+                ],
+            ],
+            'body' => [
+                [
+                    'type' => 'section',
+                    'id' => 's-1',
+                    'title' => 'Introduction',
+                    'content' => [
                         [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
+                            'type' => 'paragraph',
+                            'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                         ],
                     ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/related',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-related+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
-                json_encode([
+        $this->mockArticleGet($article);
+
+        $v1 = $this->articleFixture('vor', [
+            'authorLine' => 'Author One et al.'
+        ]);
+        $this->mockArticleVersions([$v1]);
+
+        $this->mockRelatedArticles([
+            [
+                'id' => '80494',
+                'doi' => '10.1101/2022.06.24.497502',
+                'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
+                'status' => 'reviewed',
+                'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
+                'title' => 'reviewed-preprint 1',
+                'stage' => 'published',
+                'type' => 'reviewed-preprint',
+                'published' => '2022-10-20T03:00:00Z',
+                'reviewedDate' => '2022-10-20T03:00:00Z',
+                'versionDate' => '2022-10-20T03:00:00Z',
+                'statusDate' => '2022-10-20T03:00:00Z',
+                'subjects' => [
                     [
-                        'id' => '80494',
-                        'doi' => '10.1101/2022.06.24.497502',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'reviewed-preprint 1',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
-                            [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology'
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => '80495',
-                        'doi' => '10.1101/2022.06.24.80495',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'reviewed preprint 2',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
-                            [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology'
-                            ]
-                        ]
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=3',
-                    ],
+                        'id' => 'cell-biology',
+                        'name' => 'Cell Biology'
+                    ]
                 ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
-                json_encode([
-                    'total' => 3,
-                    'items' => [
-                        [
-                            'id' => '80494',
-                            'doi' => '10.1101/2022.06.24.497502',
-                            'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                            'status' => 'reviewed',
-                            'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                            'title' => 'reviewed-preprint 1',
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2022-10-20T03:00:00Z',
-                            'reviewedDate' => '2022-10-20T03:00:00Z',
-                            'versionDate' => '2022-10-20T03:00:00Z',
-                            'statusDate' => '2022-10-20T03:00:00Z',
-                            'subjects' => [
-                                [
-                                    'id' => 'cell-biology',
-                                    'name' => 'Cell Biology'
-                                ]
-                            ]
-                        ],
-                        [
-                            'id' => '80495',
-                            'doi' => '10.1101/2022.06.24.80495',
-                            'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                            'status' => 'reviewed',
-                            'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                            'title' => 'reviewed preprint 2',
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2022-10-20T03:00:00Z',
-                            'reviewedDate' => '2022-10-20T03:00:00Z',
-                            'versionDate' => '2022-10-20T03:00:00Z',
-                            'statusDate' => '2022-10-20T03:00:00Z',
-                            'subjects' => [
-                                [
-                                    'id' => 'cell-biology',
-                                    'name' => 'Cell Biology'
-                                ]
-                            ]
-                        ],
-                    ],
-                ])
-            )
-        );
+            ],
+            [
+                'id' => '80495',
+                'doi' => '10.1101/2022.06.24.80495',
+                'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
+                'status' => 'reviewed',
+                'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
+                'title' => 'reviewed preprint 2',
+                'stage' => 'published',
+                'type' => 'reviewed-preprint',
+                'published' => '2022-10-20T03:00:00Z',
+                'reviewedDate' => '2022-10-20T03:00:00Z',
+                'versionDate' => '2022-10-20T03:00:00Z',
+                'statusDate' => '2022-10-20T03:00:00Z',
+                'subjects' => [
+                    [
+                        'id' => 'cell-biology',
+                        'name' => 'Cell Biology'
+                    ]
+                ]
+            ],
+        ]);
+
+        $this->mockEmptyCollectionsAndPodcasts();
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -5225,6 +4147,22 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(2, $furtherReading);
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
         $this->assertStringContainsString('reviewed preprint 2', $furtherReading->filter('.content-header__title_link')->eq(1)->text());
+    }
+
+    #[Test]
+    public function it_does_not_display_recommendations_when_there_are_none()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleAndVersions();
+        $this->mockRelatedArticles([]);
+        $this->mockEmptyCollectionsAndPodcasts();
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(0, $crawler->filter('.teaser--related'));
+        $this->assertCount(0, $crawler->filter('.listing-list-heading:contains("Further reading")'));
     }
 
     #[Test]
@@ -5285,7 +4223,7 @@ final class ArticleControllerTest extends PageTestCase
                     'authorResponse' => [
                         'content' => [
                             [
-                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
+                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i>',
                                 'type' => 'paragraph',
                             ],
                         ],
@@ -5299,7 +4237,7 @@ final class ArticleControllerTest extends PageTestCase
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.'
+                                'text' => 'Collagen is a major component of extracellular matrix.'
                             ],
                         ],
                         'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326'
@@ -5312,7 +4250,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
+                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber.',
                                 ],
                                 [
                                     'type' => 'box',
@@ -5320,13 +4258,13 @@ final class ArticleControllerTest extends PageTestCase
                                     'content' => [
                                         [
                                             'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor)...',
                                         ],
                                     ],
                                 ],
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber...',
                                 ],
                             ],
                         ],
@@ -5345,13 +4283,13 @@ final class ArticleControllerTest extends PageTestCase
                                     'content' => [
                                         [
                                             'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor)...'
                                         ],
                                     ],
                                 ],
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber...'
                                 ],
                             ],
                         ],
@@ -5385,48 +4323,12 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'received' => '2023-12-10',
-                    'accepted' => '2023-12-10',
-                    'sentForReview' => '2023-03-15',
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'RP00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $v1 = $this->articleFixture('vor', overrides: [
+            'title' => 'Article 1 title',
+            'elocationId' => 'RP00001',
+        ]);
+
+        $this->mockArticleVersions([$v1]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
@@ -5444,112 +4346,35 @@ final class ArticleControllerTest extends PageTestCase
     #[Test]
     public function it_displays_doi_version_for_vor_article()
     {
-        $client = static::createClient();
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'doiVersion' => '10.7554/eLife.00001.1',
-                    'title' => 'Article 1 title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'RP00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
-                        ],
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
+        $this->mockArticleAndVersions('vor', [
+            'doiVersion' => '10.7554/eLife.00001.1',
+            'elocationId' => 'RP00001',
+            'authorLine' => 'Foo Bar',
+            'authors' => [
                 [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Foo Bar',
+                        'index' => 'Bar, Foo',
                     ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'received' => '2023-12-10',
-                    'accepted' => '2023-12-10',
-                    'sentForReview' => '2023-03-15',
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'RP00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
+                ],
+            ],
+        ]);
 
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('https://doi.org/10.7554/eLife.00001.1', $crawler->filter('#modal-share-doi')->attr('value'));
-        $this->assertSame('Foo Bar (2010) Article 1 title eLife 1:RP00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($crawler->filter('.modal .reference')));
-        $this->assertSame('https://doi.org/10.7554/eLife.00001.1', trim($crawler->filter('.content-header__footer .doi')->text()));
+        $this->assertSame(
+            'Foo Bar (2010) Article title eLife 1:RP00001. https://doi.org/10.7554/eLife.00001.1',
+            $this->crawlerText($crawler->filter('.modal .reference'))
+        );
+        $this->assertSame(
+            'https://doi.org/10.7554/eLife.00001.1',
+            trim($crawler->filter('.content-header__footer .doi')->text())
+        );
     }
 
     public static function prcVorHistoryProvider()
@@ -5698,142 +4523,68 @@ final class ArticleControllerTest extends PageTestCase
     public function it_displays_versions_in_timeline_for_prc_vor(
         array $preprints,
         array $expectedTimeline
-    )
-    {
-        $client = static::createClient();
+    ) {
+        $client = ArticleControllerTest::createClient();
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=8'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article 1 title',
-                    'published' => '2023-05-03T00:00:00Z',
-                    'versionDate' => '2023-05-03T00:00:00Z',
-                    'statusDate' => '2023-05-03T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'RP00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
+        $this->mockArticleGet(
+            $this->articleFixture('vor', overrides: [
+                'published' => '2023-05-03T00:00:00Z',
+                'versionDate' => '2023-05-03T00:00:00Z',
+                'statusDate' => '2023-05-03T00:00:00Z',
+                'authorLine' => 'Foo Bar',
+                'authors' => [
+                    [
+                        'type' => 'person',
+                        'name' => [
+                            'preferred' => 'Foo Bar',
+                            'index' => 'Bar, Foo',
                         ],
                     ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'authorResponse' => [
-                        'content' => [
-                            [
-                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
-                                'type' => 'paragraph',
-                            ],
-                        ],
-                        'doi' => '10.7554/eLife.09562.031',
-                        'id' => 'SA2',
-                    ],
-                    'elifeAssessment' => [
-                        'title' => 'eLife assessment',
-                        'id' => 'sa0',
-                        'doi' => '10.7554/eLife.09562.sa00',
+                ],
+                'body' => [
+                    [
+                        'type' => 'section',
+                        'id' => 's-1',
+                        'title' => 'Introduction',
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.',
-                            ],
-                        ],
-                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326',
-                    ],
-                    'publicReviews' => [
-                        [
-                            'title' => 'Reviewer #1 (public review)',
-                            'id' => 'SA21',
-                            'doi' => '10.7554/eLife.09562.230',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
-                                ],
-                                [
-                                    'type' => 'box',
-                                    'title' => 'Box 2',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
-                                ],
-                            ],
-                        ],
-                        [
-                            'title' => 'Reviewer #2 (public review)',
-                            'id' => 'SA22',
-                            'doi' => '10.7554/eLife.09562.330',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
-                                ],
-                                [
-                                    'type' => 'box',
-                                    'title' => 'Box 2',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
-                                ],
+                                'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013.',
                             ],
                         ],
                     ],
-                    'recommendationsForAuthors' => [
-                        'title' => 'Recommendations for authors',
-                        'id' => 'SA11',
-                        'doi' => '10.7554/eLife.09562.130',
+                ],
+                'authorResponse' => [
+                    'content' => [
+                        [
+                            'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
+                            'type' => 'paragraph',
+                        ],
+                    ],
+                    'doi' => '10.7554/eLife.09562.031',
+                    'id' => 'SA2',
+                ],
+                'elifeAssessment' => [
+                    'title' => 'eLife assessment',
+                    'id' => 'sa0',
+                    'doi' => '10.7554/eLife.09562.sa00',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Collagen is a major component of extracellular matrix.',
+                        ],
+                    ],
+                    'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326',
+                ],
+                'publicReviews' => [
+                    [
+                        'title' => 'Reviewer #1 (public review)',
+                        'id' => 'SA21',
+                        'doi' => '10.7554/eLife.09562.230',
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
+                                'text' => 'Thank you for submitting your work entitled “A new species of the genus ...',
                             ],
                             [
                                 'type' => 'box',
@@ -5841,18 +4592,68 @@ final class ArticleControllerTest extends PageTestCase
                                 'content' => [
                                     [
                                         'type' => 'paragraph',
-                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
+                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior.',
                                     ],
                                 ],
                             ],
                             [
                                 'type' => 'paragraph',
-                                'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
+                                'text' => 'The authors describe a large collection of recently discovered hominin ..',
                             ],
                         ],
                     ],
-                ])
-            )
+                    [
+                        'title' => 'Reviewer #2 (public review)',
+                        'id' => 'SA22',
+                        'doi' => '10.7554/eLife.09562.330',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Thank you for submitting your work entitled “A new species of the genus ..',
+                            ],
+                            [
+                                'type' => 'box',
+                                'title' => 'Box 2',
+                                'content' => [
+                                    [
+                                        'type' => 'paragraph',
+                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior.',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'The authors describe a large collection of recently discovered hominin ..',
+                            ],
+                        ],
+                    ],
+                ],
+                'recommendationsForAuthors' => [
+                    'title' => 'Recommendations for authors',
+                    'id' => 'SA11',
+                    'doi' => '10.7554/eLife.09562.130',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Thank you for submitting your work entitled “A new species of the genus ...',
+                        ],
+                        [
+                            'type' => 'box',
+                            'title' => 'Box 2',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior...',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'The authors describe a large collection of recently discovered hominin fossils.',
+                        ],
+                    ],
+                ],
+            ])
         );
 
         self::mockApiResponse(
@@ -5872,26 +4673,14 @@ final class ArticleControllerTest extends PageTestCase
                     'versions' => array_merge(
                         $preprints,
                         [
-                            [
-                                'status' => 'vor',
-                                'stage' => 'published',
-                                'id' => '00001',
-                                'version' => 1,
-                                'type' => 'research-article',
-                                'doi' => '10.7554/eLife.00001',
+                            $this->articleFixture('vor', overrides: [
                                 'title' => 'Article 1 title',
                                 'published' => '2023-05-03T00:00:00Z',
                                 'versionDate' => '2023-05-03T00:00:00Z',
                                 'statusDate' => '2023-05-03T00:00:00Z',
-                                'volume' => 1,
                                 'elocationId' => 'RP00001',
-                                'copyright' => [
-                                    'license' => 'CC-BY-4.0',
-                                    'holder' => 'Bar',
-                                    'statement' => 'Copyright statement.',
-                                ],
                                 'authorLine' => 'Foo Bar',
-                            ]
+                            ])
                         ]
                     ),
                 ])
@@ -5946,7 +4735,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
                                 ],
                                 [
                                     'type' => 'section',
@@ -6033,6 +4822,21 @@ final class ArticleControllerTest extends PageTestCase
 
     private function getPreviousVersionUrl() : string
     {
+        $article = $this->articleFixture(overrides: [
+            'pdf' => 'http://www.example.com/pdf',
+            'xml' => 'http://www.example.com/xml',
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
+                    ],
+                ],
+            ],
+        ]);
+
         self::mockApiResponse(
             new Request(
                 'GET',
@@ -6042,206 +4846,199 @@ final class ArticleControllerTest extends PageTestCase
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'pdf' => 'http://www.example.com/pdf',
-                    'xml' => 'http://www.example.com/xml',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
-                ])
+                json_encode($article)
             )
         );
 
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2011-01-01T00:00:00Z',
-                            'statusDate' => '2011-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $v1 = $this->articleFixture(overrides: ['authorLine' => 'Author One et al.']);
+        $v2 = $this->articleFixture('vor', overrides: [
+            'authorLine' => 'Author One et al.',
+            'version' => 2,
+        ]);
+
+        $this->mockArticleVersions([$v1, $v2]);
 
         return '/articles/00001v1';
     }
 
     public function getPoaUrl($articleId = '12345') : string
     {
-        self::mockApiResponse(
-            new Request(
-                'GET',
-                "http://api.elifesciences.org/articles/${articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => $articleId,
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => "10.7554/eLife.{$articleId}",
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => "e{$articleId}",
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
+        $article = $this->articleFixture(overrides: [
+            'id' => $articleId,
+            'doi' => "10.7554/eLife.{$articleId}",
+            'elocationId' => "e{$articleId}",
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'Author One',
                     ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
+                ],
+            ],
+            'reviewers' => [
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer 1',
+                        'index' => 'Reviewer 1',
                     ],
-                    'reviewers' => [
+                    'role' => 'Reviewer',
+                    'affiliations' => [
                         [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
+                            'name' => ['Institution'],
+                            'address' => [
+                                'formatted' => ['Country'],
+                                'components' => [
+                                    'country' => 'Country',
                                 ],
                             ],
                         ],
                     ],
-                ])
+                ],
+            ],
+        ]);
+
+        $this->mockArticleGet($article);
+
+        $v1 = $this->articleFixture(overrides: [
+            'id' => $articleId,
+            'doi' => "10.7554/eLife.{$articleId}",
+            'elocationId' => "e{$articleId}",
+            'authorLine' => 'Author One et al.',
+        ]);
+
+        $this->mockArticleVersions([$v1], $articleId);
+
+        return "/articles/{$articleId}";
+    }
+
+    private function articleFixture(string $status = 'poa', array $overrides = [], array $unsetKeys = []): array
+    {
+        $article = [
+            'status' => $status,
+            'stage' => 'published',
+            'id' => '00001',
+            'version' => 1,
+            'type' => 'research-article',
+            'doi' => '10.7554/eLife.00001',
+            'title' => 'Article title',
+            'published' => '2010-01-01T00:00:00Z',
+            'versionDate' => '2010-01-01T00:00:00Z',
+            'statusDate' => '2010-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e00001',
+            'copyright' => ['license' => 'CC-BY-4.0', 'holder' => 'Author One', 'statement' => 'Copyright statement.'],
+            'body' => [[
+                'type' => 'section',
+                'id' => 's-1',
+                    'title' => 'Introduction',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber.',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        if (count($unsetKeys) > 0) {
+            foreach ($unsetKeys as $key) {
+                unset($article[$key]);
+            }
+        }
+
+        return array_merge($article, $overrides);
+    }
+
+    private function mockArticleGet(array $article): void
+    {
+        $contentType = 'poa' === $article['status']
+            ? 'application/vnd.elife.article-poa+json; version=4'
+            : 'application/vnd.elife.article-vor+json; version=8';
+
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/'.$article['id'],
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']),
+            new Response(
+                200,
+                ['Content-Type' => $contentType],
+                json_encode($article)
+            )
+        );
+    }
+
+    private function mockArticleVersions(array $versions, string $id = '00001'): void
+    {
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/$id/versions",
+                ['Accept' => ['application/vnd.elife.article-history+json; version=2']]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode(['versions' => $versions])
+            )
+        );
+    }
+
+    private function mockArticleAndVersions(string $status = 'poa', array $additions = [], array $unsetKeys = []): void
+    {
+        $article = $this->articleFixture($status, $additions, $unsetKeys);
+        $this->mockArticleGet($article);
+        $this->mockArticleVersions([$article]);
+    }
+
+    private function mockRelatedArticles(array $items = []): void
+    {
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/related',
+                ['Accept' => ['application/vnd.elife.article-related+json; version=2']]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
+                json_encode($items)
+            )
+        );
+    }
+
+    private function mockEmptyCollectionsAndPodcasts(): void
+    {
+        self::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
+                json_encode(['total' => 0, 'items' => []])
             )
         );
 
         self::mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/articles/{$articleId}/versions",
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=100&order=desc&containing[]=article/00001',
+                ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
             ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => $articleId,
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => "10.7554/eLife.{$articleId}",
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => "e{$articleId}",
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
+            new Response(200, ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
+                json_encode(
+                    [
+                        'total' => 0,
+                        'items' => []
+                    ]
+                )
             )
         );
-
-        return "/articles/{$articleId}";
     }
 }
