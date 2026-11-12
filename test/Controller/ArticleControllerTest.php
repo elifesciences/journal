@@ -725,7 +725,7 @@ final class ArticleControllerTest extends PageTestCase
                 'type' => 'on-behalf-of',
                 'onBehalfOf' => 'on behalf of Institution Four',
             ],
-        ]];
+            ]];
 
         $this->mockArticleAndVersions('vor', $authorSection);
 
